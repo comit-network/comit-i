@@ -1,27 +1,24 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-}
+const App = () => (
+  <BrowserRouter>
+    <MainContent />
+  </BrowserRouter>
+);
+
+const MainContent = () => (
+  <React.Fragment>
+    <Route exact path="/" component={ListSwaps} />
+    <Route path="/make_link" component={CreateNewSwap} />
+    <Route path="/new_swap" component={LinkLandingPage} />
+  </React.Fragment>
+);
+
+const ListSwaps = () => <div>Here is where we will list all swaps</div>;
+const CreateNewSwap = () => <div>Here is where you can create a new swap</div>;
+const LinkLandingPage = () => (
+  <div>Here is where you land when you click on a swap-link</div>
+);
 
 export default App;
