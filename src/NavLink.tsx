@@ -1,30 +1,25 @@
 import { RouteComponentProps, withRouter } from "react-router";
-import {
-  Typography,
-  WithStyles,
-  createStyles,
-  withStyles
-} from "@material-ui/core";
+import { Button, Typography } from "@material-ui/core";
 import React from "react";
+import { Link } from "react-router-dom";
 
-const styles = createStyles({
-  link: {
-    marginLeft: "1rem",
-    marginRight: "1rem"
-  }
-});
-
-interface NavLinkProps extends RouteComponentProps, WithStyles<typeof styles> {
+interface NavLinkProps extends RouteComponentProps {
   to: string;
   desc: string;
 }
 
-function NavLink({ to, desc, history, classes }: NavLinkProps) {
+function NavLink({ desc, history, to }: NavLinkProps) {
+  const linkProps = {
+    to
+  };
+
   return (
-    <Typography variant="h6" color="inherit" className={classes.link}>
-      <a onClick={() => history.push(to)}>{desc}</a>
-    </Typography>
+    <Button color="inherit" component={Link as any} {...linkProps}>
+      <Typography variant="h6" color="inherit">
+        {desc}
+      </Typography>
+    </Button>
   );
 }
 
-export default withStyles(styles)(withRouter(NavLink));
+export default withRouter(NavLink);
