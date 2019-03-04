@@ -18,6 +18,7 @@
     "prettier": "^1.16.4"
   },
   "scripts": {
+    "prestart": "git config core.hooksPath .githooks",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
