@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
-import { AppBar, createMuiTheme, Toolbar, Typography } from "@material-ui/core";
-import { makeStyles, ThemeProvider } from "@material-ui/styles";
-import NavLink from "./NavLink";
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
+import TopAppBar from "./TopAppBar";
 
 const theme = createMuiTheme({
   typography: {
@@ -20,28 +20,6 @@ const App = () => (
     </BrowserRouter>
   </ThemeProvider>
 );
-
-const useTopAppBarStyles = makeStyles({
-  grow: {
-    flexGrow: 1
-  },
-});
-
-function TopAppBar() {
-  const classes = useTopAppBarStyles();
-
-  return (
-    <AppBar position="static">
-      <Toolbar>
-        <Typography variant="h6" color="inherit" className={classes.grow}>
-          COMIT-i
-        </Typography>
-        <NavLink to={"/make_link"} desc={"New SWAP link"}/>
-        <NavLink to={"/"} desc={"List swaps"}/>
-      </Toolbar>
-    </AppBar>
-  );
-}
 
 const MainContent = () => (
   <React.Fragment>
