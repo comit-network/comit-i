@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
-import TopAppBar from "./TopAppBar";
+import TopAppBar from "./components/TopAppBar";
 import FetchSwaps from "./pages/FetchSwaps";
 
 const theme = createMuiTheme({

@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import getSwaps, { Asset, Swap } from "../api/get_swaps";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import CenteredProgress from "../CenteredProgress";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
+} from "@material-ui/core";
+import CenteredProgress from "../components/CenteredProgress";
 
 type AssetCellProps = { asset: Asset };
 
@@ -31,22 +37,19 @@ function FetchSwaps() {
     setLoading(() => true);
     getSwaps().then(swaps => {
       setLoading(() => false);
-      setSwaps(prevState => swaps);
+      setSwaps(() => swaps);
     });
   }, []);
 
-  return <SwapList swaps={swaps} loading={loading} />;
+  return loading ? <CenteredProgress /> : <SwapList swaps={swaps} />;
 }
 
 interface SwapListProps {
   swaps: Swap[];
-  loading: boolean;
 }
 
-function SwapList({ swaps, loading }: SwapListProps) {
-  return loading ? (
-    <CenteredProgress />
-  ) : (
+function SwapList({ swaps }: SwapListProps) {
+  return (
     <Table>
       <TableHead>
         <TableRow>
