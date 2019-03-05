@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Link as RouterLink, Route, RouteComponentProps } from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import { AppBar, createMuiTheme, Toolbar, Typography } from "@material-ui/core";
 import { makeStyles, ThemeProvider } from "@material-ui/styles";
 import NavLink from "./NavLink";

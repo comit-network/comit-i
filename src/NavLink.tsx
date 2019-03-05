@@ -1,14 +1,13 @@
-import { RouteComponentProps, withRouter } from "react-router";
 import { Button, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 
-interface NavLinkProps extends RouteComponentProps {
+interface NavLinkProps {
   to: string;
   desc: string;
 }
 
-function NavLink({ desc, history, to }: NavLinkProps) {
+function NavLink({ desc, to }: NavLinkProps) {
   const linkProps = {
     to
   };
@@ -22,4 +21,4 @@ function NavLink({ desc, history, to }: NavLinkProps) {
   );
 }
 
-export default withRouter(NavLink);
+export default NavLink;
