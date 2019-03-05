@@ -37,5 +37,9 @@ export interface GetSwapsResponse {
 }
 
 export default () => {
-  return Promise.resolve(response as GetSwapsResponse).then(response => response._embedded.swaps);
+  return new Promise<GetSwapsResponse>((resolve, reject) => {
+    setTimeout(() => {
+      resolve(response as GetSwapsResponse);
+    }, 2000);
+  }).then(response => response._embedded.swaps);
 };

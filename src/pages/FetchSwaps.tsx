@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import getSwaps, { Asset, Swap } from "../api/get_swaps";
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
+import CenteredProgress from "../CenteredProgress";
 
 type AssetCellProps = { asset: Asset };
 
@@ -24,20 +25,28 @@ function AssetCell({ asset }: AssetCellProps) {
 
 function FetchSwaps() {
   const [swaps, setSwaps] = useState<Swap[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getSwaps().then(swaps => setSwaps(prevState => swaps));
+    setLoading(() => true);
+    getSwaps().then(swaps => {
+      setLoading(() => false);
+      setSwaps(prevState => swaps);
+    });
   }, []);
 
-  return <SwapList swaps={swaps} />;
+  return <SwapList swaps={swaps} loading={loading} />;
 }
 
 interface SwapListProps {
   swaps: Swap[];
+  loading: boolean;
 }
 
-function SwapList({ swaps }: SwapListProps) {
-  return (
+function SwapList({ swaps, loading }: SwapListProps) {
+  return loading ? (
+    <CenteredProgress />
+  ) : (
     <Table>
       <TableHead>
         <TableRow>
@@ -60,9 +69,7 @@ function SwapList({ swaps }: SwapListProps) {
             <TableCell>
               <AssetCell asset={row.parameters.beta_asset} />
             </TableCell>
-            <TableCell>
-              {row.status}
-            </TableCell>
+            <TableCell>{row.status}</TableCell>
             <TableCell>
               {Object.keys(row._links).filter(key => key != "self")}
             </TableCell>
