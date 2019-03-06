@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from "react";
 import getSwaps, { Asset, Swap } from "../api/get_swaps";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow
-} from "@material-ui/core";
+import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
 import CenteredProgress from "../components/CenteredProgress";
+import ErrorSnackbar from "../components/ErrorSnackbar";
 
 type AssetCellProps = { asset: Asset };
 
@@ -32,16 +27,26 @@ function AssetCell({ asset }: AssetCellProps) {
 function FetchSwaps() {
   const [swaps, setSwaps] = useState<Swap[]>([]);
   const [loading, setLoading] = useState(false);
+  const [displayError, setDisplayError] = useState(false);
 
   useEffect(() => {
     setLoading(() => true);
-    getSwaps().then(swaps => {
-      setLoading(() => false);
-      setSwaps(() => swaps);
-    });
+    getSwaps()
+      .then(swaps => setSwaps(() => swaps))
+      .catch(() => setDisplayError(() => true))
+      .finally(() => setLoading(false));
   }, []);
 
-  return loading ? <CenteredProgress /> : <SwapList swaps={swaps} />;
+  return (
+    <React.Fragment>
+      {loading ? <CenteredProgress /> : <SwapList swaps={swaps} />}
+      <ErrorSnackbar
+        message={"Failed to fetch swaps. Is your COMIT node running?"}
+        onClose={() => setDisplayError(false)}
+        open={displayError}
+      />
+    </React.Fragment>
+  );
 }
 
 interface SwapListProps {
