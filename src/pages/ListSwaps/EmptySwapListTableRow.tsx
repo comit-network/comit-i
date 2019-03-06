@@ -18,7 +18,7 @@ function EmptySwapListTableRow() {
           root: classes.root
         }}
         align={"center"}
-        colSpan={6}
+        colSpan={100} // Just needs to be more than our actual number of columns to span all of them
       >
         <Typography variant="display2">
           The list of swaps is empty :(
