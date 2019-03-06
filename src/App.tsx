@@ -1,7 +1,7 @@
-import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
+import React from "react";
+import { BrowserRouter, Route } from "react-router-dom";
 import TopAppBar from "./components/TopAppBar";
 import ListSwaps from "./pages/ListSwaps/ListSwaps";
 
@@ -24,7 +24,7 @@ const App = () => (
 
 const MainContent = () => (
   <React.Fragment>
-    <Route exact path="/" component={ListSwaps} />
+    <Route exact={true} path="/" component={ListSwaps} />
     <Route path="/make_link" component={CreateNewSwap} />
     <Route path="/new_swap" component={LinkLandingPage} />
   </React.Fragment>

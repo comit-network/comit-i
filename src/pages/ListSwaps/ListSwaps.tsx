@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from "react";
-import getSwaps, { Asset, Swap } from "../../api/get_swaps";
 import {
   Table,
   TableBody,
@@ -7,11 +5,15 @@ import {
   TableHead,
   TableRow
 } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import getSwaps, { Asset, Swap } from "../../api/get_swaps";
 import CenteredProgress from "../../components/CenteredProgress";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import EmptySwapListTableRow from "./EmptySwapListTableRow";
 
-type AssetCellProps = { asset: Asset };
+interface AssetCellProps {
+  asset: Asset;
+}
 
 function AssetCell({ asset }: AssetCellProps) {
   switch (asset.name) {
@@ -39,17 +41,19 @@ function FetchSwaps() {
   useEffect(() => {
     setLoading(() => true);
     getSwaps()
-      .then(swaps => setSwaps(() => swaps))
+      .then(fetchedSwaps => setSwaps(() => fetchedSwaps))
       .catch(() => setDisplayError(() => true))
       .finally(() => setLoading(false));
   }, []);
+
+  const hideError = () => setDisplayError(false);
 
   return (
     <React.Fragment>
       {loading ? <CenteredProgress /> : <SwapList swaps={swaps} />}
       <ErrorSnackbar
         message={"Failed to fetch swaps. Is your COMIT node running?"}
-        onClose={() => setDisplayError(false)}
+        onClose={hideError}
         open={displayError}
       />
     </React.Fragment>
@@ -61,7 +65,7 @@ interface SwapListProps {
 }
 
 function SwapList({ swaps }: SwapListProps) {
-  const hasSwaps = swaps.length != 0;
+  const hasSwaps = swaps.length !== 0;
 
   return (
     <Table>
@@ -79,7 +83,7 @@ function SwapList({ swaps }: SwapListProps) {
       <TableBody>
         {hasSwaps &&
           swaps.map(row => (
-            <TableRow key={row._links["self"].href} data-cy="swap-row">
+            <TableRow key={row._links.self.href} data-cy="swap-row">
               <TableCell>{row.parameters.alpha_ledger.name}</TableCell>
               <TableCell>
                 <AssetCell asset={row.parameters.alpha_asset} />
@@ -91,7 +95,7 @@ function SwapList({ swaps }: SwapListProps) {
               <TableCell>{row.protocol}</TableCell>
               <TableCell>{row.status}</TableCell>
               <TableCell>
-                {Object.keys(row._links).filter(key => key != "self")}
+                {Object.keys(row._links).filter(key => key !== "self")}
               </TableCell>
             </TableRow>
           ))}

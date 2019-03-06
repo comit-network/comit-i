@@ -1,6 +1,6 @@
 import { TableCell, TableRow, Typography } from "@material-ui/core";
-import React from "react";
 import { makeStyles } from "@material-ui/styles";
+import React from "react";
 
 const useStyles = makeStyles(theme => ({
   root: {

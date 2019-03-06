@@ -8,9 +8,9 @@ import {
   WithStyles,
   withStyles
 } from "@material-ui/core";
-import React from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
+import React from "react";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -48,7 +48,7 @@ function ErrorSnackbar({
       open={open}
       onClose={onClose}
       ClickAwayListenerProps={{
-        onClickAway: () => {}
+        onClickAway: () => {} // tslint:disable-line no-empty
       }}
     >
       <SnackbarContent
