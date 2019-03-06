@@ -40,6 +40,7 @@ function ErrorSnackbar({
 }: ErrorSnackbarProps) {
   return (
     <Snackbar
+      data-cy="error-snackbar"
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "left"

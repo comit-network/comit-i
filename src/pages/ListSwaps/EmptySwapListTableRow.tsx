@@ -12,7 +12,7 @@ function EmptySwapListTableRow() {
   const classes = useStyles();
 
   return (
-    <TableRow>
+    <TableRow data-cy="empty-swap-list-placeholder">
       <TableCell
         classes={{
           root: classes.root

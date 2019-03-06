@@ -1,4 +1,4 @@
-import response from "../api/mock_response.json";
+import axios, { AxiosResponse } from "axios";
 
 export interface Links {
   [rel: string]: {
@@ -37,25 +37,9 @@ export interface GetSwapsResponse {
 }
 
 export default function getSwaps() {
-  return fetchWithTimeout("http://localhost:8080/swaps", 2000)
-    .then(response => response.json())
+  return axios
+    .get<GetSwapsResponse>("http://localhost:8080/swaps", { timeout: 2000 })
+    .then(response => response.data)
     .then(body => body as GetSwapsResponse)
     .then(body => body._embedded.swaps);
-}
-
-function fetchWithTimeout(
-  url: RequestInfo,
-  timeout: number
-): Promise<Response> {
-  return new Promise((resolve, reject) => {
-    // Set timeout timer
-    let timer = setTimeout(
-      () => reject(new Error("Request timed out")),
-      timeout
-    );
-
-    fetch(url)
-      .then(response => resolve(response), err => reject(err))
-      .finally(() => clearTimeout(timer));
-  });
 }

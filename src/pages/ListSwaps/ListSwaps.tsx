@@ -78,7 +78,7 @@ function SwapList({ swaps }: SwapListProps) {
       <TableBody>
         {hasSwaps &&
           swaps.map(row => (
-            <TableRow key={row._links["self"].href}>
+            <TableRow key={row._links["self"].href} data-cy="swap-row">
               <TableCell>{row.parameters.alpha_ledger.name}</TableCell>
               <TableCell>
                 <AssetCell asset={row.parameters.alpha_asset} />
