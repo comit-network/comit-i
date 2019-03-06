@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import getSwaps, { Asset, Swap } from "../../api/get_swaps";
 import {
-  Link,
   Table,
   TableBody,
   TableCell,
