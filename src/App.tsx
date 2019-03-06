@@ -3,7 +3,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import TopAppBar from "./components/TopAppBar";
-import FetchSwaps from "./pages/FetchSwaps";
+import ListSwaps from "./pages/ListSwaps/ListSwaps";
 
 const theme = createMuiTheme({
   typography: {
@@ -24,7 +24,7 @@ const App = () => (
 
 const MainContent = () => (
   <React.Fragment>
-    <Route exact path="/" component={FetchSwaps} />
+    <Route exact path="/" component={ListSwaps} />
     <Route path="/make_link" component={CreateNewSwap} />
     <Route path="/new_swap" component={LinkLandingPage} />
   </React.Fragment>

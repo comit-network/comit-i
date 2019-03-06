@@ -1,8 +1,15 @@
 import React, { useEffect, useState } from "react";
-import getSwaps, { Asset, Swap } from "../api/get_swaps";
-import { Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import CenteredProgress from "../components/CenteredProgress";
-import ErrorSnackbar from "../components/ErrorSnackbar";
+import getSwaps, { Asset, Swap } from "../../api/get_swaps";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow
+} from "@material-ui/core";
+import CenteredProgress from "../../components/CenteredProgress";
+import ErrorSnackbar from "../../components/ErrorSnackbar";
+import EmptySwapListTableRow from "./EmptySwapListTableRow";
 
 type AssetCellProps = { asset: Asset };
 
@@ -54,6 +61,8 @@ interface SwapListProps {
 }
 
 function SwapList({ swaps }: SwapListProps) {
+  const hasSwaps = swaps.length != 0;
+
   return (
     <Table>
       <TableHead>
@@ -67,22 +76,26 @@ function SwapList({ swaps }: SwapListProps) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {swaps.map(row => (
-          <TableRow key={row._links["self"].href}>
-            <TableCell>{row.parameters.alpha_ledger.name}</TableCell>
-            <TableCell>
-              <AssetCell asset={row.parameters.alpha_asset} />
-            </TableCell>
-            <TableCell>{row.parameters.beta_ledger.name}</TableCell>
-            <TableCell>
-              <AssetCell asset={row.parameters.beta_asset} />
-            </TableCell>
-            <TableCell>{row.status}</TableCell>
-            <TableCell>
-              {Object.keys(row._links).filter(key => key != "self")}
-            </TableCell>
-          </TableRow>
-        ))}
+        {hasSwaps &&
+          swaps.map(row => (
+            <TableRow key={row._links["self"].href}>
+              <TableCell>{row.parameters.alpha_ledger.name}</TableCell>
+              <TableCell>
+                <AssetCell asset={row.parameters.alpha_asset} />
+              </TableCell>
+              <TableCell>{row.parameters.beta_ledger.name}</TableCell>
+              <TableCell>
+                <AssetCell asset={row.parameters.beta_asset} />
+              </TableCell>
+              <TableCell>{row.status}</TableCell>
+              <TableCell>
+                {Object.keys(row._links).filter(key => key != "self")}
+              </TableCell>
+            </TableRow>
+          ))}
+        {!hasSwaps && (
+          <EmptySwapListTableRow />
+        )}
       </TableBody>
     </Table>
   );
