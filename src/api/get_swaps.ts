@@ -41,19 +41,21 @@ export default function getSwaps() {
     .then(response => response.json())
     .then(body => body as GetSwapsResponse)
     .then(body => body._embedded.swaps);
-};
+}
 
-function fetchWithTimeout( url: RequestInfo, timeout: number ): Promise<Response> {
-  return new Promise( (resolve, reject) => {
+function fetchWithTimeout(
+  url: RequestInfo,
+  timeout: number
+): Promise<Response> {
+  return new Promise((resolve, reject) => {
     // Set timeout timer
     let timer = setTimeout(
-      () => reject( new Error('Request timed out') ),
+      () => reject(new Error("Request timed out")),
       timeout
     );
 
-    fetch( url ).then(
-      response => resolve( response ),
-      err => reject( err )
-    ).finally( () => clearTimeout(timer) );
-  })
+    fetch(url)
+      .then(response => resolve(response), err => reject(err))
+      .finally(() => clearTimeout(timer));
+  });
 }

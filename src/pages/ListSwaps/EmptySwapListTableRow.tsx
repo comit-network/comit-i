@@ -16,8 +16,13 @@ function EmptySwapListTableRow() {
       <TableCell
         classes={{
           root: classes.root
-        }} align={"center"} colSpan={6}>
-        <Typography variant="display2">The list of swaps is empty :(</Typography>
+        }}
+        align={"center"}
+        colSpan={6}
+      >
+        <Typography variant="display2">
+          The list of swaps is empty :(
+        </Typography>
       </TableCell>
     </TableRow>
   );

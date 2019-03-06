@@ -12,18 +12,19 @@ import React from "react";
 import CloseIcon from "@material-ui/icons/Close";
 import ErrorIcon from "@material-ui/icons/Error";
 
-const styles = (theme: Theme) => createStyles({
-  content: {
-    backgroundColor: theme.palette.error.dark,
-  },
-  message: {
-    display: "flex",
-    alignItems: "center"
-  },
-  icon: {
-    marginRight: theme.spacing.unit
-  }
-});
+const styles = (theme: Theme) =>
+  createStyles({
+    content: {
+      backgroundColor: theme.palette.error.dark
+    },
+    message: {
+      display: "flex",
+      alignItems: "center"
+    },
+    icon: {
+      marginRight: theme.spacing.unit
+    }
+  });
 
 interface ErrorSnackbarProps extends WithStyles<typeof styles> {
   open: boolean;
@@ -31,8 +32,12 @@ interface ErrorSnackbarProps extends WithStyles<typeof styles> {
   message: string;
 }
 
-function ErrorSnackbar({ open, onClose, message, classes }: ErrorSnackbarProps) {
-
+function ErrorSnackbar({
+  open,
+  onClose,
+  message,
+  classes
+}: ErrorSnackbarProps) {
   return (
     <Snackbar
       anchorOrigin={{

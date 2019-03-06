@@ -93,9 +93,7 @@ function SwapList({ swaps }: SwapListProps) {
               </TableCell>
             </TableRow>
           ))}
-        {!hasSwaps && (
-          <EmptySwapListTableRow />
-        )}
+        {!hasSwaps && <EmptySwapListTableRow />}
       </TableBody>
     </Table>
   );
