@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import getSwaps, { Asset, Swap } from "../../api/get_swaps";
 import {
+  Link,
   Table,
   TableBody,
   TableCell,
@@ -71,6 +72,7 @@ function SwapList({ swaps }: SwapListProps) {
           <TableCell component="th">Alpha Asset</TableCell>
           <TableCell component="th">Beta Ledger</TableCell>
           <TableCell component="th">Beta Asset</TableCell>
+          <TableCell component="th">Protocol</TableCell>
           <TableCell component="th">Status</TableCell>
           <TableCell component="th">Actions</TableCell>
         </TableRow>
@@ -87,6 +89,7 @@ function SwapList({ swaps }: SwapListProps) {
               <TableCell>
                 <AssetCell asset={row.parameters.beta_asset} />
               </TableCell>
+              <TableCell>{row.protocol}</TableCell>
               <TableCell>{row.status}</TableCell>
               <TableCell>
                 {Object.keys(row._links).filter(key => key != "self")}
