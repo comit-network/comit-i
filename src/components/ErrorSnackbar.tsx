@@ -11,7 +11,7 @@ interface ErrorSnackbarProps {
 }
 
 const useStyles = makeStyles(theme => ({
-  messageContainer: {
+  message: {
     display: "flex",
     alignItems: "center"
   },
@@ -21,7 +21,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function ErrorSnackbar({ open, onClose, message }: ErrorSnackbarProps) {
-
   const classes = useStyles();
 
   return (
@@ -34,11 +33,14 @@ function ErrorSnackbar({ open, onClose, message }: ErrorSnackbarProps) {
       onClose={onClose}
     >
       <SnackbarContent
+        classes={{
+          message: classes.message
+        }}
         message={
-          <div className={classes.messageContainer}>
-            <ErrorIcon className={classes.icon}/>
+          <React.Fragment>
+            <ErrorIcon className={classes.icon} />
             <span>{message}</span>
-          </div>
+          </React.Fragment>
         }
         action={[
           <IconButton
