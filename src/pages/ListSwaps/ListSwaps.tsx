@@ -77,6 +77,7 @@ function SwapList({ swaps }: SwapListProps) {
           <TableCell component="th">Beta Asset</TableCell>
           <TableCell component="th">Protocol</TableCell>
           <TableCell component="th">Status</TableCell>
+          <TableCell component="th">Role</TableCell>
           <TableCell component="th">Actions</TableCell>
         </TableRow>
       </TableHead>
@@ -94,6 +95,7 @@ function SwapList({ swaps }: SwapListProps) {
               </TableCell>
               <TableCell>{row.protocol}</TableCell>
               <TableCell>{row.status}</TableCell>
+              <TableCell>{row.role}</TableCell>
               <TableCell>
                 {Object.keys(row._links).filter(key => key !== "self")}
               </TableCell>

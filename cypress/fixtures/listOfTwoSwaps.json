@@ -25,6 +25,7 @@
             "network": "regtest"
           }
         },
+        "role": "Alice",
         "protocol": "rfc003",
         "status": "IN_PROGRESS"
       },
@@ -52,6 +53,7 @@
             "network": "regtest"
           }
         },
+        "role": "Bob",
         "protocol": "rfc003",
         "status": "IN_PROGRESS"
       }

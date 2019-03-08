@@ -28,6 +28,7 @@ export interface Swap {
   parameters: Parameters;
   protocol: string;
   status: string;
+  role: string;
 }
 
 export interface GetSwapsResponse {
