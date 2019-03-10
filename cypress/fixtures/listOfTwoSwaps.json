@@ -1,0 +1,62 @@
+{
+  "_embedded": {
+    "swaps": [
+      {
+        "_links": {
+          "self": {
+            "href": "/swaps/rfc003/ab02b94f-b66c-48a3-8ed3-1e300391170e"
+          }
+        },
+        "parameters": {
+          "alpha_asset": {
+            "name": "Bitcoin",
+            "quantity": "100000000"
+          },
+          "alpha_ledger": {
+            "name": "Bitcoin",
+            "network": "regtest"
+          },
+          "beta_asset": {
+            "name": "Ether",
+            "quantity": "10000000000000000000"
+          },
+          "beta_ledger": {
+            "name": "Ethereum",
+            "network": "regtest"
+          }
+        },
+        "role": "Alice",
+        "protocol": "rfc003",
+        "status": "IN_PROGRESS"
+      },
+      {
+        "_links": {
+          "self": {
+            "href": "/swaps/rfc003/05739119-6340-4709-a308-79646b988507"
+          }
+        },
+        "parameters": {
+          "alpha_asset": {
+            "name": "Bitcoin",
+            "quantity": "100"
+          },
+          "alpha_ledger": {
+            "name": "Bitcoin",
+            "network": "regtest"
+          },
+          "beta_asset": {
+            "name": "Ether",
+            "quantity": "10000000000000000000"
+          },
+          "beta_ledger": {
+            "name": "Ethereum",
+            "network": "regtest"
+          }
+        },
+        "role": "Bob",
+        "protocol": "rfc003",
+        "status": "IN_PROGRESS"
+      }
+    ]
+  }
+}

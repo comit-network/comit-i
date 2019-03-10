@@ -6,30 +6,39 @@
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "@material-ui/styles": "^3.0.0-alpha.10",
+    "axios": "^0.18.0",
+    "promise-polyfill": "^8.1.0",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/jest": "24.0.9",
-    "@types/node": "11.10.4",
     "@types/react": "16.8.6",
     "@types/react-dom": "16.8.2",
     "@types/react-router-dom": "^4.3.1",
+    "cypress": "^3.1.5",
     "prettier": "^1.16.4",
+    "serve": "^10.1.2",
+    "start-server-and-test": "^1.7.11",
+    "tslint": "^5.13.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-react": "^3.6.0",
     "typescript": "3.3.3333"
   },
   "scripts": {
     "prestart": "git config core.hooksPath .githooks",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
-    "prettier": "prettier --check 'src/**/*.{js, jsx, css, ts, tsx, html}' '*.json'"
-  },
-  "eslintConfig": {
-    "extends": "react-app"
+    "lint": "tslint -p .",
+    "prettier": "prettier --check '{src,cypress,public}/**/*.{js,jsx,css,ts,tsx,html}' '*.json' '*.yml'",
+    "uiTests": "cypress run",
+    "serveBuild": "serve -s build -l 3000",
+    "serveAndRunUiTests": "start-server-and-test serveBuild http://localhost:3000 uiTests"
   },
   "browserslist": [
     ">0.2%",

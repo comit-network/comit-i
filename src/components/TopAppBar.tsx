@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import NavLink from "./NavLink";
-import { makeStyles } from "@material-ui/styles";
 
 const useTopAppBarStyles = makeStyles({
   grow: {
