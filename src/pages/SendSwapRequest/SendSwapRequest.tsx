@@ -1,6 +1,14 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import queryString from "query-string";
 import React, { useState } from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 const useLedgerSelectStyles = makeStyles(theme => ({
   formControl: {
@@ -10,7 +18,7 @@ const useLedgerSelectStyles = makeStyles(theme => ({
 }));
 
 interface LedgerSelectProps {
-  selected: string | undefined;
+  selected?: string;
   setSelected: (ledger: string) => void;
   label: string;
   disabledValues: string[];
@@ -74,7 +82,7 @@ const useProtocolSelectStyles = makeStyles(theme => ({
 }));
 
 interface ProtocolSelectProps {
-  selected: string | undefined;
+  selected?: string;
   setSelected: (protocol: string) => void;
   label: string;
 }
@@ -101,10 +109,25 @@ function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
   );
 }
 
-const SendSwap = () => {
+function Rfc003ParamsSelect() {
+  return (
+    <FormControl>
+      <TextField label="Alpha Expiry" />
+      <TextField />
+    </FormControl>
+  );
+}
+
+const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [alphaLedger, setAlphaLedger] = useState("");
   const [betaLedger, setBetaLedger] = useState("");
-  const [protocol, setProtocol] = useState("");
+  const setProtocol = (protocolName: string) => {
+    history.push({ search: `?protocol=${protocolName}` });
+  };
+  let protocol = queryString.parse(location.search).protocol || "";
+  if (protocol instanceof Array) {
+    protocol = protocol[0];
+  }
 
   return (
     <div>
@@ -125,8 +148,9 @@ const SendSwap = () => {
         setSelected={setProtocol}
         label={"Protocol"}
       />
+      {protocol === "rfc003" && <Rfc003ParamsSelect />}
     </div>
   );
 };
 
-export default SendSwap;
+export default withRouter(SendSwap);
