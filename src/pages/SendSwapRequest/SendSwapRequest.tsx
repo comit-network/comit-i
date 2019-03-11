@@ -66,9 +66,45 @@ function LedgerSelect({
   );
 }
 
+const useProtocolSelectStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: "8rem"
+  }
+}));
+
+interface ProtocolSelectProps {
+  selected: string | undefined;
+  setSelected: (protocol: string) => void;
+  label: string;
+}
+
+function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
+  const classes = useProtocolSelectStyles();
+  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setSelected(event.target.value);
+  const inputName = label.replace(" ", "-").toLowerCase();
+
+  return (
+    <FormControl className={classes.formControl}>
+      <InputLabel htmlFor={inputName}>{label}</InputLabel>
+      <Select
+        value={selected}
+        onChange={handleOnChange}
+        inputProps={{
+          name: inputName
+        }}
+      >
+        <MenuItem value={"rfc003"}>RFC003</MenuItem>
+      </Select>
+    </FormControl>
+  );
+}
+
 const SendSwap = () => {
   const [alphaLedger, setAlphaLedger] = useState("");
   const [betaLedger, setBetaLedger] = useState("");
+  const [protocol, setProtocol] = useState("");
 
   return (
     <div>
@@ -83,6 +119,11 @@ const SendSwap = () => {
         selected={betaLedger}
         setSelected={setBetaLedger}
         label={"Beta Ledger"}
+      />
+      <ProtocolSelect
+        selected={protocol}
+        setSelected={setProtocol}
+        label={"Protocol"}
       />
     </div>
   );
