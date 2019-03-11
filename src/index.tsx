@@ -1,4 +1,4 @@
-import { createMuiTheme } from "@material-ui/core";
+import { createMuiTheme, CssBaseline } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 // Not all environments support Promise.finally
 import "promise-polyfill/src/polyfill";
@@ -16,7 +16,10 @@ const appTheme = createMuiTheme({
 ReactDOM.render(
   <ThemeProvider theme={appTheme}>
     <BrowserRouter>
-      <App />
+      <React.Fragment>
+        <CssBaseline />
+        <App />
+      </React.Fragment>
     </BrowserRouter>
   </ThemeProvider>,
   document.getElementById("root")

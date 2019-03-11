@@ -1,9 +1,16 @@
 import {
+  createStyles,
   FormControl,
+  Grid,
   InputLabel,
   MenuItem,
+  Paper,
   Select,
-  TextField
+  TextField,
+  Theme,
+  Typography,
+  WithStyles,
+  withStyles
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import queryString from "query-string";
@@ -39,6 +46,7 @@ function LedgerSelect({
     <FormControl className={classes.formControl}>
       <InputLabel htmlFor={inputName}>{label}</InputLabel>
       <Select
+        variant="outlined"
         value={selected}
         onChange={handleOnChange}
         inputProps={{
@@ -111,14 +119,59 @@ function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
 
 function Rfc003ParamsSelect() {
   return (
-    <FormControl>
-      <TextField label="Alpha Expiry" />
-      <TextField />
-    </FormControl>
+    <React.Fragment>
+      <Grid item={true} xs={6}>
+        <Grid item={true} xs={12}>
+          <FormControl>
+            <TextField label="Alpha Expiry" variant="outlined" />
+          </FormControl>
+        </Grid>
+        <Grid item={true} xs={12}>
+          <FormControl>
+            <TextField label="Refund Identity" variant="outlined" />
+          </FormControl>
+        </Grid>
+      </Grid>
+      <Grid item={true} xs={6}>
+        <Grid item={true} xs={12}>
+          <FormControl>
+            <TextField label="Beta Expiry" variant="outlined" />
+          </FormControl>
+        </Grid>
+        <Grid item={true} xs={12}>
+          <FormControl>
+            <TextField label="Redeem Identity" variant="outlined" />
+          </FormControl>
+        </Grid>
+      </Grid>
+    </React.Fragment>
   );
 }
 
-const SendSwap = ({ location, history }: RouteComponentProps) => {
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      margin: "auto",
+      [theme.breakpoints.up("md")]: {
+        maxWidth: "50vw"
+      },
+      [theme.breakpoints.up("xl")]: {
+        maxWidth: "40vw"
+      },
+      padding: theme.spacing.unit * 3
+    },
+    group: {
+      border: "1px solid",
+      borderRadius: theme.shape.borderRadius,
+      borderColor: theme.palette.divider
+    }
+  });
+
+interface SendSwapProps
+  extends RouteComponentProps,
+    WithStyles<typeof styles> {}
+
+const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [alphaLedger, setAlphaLedger] = useState("");
   const [betaLedger, setBetaLedger] = useState("");
   const setProtocol = (protocolName: string) => {
@@ -130,27 +183,46 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   }
 
   return (
-    <div>
-      <LedgerSelect
-        disabledValues={[betaLedger]}
-        selected={alphaLedger}
-        setSelected={setAlphaLedger}
-        label={"Alpha Ledger"}
-      />
-      <LedgerSelect
-        disabledValues={[alphaLedger]}
-        selected={betaLedger}
-        setSelected={setBetaLedger}
-        label={"Beta Ledger"}
-      />
-      <ProtocolSelect
-        selected={protocol}
-        setSelected={setProtocol}
-        label={"Protocol"}
-      />
-      {protocol === "rfc003" && <Rfc003ParamsSelect />}
-    </div>
+    <Paper elevation={1} className={classes.root}>
+      <Typography variant="h4">Send a swap request</Typography>
+      <Grid container={true} spacing={40}>
+        <Grid item={true} xs={6}>
+          <Grid item={true} xs={12}>
+            <LedgerSelect
+              disabledValues={[betaLedger]}
+              selected={alphaLedger}
+              setSelected={setAlphaLedger}
+              label={"Alpha Ledger"}
+            />
+          </Grid>
+          <Grid item={true} xs={12}>
+            <TextField label={"Alpha Asset"} />
+          </Grid>
+        </Grid>
+        <Grid item={true} xs={6}>
+          <Grid item={true} xs={12}>
+            <LedgerSelect
+              disabledValues={[alphaLedger]}
+              selected={betaLedger}
+              setSelected={setBetaLedger}
+              label={"Beta Ledger"}
+            />
+          </Grid>
+          <Grid item={true} xs={12}>
+            <TextField label={"Alpha Asset"} />
+          </Grid>
+        </Grid>
+        <Grid item={true} xs={12}>
+          <ProtocolSelect
+            selected={protocol}
+            setSelected={setProtocol}
+            label={"Protocol"}
+          />
+        </Grid>
+        {protocol === "rfc003" && <Rfc003ParamsSelect />}
+      </Grid>
+    </Paper>
   );
 };
 
-export default withRouter(SendSwap);
+export default withStyles(styles)(withRouter(SendSwap));
