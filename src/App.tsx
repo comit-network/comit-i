@@ -1,6 +1,5 @@
 import {
   AppBar,
-  createMuiTheme,
   createStyles,
   Divider,
   Drawer,
@@ -16,17 +15,10 @@ import {
 } from "@material-ui/core";
 import InboxIcon from "@material-ui/icons/Inbox";
 import SendIcon from "@material-ui/icons/Send";
-import { ThemeProvider } from "@material-ui/styles";
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route, RouteComponentProps, withRouter } from "react-router-dom";
 import LinkPlus from "./components/LinkPlus";
 import ListSwaps from "./pages/ListSwaps/ListSwaps";
-
-const appTheme = createMuiTheme({
-  typography: {
-    useNextVariants: true
-  }
-});
 
 const drawerWidth = 240;
 
@@ -55,66 +47,70 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface AppProps extends WithStyles<typeof styles> {}
+interface AppProps extends WithStyles<typeof styles>, RouteComponentProps {}
 
-const App = ({ classes }: AppProps) => (
-  <ThemeProvider theme={appTheme}>
-    <BrowserRouter>
-      <div className={classes.root}>
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
-              COMIT-i
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          anchor="left"
-          classes={{
-            paper: classes.drawerPaper
-          }}
-        >
-          <div className={classes.toolbar} />
-          <Divider />
-          <List>
-            <ListItem button={true} key={"swaps"}>
-              <ListItemIcon>
-                <InboxIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Swaps"} />
-            </ListItem>
+function App({ classes, history }: AppProps) {
+  const goToRoot = () => history.push("/");
+  const goToMakeLink = () => history.push("/make_link");
+  const goToSendSwap = () => history.push("/send_swap");
 
-            <ListItem button={true} key={"new_swap_link"}>
-              <ListItemIcon>
-                <LinkPlus />
-              </ListItemIcon>
-              <ListItemText primary={"Create swap link"} />
-            </ListItem>
+  return (
+    <div className={classes.root}>
+      <AppBar position="fixed" className={classes.appBar}>
+        <Toolbar>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            COMIT-i
+          </Typography>
+        </Toolbar>
+      </AppBar>
+      <Drawer
+        className={classes.drawer}
+        variant="permanent"
+        anchor="left"
+        classes={{
+          paper: classes.drawerPaper
+        }}
+      >
+        <div className={classes.toolbar} />
+        <Divider />
+        <List>
+          <ListItem button={true} key={"swaps"} onClick={goToRoot}>
+            <ListItemIcon>
+              <InboxIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Swaps"} />
+          </ListItem>
 
-            <ListItem button={true} key={"send_swap"}>
-              <ListItemIcon>
-                <SendIcon />
-              </ListItemIcon>
-              <ListItemText primary={"Send swap request"} />
-            </ListItem>
-          </List>
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Route exact={true} path="/" component={ListSwaps} />
-          <Route path="/make_link" component={CreateNewSwap} />
-          <Route path="/new_swap" component={LinkLandingPage} />
-        </main>
-      </div>
-    </BrowserRouter>
-  </ThemeProvider>
-);
+          <ListItem button={true} key={"new_swap_link"} onClick={goToMakeLink}>
+            <ListItemIcon>
+              <LinkPlus />
+            </ListItemIcon>
+            <ListItemText primary={"Create swap link"} />
+          </ListItem>
 
-const CreateNewSwap = () => <div>Here is where you can create a new swap</div>;
+          <ListItem button={true} key={"send_swap"} onClick={goToSendSwap}>
+            <ListItemIcon>
+              <SendIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Send swap request"} />
+          </ListItem>
+        </List>
+      </Drawer>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+        <Route exact={true} path="/" component={ListSwaps} />
+        <Route path="/make_link" component={MakeLink} />
+        <Route path="/send_swap" component={SendSwap} />
+        <Route path="/new_swap" component={LinkLandingPage} />
+      </main>
+    </div>
+  );
+}
+
+const MakeLink = () => <div>Here is where you can create a new swap</div>;
+const SendSwap = () => <div>Here is where you can send a new swap</div>;
 const LinkLandingPage = () => (
   <div>Here is where you land when you click on a swap-link</div>
 );
 
-export default withStyles(styles)(App);
+export default withStyles(styles)(withRouter(App));

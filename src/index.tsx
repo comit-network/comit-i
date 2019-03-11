@@ -1,8 +1,23 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-
+import { createMuiTheme } from "@material-ui/core";
+import { ThemeProvider } from "@material-ui/styles";
 // Not all environments support Promise.finally
 import "promise-polyfill/src/polyfill";
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
+import App from "./App";
 
-ReactDOM.render(<App />, document.getElementById("root"));
+const appTheme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  }
+});
+
+ReactDOM.render(
+  <ThemeProvider theme={appTheme}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </ThemeProvider>,
+  document.getElementById("root")
+);
