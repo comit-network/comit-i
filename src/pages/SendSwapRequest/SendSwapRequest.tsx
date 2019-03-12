@@ -70,6 +70,13 @@ function LedgerSelect({
   );
 }
 
+const useAssetSelectStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: "10rem"
+  }
+}));
+
 interface AssetSelectProps {
   ledger?: string;
   selected?: string;
@@ -83,6 +90,7 @@ function AssetSelect({
   setSelected,
   label
 }: AssetSelectProps) {
+  const classes = useAssetSelectStyles();
   const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
     setSelected(event.target.value);
   const inputName = label.replace(" ", "-").toLowerCase();
@@ -95,7 +103,7 @@ function AssetSelect({
   }
 
   return (
-    <FormControl>
+    <FormControl className={classes.formControl}>
       <InputLabel htmlFor={inputName}>{label}</InputLabel>
       <Select
         value={selected}
@@ -176,6 +184,63 @@ function Rfc003ParamsSelect() {
   );
 }
 
+const useLedgerFieldSetStyles = makeStyles(theme => ({
+  // TODO: Hard-coded values should instead be derived from theme. Create issue in MaterialUI repo
+  root: {
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: theme.shape.borderRadius,
+    borderColor:
+      theme.palette.type === "light"
+        ? "rgba(0, 0, 0, 0.42)"
+        : "rgba(255, 255, 255, 0.7)"
+  }
+}));
+
+interface LedgerFieldSetProps {
+  name: string;
+  ledger: string;
+  setLedger: (ledger: string) => void;
+  asset: string;
+  setAsset: (asset: string) => void;
+  otherLedger: string;
+}
+
+function LedgerFieldSet({
+  name,
+  ledger,
+  setLedger,
+  asset,
+  setAsset,
+  otherLedger
+}: LedgerFieldSetProps) {
+  const classes = useLedgerFieldSetStyles();
+
+  return (
+    <fieldset className={classes.root}>
+      <legend>{name}</legend>
+      <Grid item={true} xs={1}>
+        <LedgerSelect
+          disabledValues={[otherLedger]}
+          selected={ledger}
+          setSelected={setLedger}
+          label={"Ledger"}
+        />
+      </Grid>
+      {ledger && (
+        <Grid item={true} xs={1}>
+          <AssetSelect
+            ledger={ledger}
+            selected={asset}
+            setSelected={setAsset}
+            label={"Asset"}
+          />
+        </Grid>
+      )}
+    </fieldset>
+  );
+}
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -198,47 +263,6 @@ const styles = (theme: Theme) =>
 interface SendSwapProps
   extends RouteComponentProps,
     WithStyles<typeof styles> {}
-
-interface LedgerFieldSetProps {
-  name: string;
-  ledger: string;
-  setLedger: (ledger: string) => void;
-  asset: string;
-  setAsset: (asset: string) => void;
-  otherLedger: string;
-}
-
-function LedgerFieldSet({
-  ledger,
-  setLedger,
-  asset,
-  setAsset,
-  otherLedger
-}: LedgerFieldSetProps) {
-  return (
-    <fieldset>
-      <legend>Alpha</legend>
-      <Grid item={true} xs={1}>
-        <LedgerSelect
-          disabledValues={[otherLedger]}
-          selected={ledger}
-          setSelected={setLedger}
-          label={"Ledger"}
-        />
-      </Grid>
-      {ledger && (
-        <Grid item={true} xs={1}>
-          <AssetSelect
-            ledger={ledger}
-            selected={asset}
-            setSelected={setAsset}
-            label={"Asset"}
-          />
-        </Grid>
-      )}
-    </fieldset>
-  );
-}
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [alphaLedger, setAlphaLedger] = useState("");
