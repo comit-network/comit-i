@@ -189,7 +189,7 @@ function AssetSelect({
 const useProtocolSelectStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: "8rem"
+    minWidth: "10rem"
   }
 }));
 
@@ -295,8 +295,8 @@ function LedgerFieldSet({
   return (
     <fieldset className={classes.root}>
       <legend>{label}</legend>
-      <Grid item={true} xs={12} container={true} spacing={24}>
-        <Grid item={true} xs={6}>
+      <Grid item={true} xs={12} container={true} spacing={0}>
+        <Grid item={true} xs={12} md={6}>
           <LedgerSelect
             disabledValues={[otherLedger]}
             selected={ledger}
@@ -305,7 +305,7 @@ function LedgerFieldSet({
           />
         </Grid>
         {ledger && (
-          <Grid item={true} xs={6}>
+          <Grid item={true} xs={12} md={6}>
             <NetworkSelect
               ledger={ledger}
               selected={network}
@@ -316,8 +316,8 @@ function LedgerFieldSet({
         )}
       </Grid>
       {ledger && (
-        <Grid item={true} xs={12} container={true} spacing={24}>
-          <Grid item={true} xs={6}>
+        <Grid item={true} xs={12} container={true} spacing={0}>
+          <Grid item={true} xs={12} md={6}>
             <AssetSelect
               ledger={ledger}
               selected={asset}
@@ -325,7 +325,7 @@ function LedgerFieldSet({
               label={"Asset"}
             />
           </Grid>
-          <Grid item={true} xs={6}>
+          <Grid item={true} xs={12} md={6}>
             <QuantityText selected={quantity} setSelected={setQuantity} />
           </Grid>
         </Grid>
@@ -334,17 +334,26 @@ function LedgerFieldSet({
   );
 }
 
+const useQuantityTextStyles = makeStyles(theme => ({
+  root: {
+    margin: theme.spacing.unit,
+    width: "10rem"
+  }
+}));
+
 interface QuantityTextProps {
   selected: number;
   setSelected: (quantity: number) => void;
 }
 
 function QuantityText({ selected, setSelected }: QuantityTextProps) {
+  const classes = useQuantityTextStyles();
   const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
     setSelected(parseFloat(event.target.value));
 
   return (
     <TextField
+      className={classes.root}
       type="number"
       value={selected}
       onChange={handleOnChange}
@@ -397,7 +406,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   return (
     <Paper elevation={1} className={classes.root}>
       <Typography variant="h4">Send a swap request</Typography>
-      <Grid container={true} spacing={24}>
+      <Grid container={true} spacing={40}>
         <Grid item={true} xs={12}>
           <LedgerFieldSet
             label={"Alpha"}
