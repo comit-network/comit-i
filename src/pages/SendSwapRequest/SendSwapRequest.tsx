@@ -266,42 +266,46 @@ const useLedgerFieldSetStyles = makeStyles(theme => ({
 }));
 
 interface LedgerFieldSetProps {
-  name: string;
+  label: string;
   ledger: string;
   setLedger: (ledger: string) => void;
   network: string;
   setNetwork: (network: string) => void;
   asset: string;
   setAsset: (asset: string) => void;
+  quantity: number;
+  setQuantity: (quantity: number) => void;
   otherLedger: string;
 }
 
 function LedgerFieldSet({
-  name,
+  label,
   ledger,
   setLedger,
   network,
   setNetwork,
   asset,
   setAsset,
+  quantity,
+  setQuantity,
   otherLedger
 }: LedgerFieldSetProps) {
   const classes = useLedgerFieldSetStyles();
 
   return (
     <fieldset className={classes.root}>
-      <legend>{name}</legend>
-      <Grid item={true} xs={1}>
-        <LedgerSelect
-          disabledValues={[otherLedger]}
-          selected={ledger}
-          setSelected={setLedger}
-          label={"Ledger"}
-        />
-      </Grid>
-      {ledger && (
-        <React.Fragment>
-          <Grid item={true} xs={1}>
+      <legend>{label}</legend>
+      <Grid item={true} xs={12} container={true} spacing={24}>
+        <Grid item={true} xs={6}>
+          <LedgerSelect
+            disabledValues={[otherLedger]}
+            selected={ledger}
+            setSelected={setLedger}
+            label={"Ledger"}
+          />
+        </Grid>
+        {ledger && (
+          <Grid item={true} xs={6}>
             <NetworkSelect
               ledger={ledger}
               selected={network}
@@ -309,7 +313,11 @@ function LedgerFieldSet({
               label={"Network"}
             />
           </Grid>
-          <Grid item={true} xs={1}>
+        )}
+      </Grid>
+      {ledger && (
+        <Grid item={true} xs={12} container={true} spacing={24}>
+          <Grid item={true} xs={6}>
             <AssetSelect
               ledger={ledger}
               selected={asset}
@@ -317,9 +325,31 @@ function LedgerFieldSet({
               label={"Asset"}
             />
           </Grid>
-        </React.Fragment>
+          <Grid item={true} xs={6}>
+            <QuantityText selected={quantity} setSelected={setQuantity} />
+          </Grid>
+        </Grid>
       )}
     </fieldset>
+  );
+}
+
+interface QuantityTextProps {
+  selected: number;
+  setSelected: (quantity: number) => void;
+}
+
+function QuantityText({ selected, setSelected }: QuantityTextProps) {
+  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
+    setSelected(parseFloat(event.target.value));
+
+  return (
+    <TextField
+      type="number"
+      value={selected}
+      onChange={handleOnChange}
+      label="Quantity"
+    />
   );
 }
 
@@ -353,6 +383,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [betaAsset, setBetaAsset] = useState("");
   const [alphaNetwork, setAlphaNetwork] = useState("");
   const [betaNetwork, setBetaNetwork] = useState("");
+  const [alphaQuantity, setAlphaQuantity] = useState(0);
+  const [betaQuantity, setBetaQuantity] = useState(0);
 
   const setProtocol = (protocolName: string) => {
     history.push({ search: `?protocol=${protocolName}` });
@@ -365,32 +397,36 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   return (
     <Paper elevation={1} className={classes.root}>
       <Typography variant="h4">Send a swap request</Typography>
-      <Grid container={true} spacing={40}>
+      <Grid container={true} spacing={24}>
         <Grid item={true} xs={12}>
           <LedgerFieldSet
-            name={"Alpha"}
+            label={"Alpha"}
             ledger={alphaLedger}
             setLedger={setAlphaLedger}
             network={alphaNetwork}
             setNetwork={setAlphaNetwork}
             asset={alphaAsset}
             setAsset={setAlphaAsset}
+            quantity={alphaQuantity}
+            setQuantity={setAlphaQuantity}
             otherLedger={betaLedger}
           />
         </Grid>
         <Grid item={true} xs={12}>
           <LedgerFieldSet
-            name={"Beta"}
+            label={"Beta"}
             ledger={betaLedger}
             setLedger={setBetaLedger}
             network={betaNetwork}
             setNetwork={setBetaNetwork}
             asset={betaAsset}
             setAsset={setBetaAsset}
+            quantity={betaQuantity}
+            setQuantity={setBetaQuantity}
             otherLedger={alphaLedger}
           />
         </Grid>
-        <Grid item={true} xs={12}>
+        <Grid item={true} xs={6}>
           <ProtocolSelect
             selected={protocol}
             setSelected={setProtocol}
