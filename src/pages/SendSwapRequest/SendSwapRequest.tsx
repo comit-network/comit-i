@@ -70,6 +70,74 @@ function LedgerSelect({
   );
 }
 
+const useNetworkSelectStyles = makeStyles(theme => ({
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: "10rem"
+  }
+}));
+
+interface NetworkSelectProps {
+  ledger?: string;
+  selected?: string;
+  setSelected: (network: string) => void;
+  label: string;
+}
+
+function NetworkSelect({
+  ledger,
+  selected,
+  setSelected,
+  label
+}: NetworkSelectProps) {
+  const classes = useNetworkSelectStyles();
+  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setSelected(event.target.value);
+  const inputName = label.replace(" ", "-").toLowerCase();
+
+  let menuItems;
+  if (ledger === "bitcoin") {
+    menuItems = [
+      <MenuItem value={"mainnet"} key="0">
+        Mainnet
+      </MenuItem>,
+      <MenuItem value={"regtest"} key="1">
+        Regtest
+      </MenuItem>,
+      <MenuItem value={"testnet"} key="2">
+        Testnet
+      </MenuItem>
+    ];
+  } else {
+    menuItems = [
+      <MenuItem value={"mainnet"} key="0">
+        Mainnet
+      </MenuItem>,
+      <MenuItem value={"regtest"} key="1">
+        Regtest
+      </MenuItem>,
+      <MenuItem value={"ropsten"} key="2">
+        Ropsten
+      </MenuItem>
+    ];
+  }
+
+  return (
+    <FormControl className={classes.formControl}>
+      <InputLabel htmlFor={inputName}>{label}</InputLabel>
+      <Select
+        value={selected}
+        onChange={handleOnChange}
+        inputProps={{
+          name: inputName
+        }}
+      >
+        {menuItems}
+      </Select>
+    </FormControl>
+  );
+}
+
 const useAssetSelectStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing.unit,
@@ -201,6 +269,8 @@ interface LedgerFieldSetProps {
   name: string;
   ledger: string;
   setLedger: (ledger: string) => void;
+  network: string;
+  setNetwork: (network: string) => void;
   asset: string;
   setAsset: (asset: string) => void;
   otherLedger: string;
@@ -210,6 +280,8 @@ function LedgerFieldSet({
   name,
   ledger,
   setLedger,
+  network,
+  setNetwork,
   asset,
   setAsset,
   otherLedger
@@ -228,14 +300,24 @@ function LedgerFieldSet({
         />
       </Grid>
       {ledger && (
-        <Grid item={true} xs={1}>
-          <AssetSelect
-            ledger={ledger}
-            selected={asset}
-            setSelected={setAsset}
-            label={"Asset"}
-          />
-        </Grid>
+        <React.Fragment>
+          <Grid item={true} xs={1}>
+            <NetworkSelect
+              ledger={ledger}
+              selected={network}
+              setSelected={setNetwork}
+              label={"Network"}
+            />
+          </Grid>
+          <Grid item={true} xs={1}>
+            <AssetSelect
+              ledger={ledger}
+              selected={asset}
+              setSelected={setAsset}
+              label={"Asset"}
+            />
+          </Grid>
+        </React.Fragment>
       )}
     </fieldset>
   );
@@ -269,6 +351,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [betaLedger, setBetaLedger] = useState("");
   const [alphaAsset, setAlphaAsset] = useState("");
   const [betaAsset, setBetaAsset] = useState("");
+  const [alphaNetwork, setAlphaNetwork] = useState("");
+  const [betaNetwork, setBetaNetwork] = useState("");
 
   const setProtocol = (protocolName: string) => {
     history.push({ search: `?protocol=${protocolName}` });
@@ -287,6 +371,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             name={"Alpha"}
             ledger={alphaLedger}
             setLedger={setAlphaLedger}
+            network={alphaNetwork}
+            setNetwork={setAlphaNetwork}
             asset={alphaAsset}
             setAsset={setAlphaAsset}
             otherLedger={betaLedger}
@@ -297,6 +383,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             name={"Beta"}
             ledger={betaLedger}
             setLedger={setBetaLedger}
+            network={betaNetwork}
+            setNetwork={setBetaNetwork}
             asset={betaAsset}
             setAsset={setBetaAsset}
             otherLedger={alphaLedger}
