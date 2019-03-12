@@ -54,29 +54,57 @@ function LedgerSelect({
         }}
       >
         <MenuItem
-          disabled={disabledValues.indexOf("bitcoin-mainnet") !== -1}
-          value={"bitcoin-mainnet"}
+          disabled={disabledValues.indexOf("bitcoin") !== -1}
+          value={"bitcoin"}
         >
-          Bitcoin-Mainnet
+          Bitcoin
         </MenuItem>
         <MenuItem
-          disabled={disabledValues.indexOf("bitcoin-testnet") !== -1}
-          value={"bitcoin-testnet"}
+          disabled={disabledValues.indexOf("ethereum") !== -1}
+          value={"ethereum"}
         >
-          Bitcoin-Testnet
+          Ethereum
         </MenuItem>
-        <MenuItem
-          disabled={disabledValues.indexOf("bitcoin-regtest") !== -1}
-          value={"bitcoin-regtest"}
-        >
-          Bitcoin-Regtest
-        </MenuItem>
-        <MenuItem
-          disabled={disabledValues.indexOf("ethereum-mainnet") !== -1}
-          value={"ethereum-mainnet"}
-        >
-          Ethereum-Mainnet
-        </MenuItem>
+      </Select>
+    </FormControl>
+  );
+}
+
+interface AssetSelectProps {
+  ledger?: string;
+  selected?: string;
+  setSelected: (asset: string) => void;
+  label: string;
+}
+
+function AssetSelect({
+  ledger,
+  selected,
+  setSelected,
+  label
+}: AssetSelectProps) {
+  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setSelected(event.target.value);
+  const inputName = label.replace(" ", "-").toLowerCase();
+
+  let menuItems;
+  if (ledger === "bitcoin") {
+    menuItems = <MenuItem value={"bitcoin"}>Bitcoin</MenuItem>;
+  } else {
+    menuItems = <MenuItem value={"ether"}>Ether</MenuItem>;
+  }
+
+  return (
+    <FormControl>
+      <InputLabel htmlFor={inputName}>{label}</InputLabel>
+      <Select
+        value={selected}
+        onChange={handleOnChange}
+        inputProps={{
+          name: inputName
+        }}
+      >
+        {menuItems}
       </Select>
     </FormControl>
   );
@@ -120,7 +148,7 @@ function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
 function Rfc003ParamsSelect() {
   return (
     <React.Fragment>
-      <Grid item={true} xs={6}>
+      <Grid item={true} xs={12}>
         <Grid item={true} xs={12}>
           <FormControl>
             <TextField label="Alpha Expiry" variant="outlined" />
@@ -132,7 +160,7 @@ function Rfc003ParamsSelect() {
           </FormControl>
         </Grid>
       </Grid>
-      <Grid item={true} xs={6}>
+      <Grid item={true} xs={12}>
         <Grid item={true} xs={12}>
           <FormControl>
             <TextField label="Beta Expiry" variant="outlined" />
@@ -171,9 +199,53 @@ interface SendSwapProps
   extends RouteComponentProps,
     WithStyles<typeof styles> {}
 
+interface LedgerFieldSetProps {
+  name: string;
+  ledger: string;
+  setLedger: (ledger: string) => void;
+  asset: string;
+  setAsset: (asset: string) => void;
+  otherLedger: string;
+}
+
+function LedgerFieldSet({
+  ledger,
+  setLedger,
+  asset,
+  setAsset,
+  otherLedger
+}: LedgerFieldSetProps) {
+  return (
+    <fieldset>
+      <legend>Alpha</legend>
+      <Grid item={true} xs={1}>
+        <LedgerSelect
+          disabledValues={[otherLedger]}
+          selected={ledger}
+          setSelected={setLedger}
+          label={"Ledger"}
+        />
+      </Grid>
+      {ledger && (
+        <Grid item={true} xs={1}>
+          <AssetSelect
+            ledger={ledger}
+            selected={asset}
+            setSelected={setAsset}
+            label={"Asset"}
+          />
+        </Grid>
+      )}
+    </fieldset>
+  );
+}
+
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [alphaLedger, setAlphaLedger] = useState("");
   const [betaLedger, setBetaLedger] = useState("");
+  const [alphaAsset, setAlphaAsset] = useState("");
+  const [betaAsset, setBetaAsset] = useState("");
+
   const setProtocol = (protocolName: string) => {
     history.push({ search: `?protocol=${protocolName}` });
   };
@@ -186,31 +258,25 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
     <Paper elevation={1} className={classes.root}>
       <Typography variant="h4">Send a swap request</Typography>
       <Grid container={true} spacing={40}>
-        <Grid item={true} xs={6}>
-          <Grid item={true} xs={12}>
-            <LedgerSelect
-              disabledValues={[betaLedger]}
-              selected={alphaLedger}
-              setSelected={setAlphaLedger}
-              label={"Alpha Ledger"}
-            />
-          </Grid>
-          <Grid item={true} xs={12}>
-            <TextField label={"Alpha Asset"} />
-          </Grid>
+        <Grid item={true} xs={12}>
+          <LedgerFieldSet
+            name={"Alpha"}
+            ledger={alphaLedger}
+            setLedger={setAlphaLedger}
+            asset={alphaAsset}
+            setAsset={setAlphaAsset}
+            otherLedger={betaLedger}
+          />
         </Grid>
-        <Grid item={true} xs={6}>
-          <Grid item={true} xs={12}>
-            <LedgerSelect
-              disabledValues={[alphaLedger]}
-              selected={betaLedger}
-              setSelected={setBetaLedger}
-              label={"Beta Ledger"}
-            />
-          </Grid>
-          <Grid item={true} xs={12}>
-            <TextField label={"Alpha Asset"} />
-          </Grid>
+        <Grid item={true} xs={12}>
+          <LedgerFieldSet
+            name={"Beta"}
+            ledger={betaLedger}
+            setLedger={setBetaLedger}
+            asset={betaAsset}
+            setAsset={setBetaAsset}
+            otherLedger={alphaLedger}
+          />
         </Grid>
         <Grid item={true} xs={12}>
           <ProtocolSelect
