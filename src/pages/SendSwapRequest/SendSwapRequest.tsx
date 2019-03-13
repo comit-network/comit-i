@@ -12,6 +12,7 @@ import {
   WithStyles,
   withStyles
 } from "@material-ui/core";
+import InputAdornment from "@material-ui/core/InputAdornment";
 import { makeStyles } from "@material-ui/styles";
 import queryString from "query-string";
 import React, { useState } from "react";
@@ -190,6 +191,15 @@ const useProtocolSelectStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing.unit,
     minWidth: "10rem"
+  },
+  fieldSet: {
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: theme.shape.borderRadius,
+    borderColor:
+      theme.palette.type === "light"
+        ? "rgba(0, 0, 0, 0.42)"
+        : "rgba(255, 255, 255, 0.7)"
   }
 }));
 
@@ -206,46 +216,91 @@ function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
   const inputName = label.replace(" ", "-").toLowerCase();
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel htmlFor={inputName}>{label}</InputLabel>
-      <Select
-        value={selected}
-        onChange={handleOnChange}
-        inputProps={{
-          name: inputName
-        }}
-      >
-        <MenuItem value={"rfc003"}>RFC003</MenuItem>
-      </Select>
-    </FormControl>
+    <fieldset className={classes.fieldSet}>
+      <legend>{label} Parameters</legend>
+      <FormControl className={classes.formControl}>
+        <InputLabel htmlFor={inputName}>{label} </InputLabel>
+        <Select
+          value={selected}
+          onChange={handleOnChange}
+          inputProps={{
+            name: inputName
+          }}
+        >
+          <MenuItem value={"rfc003"}>RFC003</MenuItem>
+        </Select>
+      </FormControl>
+      {selected === "rfc003" && <Rfc003ParamsSelect />}
+    </fieldset>
   );
 }
 
+const useRfc003ParamsSelectProps = makeStyles(theme => ({
+  expiry: {
+    margin: theme.spacing.unit,
+    width: "10rem"
+  },
+  identity: {
+    margin: theme.spacing.unit,
+    width: "100%"
+  },
+  // TODO: This doesn't make border-bottom respect the margin completely
+  grid: {
+    overflow: "hidden"
+  }
+}));
+
 function Rfc003ParamsSelect() {
+  const classes = useRfc003ParamsSelectProps();
+  const [alphaExpiry, setAlphaExpiry] = useState(0);
+  const [betaExpiry, setBetaExpiry] = useState(0);
+  const [alphaRefundIdentity, setAlphaRefundIdentity] = useState("");
+  const [betaRedeemIdentity, setBetaRedeemIdentity] = useState("");
+
   return (
     <React.Fragment>
-      <Grid item={true} xs={12}>
-        <Grid item={true} xs={12}>
-          <FormControl>
-            <TextField label="Alpha Expiry" variant="outlined" />
-          </FormControl>
+      <Grid item={true} xs={12} container={true} spacing={0}>
+        <Grid item={true} md={6} xs={12}>
+          <TextField
+            className={classes.expiry}
+            label="Alpha Expiry"
+            value={alphaExpiry}
+            onChange={event => setAlphaExpiry(parseInt(event.target.value, 10))}
+            type="number"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">min</InputAdornment>
+            }}
+          />
         </Grid>
-        <Grid item={true} xs={12}>
-          <FormControl>
-            <TextField label="Refund Identity" variant="outlined" />
-          </FormControl>
+        <Grid className={classes.grid} item={true} md={6} xs={12}>
+          <TextField
+            className={classes.identity}
+            label="Alpha Refund Identity"
+            value={alphaRefundIdentity}
+            onChange={event => setAlphaRefundIdentity(event.target.value)}
+          />
         </Grid>
       </Grid>
-      <Grid item={true} xs={12}>
-        <Grid item={true} xs={12}>
-          <FormControl>
-            <TextField label="Beta Expiry" variant="outlined" />
-          </FormControl>
+      <Grid item={true} xs={12} container={true} spacing={0}>
+        <Grid item={true} md={6} xs={12}>
+          <TextField
+            className={classes.expiry}
+            label="Beta Expiry"
+            value={betaExpiry}
+            onChange={event => setBetaExpiry(parseInt(event.target.value, 10))}
+            type="number"
+            InputProps={{
+              endAdornment: <InputAdornment position="end">min</InputAdornment>
+            }}
+          />
         </Grid>
-        <Grid item={true} xs={12}>
-          <FormControl>
-            <TextField label="Redeem Identity" variant="outlined" />
-          </FormControl>
+        <Grid className={classes.grid} item={true} md={6} xs={12}>
+          <TextField
+            className={classes.identity}
+            label="Beta Redeem Identity"
+            value={betaRedeemIdentity}
+            onChange={event => setBetaRedeemIdentity(event.target.value)}
+          />
         </Grid>
       </Grid>
     </React.Fragment>
@@ -378,6 +433,9 @@ const styles = (theme: Theme) =>
       border: "1px solid",
       borderRadius: theme.shape.borderRadius,
       borderColor: theme.palette.divider
+    },
+    title: {
+      marginBottom: "1rem"
     }
   });
 
@@ -405,7 +463,9 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
 
   return (
     <Paper elevation={1} className={classes.root}>
-      <Typography variant="h4">Send a swap request</Typography>
+      <Typography className={classes.title} variant="h4">
+        Send a swap request
+      </Typography>
       <Grid container={true} spacing={40}>
         <Grid item={true} xs={12}>
           <LedgerFieldSet
@@ -435,14 +495,13 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             otherLedger={alphaLedger}
           />
         </Grid>
-        <Grid item={true} xs={6}>
+        <Grid item={true} xs={12}>
           <ProtocolSelect
             selected={protocol}
             setSelected={setProtocol}
             label={"Protocol"}
           />
         </Grid>
-        {protocol === "rfc003" && <Rfc003ParamsSelect />}
       </Grid>
     </Paper>
   );
