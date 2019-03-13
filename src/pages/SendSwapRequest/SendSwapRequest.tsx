@@ -189,54 +189,6 @@ function AssetSelect({
   );
 }
 
-const useProtocolSelectStyles = makeStyles(theme => ({
-  root: {
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderRadius: theme.shape.borderRadius,
-    borderColor:
-      theme.palette.type === "light"
-        ? "rgba(0, 0, 0, 0.42)"
-        : "rgba(255, 255, 255, 0.7)"
-  },
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: "10rem"
-  }
-}));
-
-interface ProtocolSelectProps {
-  selected?: string;
-  setSelected: (protocol: string) => void;
-  label: string;
-}
-
-function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
-  const classes = useProtocolSelectStyles();
-  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
-    setSelected(event.target.value);
-  const inputName = label.replace(" ", "-").toLowerCase();
-
-  return (
-    <fieldset className={classes.root}>
-      <legend>{label} Parameters</legend>
-      <FormControl className={classes.formControl}>
-        <InputLabel htmlFor={inputName}>{label} </InputLabel>
-        <Select
-          value={selected}
-          onChange={handleOnChange}
-          inputProps={{
-            name: inputName
-          }}
-        >
-          <MenuItem value={"rfc003"}>RFC003</MenuItem>
-        </Select>
-      </FormControl>
-      {selected === "rfc003" && <Rfc003Params />}
-    </fieldset>
-  );
-}
-
 const useRfc003ParamsStyles = makeStyles(theme => ({
   expiry: {
     margin: theme.spacing.unit,
@@ -252,12 +204,28 @@ const useRfc003ParamsStyles = makeStyles(theme => ({
   }
 }));
 
-function Rfc003Params() {
+interface Rfc003ParamsProps {
+  alphaExpiry: number;
+  setAlphaExpiry: (expiry: number) => void;
+  betaExpiry: number;
+  setBetaExpiry: (expiry: number) => void;
+  alphaRefundIdentity: string;
+  setAlphaRefundIdentity: (identity: string) => void;
+  betaRedeemIdentity: string;
+  setBetaRedeemIdentity: (identity: string) => void;
+}
+
+function Rfc003Params({
+  alphaExpiry,
+  setAlphaExpiry,
+  betaExpiry,
+  setBetaExpiry,
+  alphaRefundIdentity,
+  setAlphaRefundIdentity,
+  betaRedeemIdentity,
+  setBetaRedeemIdentity
+}: Rfc003ParamsProps) {
   const classes = useRfc003ParamsStyles();
-  const [alphaExpiry, setAlphaExpiry] = useState(0);
-  const [betaExpiry, setBetaExpiry] = useState(0);
-  const [alphaRefundIdentity, setAlphaRefundIdentity] = useState("");
-  const [betaRedeemIdentity, setBetaRedeemIdentity] = useState("");
 
   return (
     <React.Fragment>
@@ -480,6 +448,19 @@ const styles = (theme: Theme) =>
     },
     title: {
       marginBottom: theme.spacing.unit * 3
+    },
+    fieldset: {
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderRadius: theme.shape.borderRadius,
+      borderColor:
+        theme.palette.type === "light"
+          ? "rgba(0, 0, 0, 0.42)"
+          : "rgba(255, 255, 255, 0.7)"
+    },
+    formControl: {
+      margin: theme.spacing.unit,
+      minWidth: "10rem"
     }
   });
 
@@ -496,6 +477,10 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [betaNetwork, setBetaNetwork] = useState("");
   const [alphaQuantity, setAlphaQuantity] = useState(0);
   const [betaQuantity, setBetaQuantity] = useState(0);
+  const [alphaExpiry, setAlphaExpiry] = useState(0);
+  const [betaExpiry, setBetaExpiry] = useState(0);
+  const [alphaRefundIdentity, setAlphaRefundIdentity] = useState("");
+  const [betaRedeemIdentity, setBetaRedeemIdentity] = useState("");
   const [peer, setPeer] = useState("");
 
   const canSend = [
@@ -553,11 +538,33 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
           />
         </Grid>
         <Grid item={true} xs={12}>
-          <ProtocolSelect
-            selected={protocol}
-            setSelected={setProtocol}
-            label={"Protocol"}
-          />
+          <fieldset className={classes.fieldset}>
+            <legend>Protocol Parameters</legend>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor={"protocol"}>Protocol</InputLabel>
+              <Select
+                value={protocol}
+                onChange={event => setProtocol(event.target.value)}
+                inputProps={{
+                  name: "protocol"
+                }}
+              >
+                <MenuItem value={"rfc003"}>RFC003</MenuItem>
+              </Select>
+            </FormControl>
+            {protocol === "rfc003" && (
+              <Rfc003Params
+                alphaExpiry={alphaExpiry}
+                setAlphaExpiry={setAlphaExpiry}
+                betaExpiry={betaExpiry}
+                setBetaExpiry={setBetaExpiry}
+                alphaRefundIdentity={alphaRefundIdentity}
+                setAlphaRefundIdentity={setAlphaRefundIdentity}
+                betaRedeemIdentity={betaRedeemIdentity}
+                setBetaRedeemIdentity={setBetaRedeemIdentity}
+              />
+            )}
+          </fieldset>
         </Grid>
         <Grid item={true} xs={12}>
           <PeerText
