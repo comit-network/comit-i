@@ -1,4 +1,5 @@
 import {
+  Button,
   createStyles,
   FormControl,
   Grid,
@@ -13,6 +14,7 @@ import {
   withStyles
 } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import SendIcon from "@material-ui/icons/Send";
 import { makeStyles } from "@material-ui/styles";
 import queryString from "query-string";
 import React, { useState } from "react";
@@ -230,12 +232,12 @@ function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
           <MenuItem value={"rfc003"}>RFC003</MenuItem>
         </Select>
       </FormControl>
-      {selected === "rfc003" && <Rfc003ParamsSelect />}
+      {selected === "rfc003" && <Rfc003Params />}
     </fieldset>
   );
 }
 
-const useRfc003ParamsSelectProps = makeStyles(theme => ({
+const useRfc003ParamsStyles = makeStyles(theme => ({
   expiry: {
     margin: theme.spacing.unit,
     width: "10rem"
@@ -250,8 +252,8 @@ const useRfc003ParamsSelectProps = makeStyles(theme => ({
   }
 }));
 
-function Rfc003ParamsSelect() {
-  const classes = useRfc003ParamsSelectProps();
+function Rfc003Params() {
+  const classes = useRfc003ParamsStyles();
   const [alphaExpiry, setAlphaExpiry] = useState(0);
   const [betaExpiry, setBetaExpiry] = useState(0);
   const [alphaRefundIdentity, setAlphaRefundIdentity] = useState("");
@@ -477,7 +479,7 @@ const styles = (theme: Theme) =>
       borderColor: theme.palette.divider
     },
     title: {
-      marginBottom: "1rem"
+      marginBottom: theme.spacing.unit * 3
     }
   });
 
@@ -495,6 +497,18 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [alphaQuantity, setAlphaQuantity] = useState(0);
   const [betaQuantity, setBetaQuantity] = useState(0);
   const [peer, setPeer] = useState("");
+
+  const canSend = [
+    alphaLedger,
+    betaLedger,
+    alphaAsset,
+    betaAsset,
+    alphaNetwork,
+    betaNetwork,
+    alphaQuantity,
+    betaQuantity,
+    peer
+  ].reduce((acc, field) => acc && field !== undefined, true);
 
   const setProtocol = (protocolName: string) => {
     history.push({ search: `?protocol=${protocolName}` });
@@ -554,8 +568,38 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
           />
         </Grid>
       </Grid>
+      <SendButton enabled={canSend} />
     </Paper>
   );
 };
+
+const useSendButtonStyles = makeStyles(theme => ({
+  button: {
+    margin: theme.spacing.unit * 2
+  },
+  icon: {
+    marginLeft: theme.spacing.unit
+  }
+}));
+
+interface SendButtonProps {
+  enabled: boolean;
+}
+
+function SendButton({ enabled }: SendButtonProps) {
+  const classes = useSendButtonStyles();
+
+  return (
+    <Button
+      variant="contained"
+      disabled={!enabled}
+      color="primary"
+      className={classes.button}
+    >
+      Send
+      <SendIcon className={classes.icon} />
+    </Button>
+  );
+}
 
 export default withStyles(styles)(withRouter(SendSwap));
