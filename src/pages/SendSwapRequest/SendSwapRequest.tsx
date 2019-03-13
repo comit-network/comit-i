@@ -188,11 +188,7 @@ function AssetSelect({
 }
 
 const useProtocolSelectStyles = makeStyles(theme => ({
-  formControl: {
-    margin: theme.spacing.unit,
-    minWidth: "10rem"
-  },
-  fieldSet: {
+  root: {
     borderWidth: "1px",
     borderStyle: "solid",
     borderRadius: theme.shape.borderRadius,
@@ -200,6 +196,10 @@ const useProtocolSelectStyles = makeStyles(theme => ({
       theme.palette.type === "light"
         ? "rgba(0, 0, 0, 0.42)"
         : "rgba(255, 255, 255, 0.7)"
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: "10rem"
   }
 }));
 
@@ -216,7 +216,7 @@ function ProtocolSelect({ selected, setSelected, label }: ProtocolSelectProps) {
   const inputName = label.replace(" ", "-").toLowerCase();
 
   return (
-    <fieldset className={classes.fieldSet}>
+    <fieldset className={classes.root}>
       <legend>{label} Parameters</legend>
       <FormControl className={classes.formControl}>
         <InputLabel htmlFor={inputName}>{label} </InputLabel>
@@ -417,6 +417,48 @@ function QuantityText({ selected, setSelected }: QuantityTextProps) {
   );
 }
 
+const usePeerTextStyles = makeStyles(theme => ({
+  root: {
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderRadius: theme.shape.borderRadius,
+    borderColor:
+      theme.palette.type === "light"
+        ? "rgba(0, 0, 0, 0.42)"
+        : "rgba(255, 255, 255, 0.7)"
+  },
+  textField: {
+    margin: theme.spacing.unit,
+    width: "10rem"
+  }
+}));
+
+interface PeerTextProps {
+  selected?: string;
+  setSelected: (peer: string) => void;
+  label: string;
+  helperText: string;
+}
+
+function PeerText({ selected, setSelected, label, helperText }: PeerTextProps) {
+  const classes = usePeerTextStyles();
+  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
+    setSelected(event.target.value);
+
+  return (
+    <fieldset className={classes.root}>
+      <legend>To</legend>
+      <TextField
+        className={classes.textField}
+        value={selected}
+        onChange={handleOnChange}
+        label={label}
+        helperText={helperText}
+      />
+    </fieldset>
+  );
+}
+
 const styles = (theme: Theme) =>
   createStyles({
     root: {
@@ -452,6 +494,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [betaNetwork, setBetaNetwork] = useState("");
   const [alphaQuantity, setAlphaQuantity] = useState(0);
   const [betaQuantity, setBetaQuantity] = useState(0);
+  const [peer, setPeer] = useState("");
 
   const setProtocol = (protocolName: string) => {
     history.push({ search: `?protocol=${protocolName}` });
@@ -500,6 +543,14 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             selected={protocol}
             setSelected={setProtocol}
             label={"Protocol"}
+          />
+        </Grid>
+        <Grid item={true} xs={12}>
+          <PeerText
+            selected={peer}
+            setSelected={setPeer}
+            label={"Peer"}
+            helperText={"IPv4 Socket Address"}
           />
         </Grid>
       </Grid>
