@@ -1,9 +1,10 @@
 import { InputAdornment, TextField } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
-import AutorenewIcon from "@material-ui/icons/Autorenew";
 import React from "react";
+import metamask from "../../public/metamask.svg";
 import Web3Loader from "./Web3Loader";
+
 
 interface Props extends StandardTextFieldProps {
   onAddress: (address: string) => void;
@@ -37,7 +38,8 @@ function EthereumAddressTextField({
                     onAddress(accounts[0]);
                   }}
                 >
-                  <AutorenewIcon />
+                  <img src={metamask} />
+
                 </IconButton>
               )}
             />
