@@ -2,15 +2,14 @@ import { InputAdornment, TextField } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
 import React from "react";
-import metamask from "../../public/metamask.svg";
+import MetamaskIcon from "./MetamaskIcon";
 import Web3Loader from "./Web3Loader";
-
 
 interface Props extends StandardTextFieldProps {
   onAddress: (address: string) => void;
 }
 
-const styles= {
+const styles = {
   minWidth: "27rem"
 };
 
@@ -38,8 +37,7 @@ function EthereumAddressTextField({
                     onAddress(accounts[0]);
                   }}
                 >
-                  <img src={metamask} />
-
+                  <MetamaskIcon />
                 </IconButton>
               )}
             />

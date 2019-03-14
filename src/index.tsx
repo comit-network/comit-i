@@ -1,11 +1,9 @@
+import { install } from "@material-ui/styles"; // Workaround until @material-ui/styles is stable
+import "promise-polyfill/src/polyfill"; // Not all environments support Promise.finally
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 
-// Not all environments support Promise.finally
-import "promise-polyfill/src/polyfill";
-
-import {install} from "@material-ui/styles"
-
 install();
+
 ReactDOM.render(<App />, document.getElementById("root"));
