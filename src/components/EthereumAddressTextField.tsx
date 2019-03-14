@@ -1,7 +1,7 @@
-import { InputAdornment, TextField } from "@material-ui/core";
+import { InputAdornment, TextField, Tooltip } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
-import React from "react";
+import React, { useState } from "react";
 import MetamaskIcon from "./MetamaskIcon";
 import Web3Loader from "./Web3Loader";
 
@@ -10,7 +10,7 @@ interface Props extends StandardTextFieldProps {
 }
 
 const styles = {
-  minWidth: "27rem"
+  minWidth: "28rem"
 };
 
 function EthereumAddressTextField({
@@ -19,6 +19,8 @@ function EthereumAddressTextField({
   InputProps,
   ...remainingProps
 }: Props) {
+  const [showTooltip, setShowTooltip] = useState(false);
+
   return (
     <TextField
       {...remainingProps}
@@ -30,15 +32,29 @@ function EthereumAddressTextField({
           <InputAdornment position="end">
             <Web3Loader
               ifPresent={web3 => (
-                <IconButton
-                  aria-label="Load"
-                  onClick={async () => {
-                    const accounts = await web3.eth.getAccounts();
-                    onAddress(accounts[0]);
-                  }}
+                <Tooltip
+                  title="Please unlock metamask first."
+                  open={showTooltip}
                 >
-                  <MetamaskIcon />
-                </IconButton>
+                  <IconButton
+                    aria-label="Load"
+                    onClick={async () => {
+                      const accounts = await web3.eth.getAccounts();
+                      const firstAccount = accounts[0];
+
+                      if (!firstAccount) {
+                        setShowTooltip(true);
+                        setTimeout(() => {
+                          setShowTooltip(false);
+                        }, 1500);
+                      } else {
+                        onAddress(firstAccount);
+                      }
+                    }}
+                  >
+                    <MetamaskIcon />
+                  </IconButton>
+                </Tooltip>
               )}
             />
           </InputAdornment>
