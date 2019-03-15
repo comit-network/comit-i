@@ -39,7 +39,7 @@ export interface GetSwapsResponse {
 
 export default function getSwaps() {
   return axios
-    .get<GetSwapsResponse>("http://localhost:8080/swaps", { timeout: 2000 })
+    .get<GetSwapsResponse>("http://localhost:8000/swaps", { timeout: 2000 })
     .then(response => response.data)
     .then(body => body as GetSwapsResponse)
     .then(body => body._embedded.swaps);
