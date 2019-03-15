@@ -41,8 +41,10 @@ function LedgerSelect({
   disabledValues
 }: LedgerSelectProps) {
   const classes = useLedgerSelectStyles();
-  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) =>
+  const handleOnChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelected(event.target.value);
+  };
+
   const inputName = label.replace(" ", "-").toLowerCase();
 
   return (
@@ -262,17 +264,16 @@ function Rfc003Params({
           />
         </Grid>
         {alphaLedger === "ethereum" && (
-            <Grid className={classes.grid} item={true} md={6} xs={12}>
-              <TextField
-                required={true}
-                className={classes.identity}
-                label="Alpha Refund Identity"
-                value={alphaRefundIdentity || ""}
-                onChange={event => setAlphaRefundIdentity(event.target.value)}
-              />
-            </Grid>
-          ) &&
-          setBetaRedeemIdentity("")}
+          <Grid className={classes.grid} item={true} md={6} xs={12}>
+            <TextField
+              required={true}
+              className={classes.identity}
+              label="Alpha Refund Identity"
+              value={alphaRefundIdentity || ""}
+              onChange={event => setAlphaRefundIdentity(event.target.value)}
+            />
+          </Grid>
+        )}
       </Grid>
       <Grid item={true} xs={12} container={true} spacing={0}>
         <Grid item={true} md={6} xs={12}>
@@ -289,17 +290,16 @@ function Rfc003Params({
           />
         </Grid>
         {betaLedger === "ethereum" && (
-            <Grid className={classes.grid} item={true} md={6} xs={12}>
-              <TextField
-                required={true}
-                className={classes.identity}
-                label="Beta Redeem Identity"
-                value={betaRedeemIdentity || ""}
-                onChange={event => setBetaRedeemIdentity(event.target.value)}
-              />
-            </Grid>
-          ) &&
-          setAlphaRefundIdentity("")}
+          <Grid className={classes.grid} item={true} md={6} xs={12}>
+            <TextField
+              required={true}
+              className={classes.identity}
+              label="Beta Redeem Identity"
+              value={betaRedeemIdentity || ""}
+              onChange={event => setBetaRedeemIdentity(event.target.value)}
+            />
+          </Grid>
+        )}
       </Grid>
     </React.Fragment>
   );
