@@ -3,7 +3,7 @@ import IconButton from "@material-ui/core/IconButton/IconButton";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
 import React, { useState } from "react";
 import MetamaskIcon from "./MetamaskIcon";
-import Web3Loader from "./Web3Loader";
+import { Web3Loader } from "./Web3Context";
 
 interface Props extends StandardTextFieldProps {
   onAddress: (address: string) => void;
