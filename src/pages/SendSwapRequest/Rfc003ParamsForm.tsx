@@ -32,10 +32,12 @@ export interface Rfc003Params {
 }
 
 export const defaultRfc003Params = {
-  alphaExpiry: 0,
-  betaExpiry: 0,
-  alphaRefundIdentity: "",
-  betaRedeemIdentity: ""
+  alphaExpiry: 30,
+  betaExpiry: 15,
+  /* These must be undefined, otherwise an empty string will be sent
+   * for one of them when Bitcoin is one of the ledgers */
+  alphaRefundIdentity: undefined,
+  betaRedeemIdentity: undefined
 };
 
 export function resetParams(currentParams: Rfc003Params) {

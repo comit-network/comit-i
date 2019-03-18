@@ -67,7 +67,7 @@ interface SendSwapProps
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [alphaLedger, setAlphaLedger] = useState("");
-  const [betaLedger, setBetaLedger] = useState("ethereum");
+  const [betaLedger, setBetaLedger] = useState("");
   const [alphaAsset, setAlphaAsset] = useState("bitcoin");
   const [betaAsset, setBetaAsset] = useState("ether");
   const [alphaNetwork, setAlphaNetwork] = useState("regtest");
