@@ -1,12 +1,13 @@
 import { createMuiTheme, CssBaseline, Theme } from "@material-ui/core";
 import { Mixins } from "@material-ui/core/styles/createMixins";
 import { ThemeProvider } from "@material-ui/styles";
-// Not all environments support Promise.finally
-import "promise-polyfill/src/polyfill";
+import { install } from "@material-ui/styles"; // Workaround until @material-ui/styles is stable
+import "promise-polyfill/src/polyfill"; // Not all environments support Promise.finally
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import { Web3Provider } from "./components/Web3Context";
 
 const mixins = {
   border: (theme: Theme) => ({
@@ -27,14 +28,18 @@ const appTheme = createMuiTheme({
   mixins
 });
 
+install();
+
 ReactDOM.render(
   <ThemeProvider theme={appTheme}>
-    <BrowserRouter>
-      <React.Fragment>
-        <CssBaseline />
-        <App />
-      </React.Fragment>
-    </BrowserRouter>
+    <Web3Provider>
+      <BrowserRouter>
+        <React.Fragment>
+          <CssBaseline />
+          <App />
+        </React.Fragment>
+      </BrowserRouter>
+    </Web3Provider>
   </ThemeProvider>,
   document.getElementById("root")
 );
