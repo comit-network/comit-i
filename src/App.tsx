@@ -3,6 +3,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import React from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import TopAppBar from "./components/TopAppBar";
+import { Web3Provider } from "./components/Web3Context";
 import ListSwaps from "./pages/ListSwaps/ListSwaps";
 
 const theme = createMuiTheme({
@@ -13,12 +14,14 @@ const theme = createMuiTheme({
 
 const App = () => (
   <ThemeProvider theme={theme}>
-    <BrowserRouter>
-      <React.Fragment>
-        <TopAppBar />
-        <MainContent />
-      </React.Fragment>
-    </BrowserRouter>
+    <Web3Provider>
+      <BrowserRouter>
+        <React.Fragment>
+          <TopAppBar />
+          <MainContent />
+        </React.Fragment>
+      </BrowserRouter>
+    </Web3Provider>
   </ThemeProvider>
 );
 

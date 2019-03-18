@@ -16,7 +16,8 @@
     "jsx": "preserve",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "rootDirs": ["src", "stories"]
   },
   "include": ["src"]
 }
