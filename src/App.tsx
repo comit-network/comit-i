@@ -17,7 +17,7 @@ import InboxIcon from "@material-ui/icons/Inbox";
 import SendIcon from "@material-ui/icons/Send";
 import React from "react";
 import { Route, RouteComponentProps, withRouter } from "react-router-dom";
-import LinkPlus from "./components/LinkPlus";
+import LinkPlusIcon from "./components/LinkPlus";
 import ListSwaps from "./pages/ListSwaps/ListSwaps";
 import SendSwap from "./pages/SendSwapRequest/SendSwapRequest";
 
@@ -84,7 +84,7 @@ function App({ classes, history }: AppProps) {
 
           <ListItem button={true} key={"new_swap_link"} onClick={goToMakeLink}>
             <ListItemIcon>
-              <LinkPlus />
+              <LinkPlusIcon />
             </ListItemIcon>
             <ListItemText primary={"Create swap link"} />
           </ListItem>
