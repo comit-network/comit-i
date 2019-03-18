@@ -1,5 +1,6 @@
 import { FormControl, InputLabel, Select } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
+import pascalCase from "pascal-case";
 import React from "react";
 
 const useNetworkSelectStyles = makeStyles(theme => ({
@@ -10,10 +11,14 @@ const useNetworkSelectStyles = makeStyles(theme => ({
 }));
 
 interface NetworkSelectProps {
-  ledger?: string;
+  ledger: string;
   selected?: string;
   setSelected: (network: string) => void;
   label: string;
+}
+
+interface Networks {
+  [ledger: string]: string[];
 }
 
 function NetworkSelect({
@@ -27,34 +32,16 @@ function NetworkSelect({
     setSelected(event.target.value);
   const inputName = label.replace(" ", "-").toLowerCase();
 
-  let menuItems;
-  if (ledger === "bitcoin") {
-    menuItems = [
-      <option value={""} key="-1" />,
-      <option value={"mainnet"} key="0">
-        Mainnet
-      </option>,
-      <option value={"regtest"} key="1">
-        Regtest
-      </option>,
-      <option value={"testnet"} key="2">
-        Testnet
-      </option>
-    ];
-  } else {
-    menuItems = [
-      <option value={""} key="-1" />,
-      <option value={"mainnet"} key="0">
-        Mainnet
-      </option>,
-      <option value={"regtest"} key="1">
-        Regtest
-      </option>,
-      <option value={"ropsten"} key="2">
-        Ropsten
-      </option>
-    ];
-  }
+  const ledgerNetworks = {
+    bitcoin: ["", "mainnet", "regtest", "testnet"],
+    ethereum: ["", "mainnet", "regtest", "ropsten"]
+  } as Networks;
+  const networks = ledgerNetworks[ledger] || [];
+  const menuItems = networks.map(value => (
+    <option value={value} key={value}>
+      {pascalCase(value)}
+    </option>
+  ));
 
   return (
     <FormControl className={classes.formControl}>

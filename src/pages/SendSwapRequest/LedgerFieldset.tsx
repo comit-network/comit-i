@@ -7,16 +7,7 @@ import NetworkSelect from "./NetworkSelect";
 import QuantityText from "./QuantityTextField";
 
 const useLedgerFieldSetStyles = makeStyles(theme => ({
-  // TODO: Hard-coded values should instead be derived from theme. Create issue in MaterialUI repo
-  root: {
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderRadius: theme.shape.borderRadius,
-    borderColor:
-      theme.palette.type === "light"
-        ? "rgba(0, 0, 0, 0.42)"
-        : "rgba(255, 255, 255, 0.7)"
-  }
+  root: theme.mixins.border(theme)
 }));
 
 interface LedgerFieldSetProps {

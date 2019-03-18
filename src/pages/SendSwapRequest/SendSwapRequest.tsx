@@ -6,13 +6,10 @@ import {
   InputLabel,
   Paper,
   Select,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles
+  Typography
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
-import { makeStyles } from "@material-ui/styles";
+import { makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import queryString from "query-string";
 import React, { useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -26,7 +23,8 @@ import Rfc003ParamsForm, {
   Rfc003Params
 } from "./Rfc003ParamsForm";
 
-const styles = (theme: Theme) =>
+// Have to use any to access custom mixins
+const styles = (theme: any) =>
   createStyles({
     root: {
       margin: "auto",
@@ -38,23 +36,11 @@ const styles = (theme: Theme) =>
       },
       padding: theme.spacing.unit * 3
     },
-    group: {
-      border: "1px solid",
-      borderRadius: theme.shape.borderRadius,
-      borderColor: theme.palette.divider
-    },
+    group: theme.mixins.border(theme),
     title: {
       marginBottom: theme.spacing.unit * 3
     },
-    fieldset: {
-      borderWidth: "1px",
-      borderStyle: "solid",
-      borderRadius: theme.shape.borderRadius,
-      borderColor:
-        theme.palette.type === "light"
-          ? "rgba(0, 0, 0, 0.42)"
-          : "rgba(255, 255, 255, 0.7)"
-    },
+    fieldset: theme.mixins.border(theme),
     formControl: {
       margin: theme.spacing.unit,
       minWidth: "10rem"
@@ -97,7 +83,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
       peer
     })
       .then(() => history.push("/"))
-      .catch(() => setDisplayError(() => true));
+      .catch(() => setDisplayError(true));
   };
 
   const hideError = () => setDisplayError(false);
@@ -229,4 +215,4 @@ function SendButton() {
   );
 }
 
-export default withStyles(styles)(withRouter(SendSwap));
+export default withRouter(withStyles(styles)(SendSwap));

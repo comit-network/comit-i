@@ -3,15 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import React from "react";
 
 const usePeerTextStyles = makeStyles(theme => ({
-  root: {
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderRadius: theme.shape.borderRadius,
-    borderColor:
-      theme.palette.type === "light"
-        ? "rgba(0, 0, 0, 0.42)"
-        : "rgba(255, 255, 255, 0.7)"
-  },
+  root: theme.mixins.border(theme),
   textField: {
     margin: theme.spacing.unit,
     width: "10rem"

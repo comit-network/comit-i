@@ -11,8 +11,9 @@ const useRfc003ParamsStyles = makeStyles(theme => ({
     margin: theme.spacing.unit,
     width: "100%"
   },
-  // TODO: This doesn't make border-bottom respect the margin completely
   grid: {
+    /* FIXME: border-bottom does not respect the margin completely with
+     * this style */
     overflow: "hidden"
   }
 }));

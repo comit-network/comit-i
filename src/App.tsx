@@ -108,7 +108,7 @@ function App({ classes, history }: AppProps) {
   );
 }
 
-const MakeLink = () => <div>Here is where you can create a new swap</div>;
+const MakeLink = () => <div>Here is where you can create a new swap-link</div>;
 const LinkLandingPage = () => (
   <div>Here is where you land when you click on a swap-link</div>
 );
