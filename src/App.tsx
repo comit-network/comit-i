@@ -19,6 +19,7 @@ import React from "react";
 import { Route, RouteComponentProps, withRouter } from "react-router-dom";
 import LinkPlusIcon from "./components/LinkPlus";
 import ListSwaps from "./pages/ListSwaps/ListSwaps";
+import MakeLink from "./pages/NewSwapLink/NewSwapLink";
 import SendSwap from "./pages/SendSwapRequest/SendSwapRequest";
 
 const drawerWidth = 240;
@@ -108,7 +109,6 @@ function App({ classes, history }: AppProps) {
   );
 }
 
-const MakeLink = () => <div>Here is where you can create a new swap-link</div>;
 const LinkLandingPage = () => (
   <div>Here is where you land when you click on a swap-link</div>
 );
