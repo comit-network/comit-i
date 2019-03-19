@@ -35,8 +35,6 @@ export interface Rfc003Params {
 export const defaultRfc003Params = {
   alphaExpiry: 30,
   betaExpiry: 15,
-  /* These must be undefined, otherwise an empty string will be sent
-   * for one of them when Bitcoin is one of the ledgers */
   alphaRefundIdentity: undefined,
   betaRedeemIdentity: undefined
 };
