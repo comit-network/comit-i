@@ -161,7 +161,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   return (
     <React.Fragment>
       <Grid item={true} xs={12}>
-        <Fieldset legend={"Alpha"}>
+        <Fieldset legend={"Alpha"} dataCy="alpha-fieldset">
           <Select
             label={"Ledger"}
             selection={alphaLedger}
@@ -170,6 +170,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
             onSelectionChange={onSelectionChange("alpha_ledger")}
             onParameterChange={onParameterChange("alpha_ledger")}
             parameters={alphaLedgerSpec.parameters}
+            dataCy="ledger-select"
           />
           {alphaLedger.name && (
             <Select
@@ -180,12 +181,13 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
               onSelectionChange={onSelectionChange("alpha_asset")}
               onParameterChange={onParameterChange("alpha_asset")}
               parameters={alphaAssetSpec.parameters}
+              dataCy="asset-select"
             />
           )}
         </Fieldset>
       </Grid>
       <Grid item={true} xs={12}>
-        <Fieldset legend={"Beta"}>
+        <Fieldset legend={"Beta"} dataCy="beta-fieldset">
           <Select
             label={"Ledger"}
             selection={betaLedger}
@@ -194,6 +196,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
             onSelectionChange={onSelectionChange("beta_ledger")}
             onParameterChange={onParameterChange("beta_ledger")}
             parameters={betaLedgerSpec.parameters}
+            dataCy="ledger-select"
           />
           {betaLedger.name && (
             <Select
@@ -204,6 +207,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
               onSelectionChange={onSelectionChange("beta_asset")}
               onParameterChange={onParameterChange("beta_asset")}
               parameters={betaAssetSpec.parameters}
+              dataCy="asset-select"
             />
           )}
         </Fieldset>

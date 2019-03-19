@@ -8,13 +8,14 @@ const useStyles = makeStyles(theme => ({
 interface FieldsetProps {
   legend: string;
   children: ReactNode;
+  dataCy?: string;
 }
 
-const Fieldset = ({ legend, children }: FieldsetProps) => {
+const Fieldset = ({ legend, children, dataCy }: FieldsetProps) => {
   const classes = useStyles();
 
   return (
-    <fieldset className={classes.root}>
+    <fieldset className={classes.root} data-cy={dataCy}>
       <legend>{legend}</legend>
       {children}
     </fieldset>

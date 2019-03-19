@@ -84,6 +84,7 @@ function Rfc003ParamsForm({
             InputProps={{
               endAdornment: <InputAdornment position="end">min</InputAdornment>
             }}
+            data-cy="alpha-expiry-input"
           />
         </Grid>
         {alphaLedger === "ethereum" && (
@@ -99,6 +100,7 @@ function Rfc003ParamsForm({
                   alphaRefundIdentity: event.target.value
                 })
               }
+              data-cy="alpha-refund-identity-input"
             />
           </Grid>
         )}
@@ -120,6 +122,7 @@ function Rfc003ParamsForm({
             InputProps={{
               endAdornment: <InputAdornment position="end">min</InputAdornment>
             }}
+            data-cy="beta-expiry-input"
           />
         </Grid>
         {betaLedger === "ethereum" && (
@@ -135,6 +138,7 @@ function Rfc003ParamsForm({
                   betaRedeemIdentity: event.target.value
                 })
               }
+              data-cy="beta-redeem-identity-input"
             />
           </Grid>
         )}
