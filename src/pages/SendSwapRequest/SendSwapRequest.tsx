@@ -11,10 +11,11 @@ import {
 import SendIcon from "@material-ui/icons/Send";
 import { makeStyles, withStyles, WithStyles } from "@material-ui/styles";
 import queryString from "query-string";
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
+import { Asset, AssetAction, ParameterKind } from "./AssetSelect";
 import LedgerFieldSet from "./LedgerFieldset";
 import PeerTextField from "./PeerTextField";
 import Rfc003ParamsForm, {
@@ -51,15 +52,32 @@ interface SendSwapProps
   extends RouteComponentProps,
     WithStyles<typeof styles> {}
 
+function reducer(state: Asset, action: AssetAction): Asset {
+  switch (action.type) {
+    case "change-parameter": {
+      return {
+        ...state,
+        [action.payload.name]: action.payload.newValue
+      };
+    }
+    case "change-asset": {
+      return {
+        name: action.payload.newAsset,
+        parameters: [{ name: "quantity", type: ParameterKind.Quantity }]
+      };
+    }
+  }
+}
+
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
+  const initAsset: Asset = { name: "", parameters: [] };
+
   const [alphaLedger, setAlphaLedger] = useState("");
   const [betaLedger, setBetaLedger] = useState("");
-  const [alphaAsset, setAlphaAsset] = useState("bitcoin");
-  const [betaAsset, setBetaAsset] = useState("ether");
+  const [alphaAsset, alphaAssetDispatch] = useReducer(reducer, initAsset);
+  const [betaAsset, betaAssetDispatch] = useReducer(reducer, initAsset);
   const [alphaNetwork, setAlphaNetwork] = useState("regtest");
   const [betaNetwork, setBetaNetwork] = useState("regtest");
-  const [alphaQuantity, setAlphaQuantity] = useState("1");
-  const [betaQuantity, setBetaQuantity] = useState("100");
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
   const [peer, setPeer] = useState("0.0.0.0:8011");
   const [displayError, setDisplayError] = useState(false);
@@ -74,8 +92,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
     postSwap(protocol, {
       alpha_ledger: { name: alphaLedger, network: alphaNetwork },
       beta_ledger: { name: betaLedger, network: betaNetwork },
-      alpha_asset: { name: alphaAsset, quantity: alphaQuantity },
-      beta_asset: { name: betaAsset, quantity: betaQuantity },
+      alpha_asset: { name: alphaAsset.name, quantity: alphaAsset.quantity },
+      beta_asset: { name: betaAsset.name, quantity: betaAsset.quantity },
       alpha_ledger_refund_identity: params.alphaRefundIdentity,
       beta_ledger_redeem_identity: params.betaRedeemIdentity,
       alpha_expiry: params.alphaExpiry,
@@ -115,9 +133,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 network={alphaNetwork}
                 setNetwork={setAlphaNetwork}
                 asset={alphaAsset}
-                setAsset={setAlphaAsset}
-                quantity={alphaQuantity}
-                setQuantity={setAlphaQuantity}
+                assetDispatch={alphaAssetDispatch}
                 otherLedger={betaLedger}
               />
             </Grid>
@@ -132,9 +148,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 network={betaNetwork}
                 setNetwork={setBetaNetwork}
                 asset={betaAsset}
-                setAsset={setBetaAsset}
-                quantity={betaQuantity}
-                setQuantity={setBetaQuantity}
+                assetDispatch={betaAssetDispatch}
                 otherLedger={alphaLedger}
               />
             </Grid>

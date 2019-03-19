@@ -1,10 +1,9 @@
 import { Grid } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
-import AssetSelect from "./AssetSelect";
+import AssetSelect, { Asset, AssetAction } from "./AssetSelect";
 import LedgerSelect from "./LedgerSelect";
 import NetworkSelect from "./NetworkSelect";
-import QuantityText from "./QuantityTextField";
 
 const useLedgerFieldSetStyles = makeStyles(theme => ({
   root: theme.mixins.border(theme)
@@ -16,10 +15,8 @@ interface LedgerFieldSetProps {
   setLedger: (ledger: string) => void;
   network: string;
   setNetwork: (network: string) => void;
-  asset: string;
-  setAsset: (asset: string) => void;
-  quantity: string;
-  setQuantity: (quantity: string) => void;
+  asset: Asset;
+  assetDispatch: (assetAction: AssetAction) => void;
   otherLedger: string;
 }
 
@@ -30,9 +27,7 @@ function LedgerFieldSet({
   network,
   setNetwork,
   asset,
-  setAsset,
-  quantity,
-  setQuantity,
+  assetDispatch,
   otherLedger
 }: LedgerFieldSetProps) {
   const classes = useLedgerFieldSetStyles();
@@ -61,19 +56,11 @@ function LedgerFieldSet({
         )}
       </Grid>
       {ledger && (
-        <Grid item={true} xs={12} container={true} spacing={0}>
-          <Grid item={true} xs={12} md={6}>
-            <AssetSelect
-              ledger={ledger}
-              selected={asset}
-              setSelected={setAsset}
-              label={"Asset"}
-            />
-          </Grid>
-          <Grid item={true} xs={12} md={6}>
-            <QuantityText selected={quantity} setSelected={setQuantity} />
-          </Grid>
-        </Grid>
+        <AssetSelect
+          ledger={ledger}
+          asset={asset}
+          assetDispatch={assetDispatch}
+        />
       )}
     </fieldset>
   );

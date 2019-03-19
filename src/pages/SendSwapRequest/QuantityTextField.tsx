@@ -10,22 +10,20 @@ const useQuantityTextStyles = makeStyles(theme => ({
 }));
 
 interface QuantityTextProps {
-  selected: string;
-  setSelected: (quantity: string) => void;
+  quantity: string;
+  onChange: (quantity: string) => void;
 }
 
-function QuantityText({ selected, setSelected }: QuantityTextProps) {
+function QuantityText({ quantity, onChange }: QuantityTextProps) {
   const classes = useQuantityTextStyles();
-  const handleOnChange = (event: React.ChangeEvent<HTMLInputElement>) =>
-    setSelected(event.target.value.toString());
 
   return (
     <TextField
       required={true}
       className={classes.root}
       type="number"
-      value={selected}
-      onChange={handleOnChange}
+      value={quantity}
+      onChange={event => onChange(event.target.value)}
       label="Quantity"
     />
   );
