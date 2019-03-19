@@ -3,7 +3,7 @@
 describe("The page for listing swaps", () => {
   it("should display a table row per swap", function() {
     cy.server();
-    cy.route("http://localhost:8080/swaps", "fixture:listOfTwoSwaps.json");
+    cy.route("http://localhost:8000/swaps", "fixture:listOfTwoSwaps.json");
 
     cy.visit("/");
 

@@ -42,7 +42,7 @@ function FetchSwaps() {
     setLoading(() => true);
     getSwaps()
       .then(fetchedSwaps => setSwaps(() => fetchedSwaps))
-      .catch(() => setDisplayError(() => true))
+      .catch(() => setDisplayError(true))
       .finally(() => setLoading(false));
   }, []);
 
