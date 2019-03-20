@@ -21,7 +21,7 @@ import Rfc003ParamsForm, {
   Rfc003Params
 } from "./Rfc003ParamsForm";
 import { ParameterKind } from "./Select";
-import SwapForm, { reducer as swapReducer, Swap } from "./SwapParametersForm";
+import SwapForm, { reducer as swapReducer, Swap } from "./SwapForm";
 
 // Have to use any to access custom mixins
 const styles = (theme: any) =>
