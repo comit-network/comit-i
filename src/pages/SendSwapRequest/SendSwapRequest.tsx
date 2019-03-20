@@ -20,7 +20,7 @@ import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
 } from "./Rfc003ParamsForm";
-import Select from "./Select";
+import Select, { Parameter, ParameterKind } from "./Select";
 
 // Have to use any to access custom mixins
 const styles = (theme: any) =>
@@ -81,11 +81,31 @@ interface FormData {
   };
 }
 
-interface State {
-  formData: FormData;
+interface FormSpec {
+  alpha_ledger: Parameter[];
+  alpha_asset: Parameter[];
+  beta_ledger: Parameter[];
+  beta_asset: Parameter[];
 }
 
-const initialState = {
+interface LedgerSpec {
+  name: string;
+  parameters: Parameter[];
+  assets: AssetSpec[];
+}
+
+interface AssetSpec {
+  name: string;
+  parameters: Parameter[];
+}
+
+interface State {
+  formData: FormData;
+  formSpec: FormSpec;
+  ledgers: LedgerSpec[];
+}
+
+const initialState: State = {
   formData: {
     alpha_ledger: {
       name: ""
@@ -101,13 +121,63 @@ const initialState = {
     }
   },
   formSpec: {
-    alphaLedger: {}
-  }
+    alpha_ledger: [],
+    beta_ledger: [],
+    alpha_asset: [],
+    beta_asset: []
+  },
+  ledgers: [
+    {
+      name: "bitcoin",
+      parameters: [
+        {
+          name: "network",
+          type: ParameterKind.Network,
+          options: ["mainnet", "testnet", "regtest"]
+        }
+      ],
+      assets: [
+        {
+          name: "bitcoin",
+          parameters: [
+            {
+              name: "quantity",
+              type: ParameterKind.Quantity
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: "ethereum",
+      parameters: [
+        {
+          name: "network",
+          type: ParameterKind.Network,
+          options: ["mainnet", "ropsten", "regtest"]
+        }
+      ],
+      assets: [
+        {
+          name: "ether",
+          parameters: [
+            {
+              name: "quantity",
+              type: ParameterKind.Quantity
+            }
+          ]
+        }
+      ]
+    }
+  ]
 };
 
 function reducer(state: State, action: Action): State {
   const formData = {
     ...state.formData
+  };
+  const formSpec = {
+    ...state.formSpec
   };
 
   switch (action.type) {
@@ -122,12 +192,56 @@ function reducer(state: State, action: Action): State {
         };
 
         switch (action.of) {
-          case "beta_ledger": {
-            formData.beta_asset = { name: "" };
-            break;
-          }
           case "alpha_ledger": {
             formData.alpha_asset = { name: "" };
+
+            const ledgerSpec = findLedgerSpec(
+              state,
+              formData.alpha_ledger.name
+            );
+            if (ledgerSpec) {
+              formSpec.alpha_ledger = ledgerSpec.parameters;
+            }
+            break;
+          }
+          case "alpha_asset": {
+            const ledgerSpec = findLedgerSpec(
+              state,
+              formData.alpha_ledger.name
+            );
+            if (ledgerSpec) {
+              const assetSpec = findAssetSpec(
+                ledgerSpec,
+                formData.alpha_asset.name
+              );
+
+              if (assetSpec) {
+                formSpec.alpha_asset = assetSpec.parameters;
+              }
+            }
+            break;
+          }
+          case "beta_asset": {
+            const ledgerSpec = findLedgerSpec(state, formData.beta_ledger.name);
+            if (ledgerSpec) {
+              const assetSpec = findAssetSpec(
+                ledgerSpec,
+                formData.beta_asset.name
+              );
+
+              if (assetSpec) {
+                formSpec.beta_asset = assetSpec.parameters;
+              }
+            }
+            break;
+          }
+          case "beta_ledger": {
+            formData.beta_asset = { name: "" };
+
+            const ledgerSpec = findLedgerSpec(state, formData.beta_ledger.name);
+            if (ledgerSpec) {
+              formSpec.beta_ledger = ledgerSpec.parameters;
+            }
             break;
           }
         }
@@ -138,14 +252,18 @@ function reducer(state: State, action: Action): State {
 
   return {
     ...state,
-    formData
+    formData,
+    formSpec
   };
 }
 
-const assetsByLedger: { [key: string]: string[] | undefined } = {
-  bitcoin: ["bitcoin"],
-  ethereum: ["ether"]
-};
+function findLedgerSpec(state: State, ledger: string) {
+  return state.ledgers.find(ledgerSpec => ledgerSpec.name === ledger);
+}
+
+function findAssetSpec(ledgerSpec: LedgerSpec, asset: string) {
+  return ledgerSpec.assets.find(assetSpec => assetSpec.name === asset);
+}
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -188,6 +306,18 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const alphaAsset = state.formData.alpha_asset;
   const betaAsset = state.formData.beta_asset;
 
+  const ledgers = state.ledgers.map(ledger => ledger.name);
+
+  const alphaLedgerSpec = findLedgerSpec(state, alphaLedger.name);
+  const alphaAssets = alphaLedgerSpec
+    ? alphaLedgerSpec.assets.map(asset => asset.name)
+    : [];
+
+  const betaLedgerSpec = findLedgerSpec(state, betaLedger.name);
+  const betaAssets = betaLedgerSpec
+    ? betaLedgerSpec.assets.map(asset => asset.name)
+    : [];
+
   return (
     <React.Fragment>
       <Paper elevation={1} className={classes.root}>
@@ -201,7 +331,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 <legend>Alpha</legend>
                 <Select
                   selection={alphaLedger}
-                  options={["bitcoin", "ethereum"]}
+                  options={ledgers}
                   disabledOptions={[betaLedger.name]}
                   onSelectionChange={selection =>
                     dispatch({
@@ -217,13 +347,13 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       payload: { name, newValue: value }
                     })
                   }
-                  parameters={[]}
+                  parameters={state.formSpec.alpha_ledger}
                   label={"Ledger"}
                 />
                 {alphaLedger.name && (
                   <Select
                     selection={alphaAsset}
-                    options={assetsByLedger[alphaLedger.name] || []}
+                    options={alphaAssets}
                     onSelectionChange={selection =>
                       dispatch({
                         type: "change-selection",
@@ -239,7 +369,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       })
                     }
                     disabledOptions={[]}
-                    parameters={[]}
+                    parameters={state.formSpec.alpha_asset}
                     label={"Asset"}
                   />
                 )}
@@ -250,7 +380,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 <legend>Beta</legend>
                 <Select
                   selection={betaLedger}
-                  options={["bitcoin", "ethereum"]}
+                  options={ledgers}
                   disabledOptions={[alphaLedger.name]}
                   onSelectionChange={selection =>
                     dispatch({
@@ -266,13 +396,13 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       payload: { name, newValue: value }
                     })
                   }
-                  parameters={[]}
+                  parameters={state.formSpec.beta_ledger}
                   label={"Ledger"}
                 />
                 {betaLedger.name && (
                   <Select
                     selection={betaAsset}
-                    options={assetsByLedger[betaLedger.name] || []}
+                    options={betaAssets}
                     onSelectionChange={selection =>
                       dispatch({
                         of: "beta_asset",
@@ -288,7 +418,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       })
                     }
                     disabledOptions={[]}
-                    parameters={[]}
+                    parameters={state.formSpec.beta_asset}
                     label={"Asset"}
                   />
                 )}

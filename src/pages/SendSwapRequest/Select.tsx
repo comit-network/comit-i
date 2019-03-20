@@ -29,7 +29,7 @@ export enum ParameterKind {
 export interface Parameter {
   name: string;
   type: ParameterKind;
-  options: string[];
+  options?: string[];
 }
 
 interface SelectProps {
@@ -81,7 +81,7 @@ function Select({
           </MUISelect>
         </FormControl>
       </Grid>
-      {selection &&
+      {selection.name &&
         parameters.map(param => {
           switch (param.type) {
             case ParameterKind.Network: {
@@ -101,11 +101,13 @@ function Select({
                         name: inputName
                       }}
                     >
-                      {param.options.map(value => (
-                        <option value={value} key={value}>
-                          {pascalCase(value)}
-                        </option>
-                      ))}
+                      <option />
+                      {param.options &&
+                        param.options.map(value => (
+                          <option value={value} key={value}>
+                            {pascalCase(value)}
+                          </option>
+                        ))}
                     </MUISelect>
                   </FormControl>
                 </Grid>
