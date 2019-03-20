@@ -3,15 +3,18 @@ import React, { Dispatch } from "react";
 import Select, { Parameter } from "./Select";
 
 function findLedgerSpec(ledgers: LedgerSpec[], ledger: string) {
-  return ledgers.find(ledgerSpec => ledgerSpec.name === ledger);
+  return (
+    ledgers.find(ledgerSpec => ledgerSpec.name === ledger) || emptyLedgerSpec
+  );
 }
 
 function findAssetSpec(ledgers: LedgerSpec[], ledger: string, asset: string) {
   const ledgerSpec = findLedgerSpec(ledgers, ledger);
 
-  if (ledgerSpec) {
-    return ledgerSpec.assets.find(assetSpec => assetSpec.name === asset);
-  }
+  return (
+    ledgerSpec.assets.find(assetSpec => assetSpec.name === asset) ||
+    emptyAssetSpec
+  );
 }
 
 interface LedgerSpec {
@@ -20,10 +23,21 @@ interface LedgerSpec {
   assets: AssetSpec[];
 }
 
+const emptyLedgerSpec = {
+  name: "",
+  parameters: [],
+  assets: []
+};
+
 interface AssetSpec {
   name: string;
   parameters: Parameter[];
 }
+
+const emptyAssetSpec = {
+  name: "",
+  parameters: []
+};
 
 export interface Swap {
   alpha_ledger: {
@@ -123,8 +137,6 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   const alphaAsset = swap.alpha_asset;
   const betaAsset = swap.beta_asset;
 
-  const ledgerOptions = ledgers.map(ledger => ledger.name);
-
   const alphaLedgerSpec = findLedgerSpec(ledgers, alphaLedger.name);
   const alphaAssetSpec = findAssetSpec(
     ledgers,
@@ -134,20 +146,9 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   const betaLedgerSpec = findLedgerSpec(ledgers, betaLedger.name);
   const betaAssetSpec = findAssetSpec(ledgers, betaLedger.name, betaAsset.name);
 
-  const alphaAssets = alphaLedgerSpec
-    ? alphaLedgerSpec.assets.map(asset => asset.name)
-    : [];
-
-  const betaAssets = betaLedgerSpec
-    ? betaLedgerSpec.assets.map(asset => asset.name)
-    : [];
-
-  const alphaLedgerParameters = alphaLedgerSpec
-    ? alphaLedgerSpec.parameters
-    : [];
-  const alphaAssetParameters = alphaAssetSpec ? alphaAssetSpec.parameters : [];
-  const betaLedgerParameters = betaLedgerSpec ? betaLedgerSpec.parameters : [];
-  const betaAssetParameters = betaAssetSpec ? betaAssetSpec.parameters : [];
+  const ledgerOptions = ledgers.map(ledger => ledger.name);
+  const alphaAssetOptions = alphaLedgerSpec.assets.map(asset => asset.name);
+  const betaAssetOptions = betaLedgerSpec.assets.map(asset => asset.name);
 
   const onSelectionChange = (of: keyof Swap) => (selection: string) =>
     dispatch({
@@ -174,17 +175,17 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
             disabledOptions={[betaLedger.name]}
             onSelectionChange={onSelectionChange("alpha_ledger")}
             onParameterChange={onParameterChange("alpha_ledger")}
-            parameters={alphaLedgerParameters}
+            parameters={alphaLedgerSpec.parameters}
           />
           {alphaLedger.name && (
             <Select
               label={"Asset"}
               selection={alphaAsset}
-              options={alphaAssets}
+              options={alphaAssetOptions}
               disabledOptions={[]}
               onSelectionChange={onSelectionChange("alpha_asset")}
               onParameterChange={onParameterChange("alpha_asset")}
-              parameters={alphaAssetParameters}
+              parameters={alphaAssetSpec.parameters}
             />
           )}
         </fieldset>
@@ -199,17 +200,17 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
             disabledOptions={[alphaLedger.name]}
             onSelectionChange={onSelectionChange("beta_ledger")}
             onParameterChange={onParameterChange("beta_ledger")}
-            parameters={betaLedgerParameters}
+            parameters={betaLedgerSpec.parameters}
           />
           {betaLedger.name && (
             <Select
               label={"Asset"}
               selection={betaAsset}
-              options={betaAssets}
+              options={betaAssetOptions}
               disabledOptions={[]}
               onSelectionChange={onSelectionChange("beta_asset")}
               onParameterChange={onParameterChange("beta_asset")}
-              parameters={betaAssetParameters}
+              parameters={betaAssetSpec.parameters}
             />
           )}
         </fieldset>

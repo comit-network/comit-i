@@ -70,15 +70,17 @@ function Select({
             }}
           >
             <option key={""} />
-            {options.map(option => (
-              <option
-                key={option}
-                disabled={disabledOptions.indexOf(option) !== -1}
-                value={option}
-              >
-                {pascalCase(option)}
-              </option>
-            ))}
+            {options
+              .filter(item => item !== "")
+              .map(option => (
+                <option
+                  key={option}
+                  disabled={disabledOptions.indexOf(option) !== -1}
+                  value={option}
+                >
+                  {pascalCase(option)}
+                </option>
+              ))}
           </MUISelect>
         </FormControl>
       </Grid>
