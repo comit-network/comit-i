@@ -15,12 +15,20 @@ import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
-import { Asset, AssetAction, ParameterKind } from "./AssetSelect";
+import {
+  Asset,
+  AssetAction,
+  ParameterKind as AssetParameterKind
+} from "./AssetSelect";
 import LedgerFieldSet from "./LedgerFieldset";
+import {
+  Ledger,
+  LedgerAction,
+  ParameterKind as LedgerParameterKind
+} from "./LedgerSelect";
 import PeerTextField from "./PeerTextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
-  resetParams,
   Rfc003Params
 } from "./Rfc003ParamsForm";
 
@@ -52,7 +60,7 @@ interface SendSwapProps
   extends RouteComponentProps,
     WithStyles<typeof styles> {}
 
-function reducer(state: Asset, action: AssetAction): Asset {
+function assetReducer(state: Asset, action: AssetAction): Asset {
   switch (action.type) {
     case "change-parameter": {
       return {
@@ -63,7 +71,35 @@ function reducer(state: Asset, action: AssetAction): Asset {
     case "change-asset": {
       return {
         name: action.payload.newAsset,
-        parameters: [{ name: "quantity", type: ParameterKind.Quantity }]
+        parameters: [{ name: "quantity", type: AssetParameterKind.Quantity }]
+      };
+    }
+  }
+}
+
+function ledgerReducer(state: Ledger, action: LedgerAction): Ledger {
+  switch (action.type) {
+    case "change-parameter": {
+      return {
+        ...state,
+        [action.payload.name]: action.payload.newValue
+      };
+    }
+    case "change-ledger": {
+      const ledgerNetworks: { [ledger: string]: string[] | undefined } = {
+        bitcoin: ["", "mainnet", "regtest", "testnet"],
+        ethereum: ["", "mainnet", "regtest", "ropsten"]
+      };
+      const name = action.payload.newLedger;
+      return {
+        name,
+        parameters: [
+          {
+            name: "network",
+            type: LedgerParameterKind.Network,
+            options: ledgerNetworks[name] || []
+          }
+        ]
       };
     }
   }
@@ -71,13 +107,18 @@ function reducer(state: Asset, action: AssetAction): Asset {
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const initAsset: Asset = { name: "", parameters: [] };
+  const initLedger: Ledger = { name: "", parameters: [] };
+  const [alphaLedger, alphaLedgerDispatch] = useReducer(
+    ledgerReducer,
+    initLedger
+  );
+  const [betaLedger, betaLedgerDispatch] = useReducer(
+    ledgerReducer,
+    initLedger
+  );
+  const [alphaAsset, alphaAssetDispatch] = useReducer(assetReducer, initAsset);
+  const [betaAsset, betaAssetDispatch] = useReducer(assetReducer, initAsset);
 
-  const [alphaLedger, setAlphaLedger] = useState("");
-  const [betaLedger, setBetaLedger] = useState("");
-  const [alphaAsset, alphaAssetDispatch] = useReducer(reducer, initAsset);
-  const [betaAsset, betaAssetDispatch] = useReducer(reducer, initAsset);
-  const [alphaNetwork, setAlphaNetwork] = useState("regtest");
-  const [betaNetwork, setBetaNetwork] = useState("regtest");
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
   const [peer, setPeer] = useState("0.0.0.0:8011");
   const [displayError, setDisplayError] = useState(false);
@@ -90,8 +131,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
     }
 
     postSwap(protocol, {
-      alpha_ledger: { name: alphaLedger, network: alphaNetwork },
-      beta_ledger: { name: betaLedger, network: betaNetwork },
+      alpha_ledger: { name: alphaLedger.name, network: alphaLedger.network },
+      beta_ledger: { name: betaLedger.name, network: betaLedger.network },
       alpha_asset: { name: alphaAsset.name, quantity: alphaAsset.quantity },
       beta_asset: { name: betaAsset.name, quantity: betaAsset.quantity },
       alpha_ledger_refund_identity: params.alphaRefundIdentity,
@@ -126,12 +167,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
               <LedgerFieldSet
                 label={"Alpha"}
                 ledger={alphaLedger}
-                setLedger={ledger => {
-                  setAlphaLedger(ledger);
-                  setParams(resetParams(params));
-                }}
-                network={alphaNetwork}
-                setNetwork={setAlphaNetwork}
+                ledgerDispatch={alphaLedgerDispatch}
                 asset={alphaAsset}
                 assetDispatch={alphaAssetDispatch}
                 otherLedger={betaLedger}
@@ -141,12 +177,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
               <LedgerFieldSet
                 label={"Beta"}
                 ledger={betaLedger}
-                setLedger={ledger => {
-                  setBetaLedger(ledger);
-                  setParams(resetParams(params));
-                }}
-                network={betaNetwork}
-                setNetwork={setBetaNetwork}
+                ledgerDispatch={betaLedgerDispatch}
                 asset={betaAsset}
                 assetDispatch={betaAssetDispatch}
                 otherLedger={alphaLedger}
@@ -175,8 +206,8 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 </FormControl>
                 {protocol === "rfc003" && (
                   <Rfc003ParamsForm
-                    alphaLedger={alphaLedger}
-                    betaLedger={betaLedger}
+                    alphaLedger={alphaLedger.name}
+                    betaLedger={betaLedger.name}
                     params={params}
                     setParams={setParams}
                   />

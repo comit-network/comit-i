@@ -1,8 +1,8 @@
 import { FormControl, Grid, InputLabel, Select } from "@material-ui/core";
+import { TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import pascalCase from "pascal-case";
 import React from "react";
-import QuantityText from "./QuantityTextField";
 
 const useAssetSelectStyles = makeStyles(theme => ({
   formControl: {
@@ -25,7 +25,7 @@ export interface Asset {
 interface AssetSelectProps {
   ledger?: string;
   asset: Asset;
-  assetDispatch: (assetAction: AssetAction) => void;
+  dispatch: (assetAction: AssetAction) => void;
 }
 
 export type AssetAction =
@@ -50,7 +50,7 @@ export enum ParameterKind {
   Quantity
 }
 
-function AssetSelect({ ledger, asset, assetDispatch }: AssetSelectProps) {
+function AssetSelect({ ledger, asset, dispatch }: AssetSelectProps) {
   const classes = useAssetSelectStyles();
   const inputName = "asset-input";
 
@@ -65,14 +65,18 @@ function AssetSelect({ ledger, asset, assetDispatch }: AssetSelectProps) {
       case ParameterKind.Quantity: {
         return (
           <Grid key={param.name} item={true} xs={12} md={6}>
-            <QuantityText
-              quantity={asset[param.name] || ""}
-              onChange={quantity => {
-                assetDispatch({
+            <TextField
+              required={true}
+              className={classes.formControl}
+              type="number"
+              value={asset[param.name] || ""}
+              onChange={event => {
+                dispatch({
                   type: "change-parameter",
-                  payload: { name: param.name, newValue: quantity }
+                  payload: { name: param.name, newValue: event.target.value }
                 });
               }}
+              label="Quantity"
             />
           </Grid>
         );
@@ -90,7 +94,7 @@ function AssetSelect({ ledger, asset, assetDispatch }: AssetSelectProps) {
             required={true}
             value={asset.name}
             onChange={event =>
-              assetDispatch({
+              dispatch({
                 type: "change-asset",
                 payload: { newAsset: event.target.value }
               })
