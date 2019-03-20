@@ -81,13 +81,6 @@ interface FormData {
   };
 }
 
-interface FormSpec {
-  alpha_ledger: Parameter[];
-  alpha_asset: Parameter[];
-  beta_ledger: Parameter[];
-  beta_asset: Parameter[];
-}
-
 interface LedgerSpec {
   name: string;
   parameters: Parameter[];
@@ -101,7 +94,6 @@ interface AssetSpec {
 
 interface State {
   formData: FormData;
-  formSpec: FormSpec;
   ledgers: LedgerSpec[];
 }
 
@@ -119,12 +111,6 @@ const initialState: State = {
     beta_asset: {
       name: ""
     }
-  },
-  formSpec: {
-    alpha_ledger: [],
-    beta_ledger: [],
-    alpha_asset: [],
-    beta_asset: []
   },
   ledgers: [
     {
@@ -176,9 +162,6 @@ function reducer(state: State, action: Action): State {
   const formData = {
     ...state.formData
   };
-  const formSpec = {
-    ...state.formSpec
-  };
 
   switch (action.type) {
     case "change-parameter": {
@@ -194,54 +177,10 @@ function reducer(state: State, action: Action): State {
         switch (action.of) {
           case "alpha_ledger": {
             formData.alpha_asset = { name: "" };
-
-            const ledgerSpec = findLedgerSpec(
-              state,
-              formData.alpha_ledger.name
-            );
-            if (ledgerSpec) {
-              formSpec.alpha_ledger = ledgerSpec.parameters;
-            }
-            break;
-          }
-          case "alpha_asset": {
-            const ledgerSpec = findLedgerSpec(
-              state,
-              formData.alpha_ledger.name
-            );
-            if (ledgerSpec) {
-              const assetSpec = findAssetSpec(
-                ledgerSpec,
-                formData.alpha_asset.name
-              );
-
-              if (assetSpec) {
-                formSpec.alpha_asset = assetSpec.parameters;
-              }
-            }
-            break;
-          }
-          case "beta_asset": {
-            const ledgerSpec = findLedgerSpec(state, formData.beta_ledger.name);
-            if (ledgerSpec) {
-              const assetSpec = findAssetSpec(
-                ledgerSpec,
-                formData.beta_asset.name
-              );
-
-              if (assetSpec) {
-                formSpec.beta_asset = assetSpec.parameters;
-              }
-            }
             break;
           }
           case "beta_ledger": {
             formData.beta_asset = { name: "" };
-
-            const ledgerSpec = findLedgerSpec(state, formData.beta_ledger.name);
-            if (ledgerSpec) {
-              formSpec.beta_ledger = ledgerSpec.parameters;
-            }
             break;
           }
         }
@@ -252,8 +191,7 @@ function reducer(state: State, action: Action): State {
 
   return {
     ...state,
-    formData,
-    formSpec
+    formData
   };
 }
 
@@ -261,8 +199,12 @@ function findLedgerSpec(state: State, ledger: string) {
   return state.ledgers.find(ledgerSpec => ledgerSpec.name === ledger);
 }
 
-function findAssetSpec(ledgerSpec: LedgerSpec, asset: string) {
-  return ledgerSpec.assets.find(assetSpec => assetSpec.name === asset);
+function findAssetSpec(state: State, ledger: string, asset: string) {
+  const ledgerSpec = findLedgerSpec(state, ledger);
+
+  if (ledgerSpec) {
+    return ledgerSpec.assets.find(assetSpec => assetSpec.name === asset);
+  }
 }
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
@@ -309,14 +251,28 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const ledgers = state.ledgers.map(ledger => ledger.name);
 
   const alphaLedgerSpec = findLedgerSpec(state, alphaLedger.name);
+  const alphaAssetSpec = findAssetSpec(
+    state,
+    alphaLedger.name,
+    alphaAsset.name
+  );
+  const betaLedgerSpec = findLedgerSpec(state, betaLedger.name);
+  const betaAssetSpec = findAssetSpec(state, betaLedger.name, betaAsset.name);
+
   const alphaAssets = alphaLedgerSpec
     ? alphaLedgerSpec.assets.map(asset => asset.name)
     : [];
 
-  const betaLedgerSpec = findLedgerSpec(state, betaLedger.name);
   const betaAssets = betaLedgerSpec
     ? betaLedgerSpec.assets.map(asset => asset.name)
     : [];
+
+  const alphaLedgerParameters = alphaLedgerSpec
+    ? alphaLedgerSpec.parameters
+    : [];
+  const alphaAssetParameters = alphaAssetSpec ? alphaAssetSpec.parameters : [];
+  const betaLedgerParameters = betaLedgerSpec ? betaLedgerSpec.parameters : [];
+  const betaAssetParameters = betaAssetSpec ? betaAssetSpec.parameters : [];
 
   return (
     <React.Fragment>
@@ -347,7 +303,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       payload: { name, newValue: value }
                     })
                   }
-                  parameters={state.formSpec.alpha_ledger}
+                  parameters={alphaLedgerParameters}
                   label={"Ledger"}
                 />
                 {alphaLedger.name && (
@@ -369,7 +325,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       })
                     }
                     disabledOptions={[]}
-                    parameters={state.formSpec.alpha_asset}
+                    parameters={alphaAssetParameters}
                     label={"Asset"}
                   />
                 )}
@@ -396,7 +352,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       payload: { name, newValue: value }
                     })
                   }
-                  parameters={state.formSpec.beta_ledger}
+                  parameters={betaLedgerParameters}
                   label={"Ledger"}
                 />
                 {betaLedger.name && (
@@ -418,7 +374,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                       })
                     }
                     disabledOptions={[]}
-                    parameters={state.formSpec.beta_asset}
+                    parameters={betaAssetParameters}
                     label={"Asset"}
                   />
                 )}
