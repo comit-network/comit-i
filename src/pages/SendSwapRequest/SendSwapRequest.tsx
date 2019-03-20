@@ -22,7 +22,6 @@ import AssetSelect, {
 } from "./AssetSelect";
 import LedgerSelect, {
   Ledger,
-  LedgerAction,
   ParameterKind as LedgerParameterKind
 } from "./LedgerSelect";
 import PeerTextField from "./PeerTextField";
@@ -104,6 +103,10 @@ function ledgerReducer(state: Ledger, action: LedgerAction): Ledger {
   }
 }
 
+export type LedgerAction =
+  | { type: "change-parameter"; payload: { name: string; newValue: string } }
+  | { type: "change-ledger"; payload: { newLedger: string } };
+
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const initAsset: Asset = { name: "", parameters: [] };
   const initLedger: Ledger = { name: "", parameters: [] };
@@ -167,7 +170,18 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 <legend>Alpha</legend>
                 <LedgerSelect
                   ledger={alphaLedger}
-                  dispatch={alphaLedgerDispatch}
+                  onLedgerChange={ledger =>
+                    alphaLedgerDispatch({
+                      type: "change-ledger",
+                      payload: { newLedger: ledger }
+                    })
+                  }
+                  onParameterChange={(name, value) =>
+                    alphaLedgerDispatch({
+                      type: "change-parameter",
+                      payload: { name, newValue: value }
+                    })
+                  }
                   disabledValues={[betaLedger.name]}
                 />
                 {alphaLedger.name && (
@@ -184,7 +198,18 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 <legend>Beta</legend>
                 <LedgerSelect
                   ledger={betaLedger}
-                  dispatch={betaLedgerDispatch}
+                  onLedgerChange={ledger =>
+                    betaLedgerDispatch({
+                      type: "change-ledger",
+                      payload: { newLedger: ledger }
+                    })
+                  }
+                  onParameterChange={(name, value) =>
+                    betaLedgerDispatch({
+                      type: "change-parameter",
+                      payload: { name, newValue: value }
+                    })
+                  }
                   disabledValues={[betaLedger.name]}
                 />
                 {betaLedger.name && (
