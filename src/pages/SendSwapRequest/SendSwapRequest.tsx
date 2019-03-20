@@ -21,7 +21,7 @@ import Rfc003ParamsForm, {
   Rfc003Params
 } from "./Rfc003ParamsForm";
 import { ParameterKind } from "./Select";
-import SwapForm, { reducer as swapReducer, Swap } from "./SwapForm";
+import SwapForm, { emptySwap, reducer as swapReducer } from "./SwapForm";
 
 // Have to use any to access custom mixins
 const styles = (theme: any) =>
@@ -50,21 +50,6 @@ const styles = (theme: any) =>
 interface SendSwapProps
   extends RouteComponentProps,
     WithStyles<typeof styles> {}
-
-const emptySwap: Swap = {
-  alpha_ledger: {
-    name: ""
-  },
-  alpha_asset: {
-    name: ""
-  },
-  beta_ledger: {
-    name: ""
-  },
-  beta_asset: {
-    name: ""
-  }
-};
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);

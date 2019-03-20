@@ -96,6 +96,21 @@ export function reducer(swap: Swap, action: Action): Swap {
   }
 }
 
+export const emptySwap: Swap = {
+  alpha_ledger: {
+    name: ""
+  },
+  alpha_asset: {
+    name: ""
+  },
+  beta_ledger: {
+    name: ""
+  },
+  beta_asset: {
+    name: ""
+  }
+};
+
 interface Props {
   swap: Swap;
   ledgers: LedgerSpec[];
