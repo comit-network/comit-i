@@ -69,9 +69,10 @@ function Select({
               name: inputName
             }}
           >
-            <option value={""} />
+            <option key={""} />
             {options.map(option => (
               <option
+                key={option}
                 disabled={disabledOptions.indexOf(option) !== -1}
                 value={option}
               >
@@ -87,7 +88,7 @@ function Select({
             case ParameterKind.Network: {
               const inputName = "network-input";
               return (
-                <Grid item={true} xs={12} md={6}>
+                <Grid key={param.name} item={true} xs={12} md={6}>
                   <FormControl className={classes.formControl}>
                     <InputLabel htmlFor={inputName}> Network </InputLabel>
                     <MUISelect
@@ -101,7 +102,7 @@ function Select({
                         name: inputName
                       }}
                     >
-                      <option />
+                      <option key={""} />
                       {param.options &&
                         param.options.map(value => (
                           <option value={value} key={value}>
