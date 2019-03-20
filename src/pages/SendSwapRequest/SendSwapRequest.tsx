@@ -5,7 +5,7 @@ import {
   Grid,
   InputLabel,
   Paper,
-  Select,
+  Select as MUISelect,
   Typography
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
@@ -15,20 +15,12 @@ import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
-import AssetSelect, {
-  Asset,
-  AssetAction,
-  ParameterKind as AssetParameterKind
-} from "./AssetSelect";
-import LedgerSelect, {
-  Ledger,
-  ParameterKind as LedgerParameterKind
-} from "./LedgerSelect";
 import PeerTextField from "./PeerTextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
 } from "./Rfc003ParamsForm";
+import Select from "./Select";
 
 // Have to use any to access custom mixins
 const styles = (theme: any) =>
@@ -58,68 +50,105 @@ interface SendSwapProps
   extends RouteComponentProps,
     WithStyles<typeof styles> {}
 
-function assetReducer(state: Asset, action: AssetAction): Asset {
-  switch (action.type) {
-    case "change-parameter": {
-      return {
-        ...state,
-        [action.payload.name]: action.payload.newValue
-      };
+export type Action =
+  | {
+      type: "change-parameter";
+      of: keyof FormData;
+      payload: { name: string; newValue: string };
     }
-    case "change-asset": {
-      return {
-        name: action.payload.newAsset,
-        parameters: [{ name: "quantity", type: AssetParameterKind.Quantity }]
-      };
-    }
-  }
+  | {
+      type: "change-selection";
+      of: keyof FormData;
+      payload: { newSelection: string };
+    };
+
+interface FormData {
+  alpha_ledger: {
+    name: string;
+    [parameter: string]: string | undefined;
+  };
+  alpha_asset: {
+    name: string;
+    [parameter: string]: string | undefined;
+  };
+  beta_ledger: {
+    name: string;
+    [parameter: string]: string | undefined;
+  };
+  beta_asset: {
+    name: string;
+    [parameter: string]: string | undefined;
+  };
 }
 
-function ledgerReducer(state: Ledger, action: LedgerAction): Ledger {
+interface State {
+  formData: FormData;
+}
+
+const initialState = {
+  formData: {
+    alpha_ledger: {
+      name: ""
+    },
+    alpha_asset: {
+      name: ""
+    },
+    beta_ledger: {
+      name: ""
+    },
+    beta_asset: {
+      name: ""
+    }
+  },
+  formSpec: {
+    alphaLedger: {}
+  }
+};
+
+function reducer(state: State, action: Action): State {
+  const formData = {
+    ...state.formData
+  };
+
   switch (action.type) {
     case "change-parameter": {
-      return {
-        ...state,
-        [action.payload.name]: action.payload.newValue
-      };
+      formData[action.of][action.payload.name] = action.payload.newValue;
+      break;
     }
-    case "change-ledger": {
-      const ledgerNetworks: { [ledger: string]: string[] | undefined } = {
-        bitcoin: ["", "mainnet", "regtest", "testnet"],
-        ethereum: ["", "mainnet", "regtest", "ropsten"]
-      };
-      const name = action.payload.newLedger;
-      return {
-        name,
-        parameters: [
-          {
-            name: "network",
-            type: LedgerParameterKind.Network,
-            options: ledgerNetworks[name] || []
+    case "change-selection":
+      {
+        formData[action.of] = {
+          name: action.payload.newSelection
+        };
+
+        switch (action.of) {
+          case "beta_ledger": {
+            formData.beta_asset = { name: "" };
+            break;
           }
-        ]
-      };
-    }
+          case "alpha_ledger": {
+            formData.alpha_asset = { name: "" };
+            break;
+          }
+        }
+      }
+
+      break;
   }
+
+  return {
+    ...state,
+    formData
+  };
 }
 
-export type LedgerAction =
-  | { type: "change-parameter"; payload: { name: string; newValue: string } }
-  | { type: "change-ledger"; payload: { newLedger: string } };
+const assetsByLedger: { [key: string]: string[] | undefined } = {
+  bitcoin: ["bitcoin"],
+  ethereum: ["ether"]
+};
 
 const SendSwap = ({ location, history, classes }: SendSwapProps) => {
-  const initAsset: Asset = { name: "", parameters: [] };
-  const initLedger: Ledger = { name: "", parameters: [] };
-  const [alphaLedger, alphaLedgerDispatch] = useReducer(
-    ledgerReducer,
-    initLedger
-  );
-  const [betaLedger, betaLedgerDispatch] = useReducer(
-    ledgerReducer,
-    initLedger
-  );
-  const [alphaAsset, alphaAssetDispatch] = useReducer(assetReducer, initAsset);
-  const [betaAsset, betaAssetDispatch] = useReducer(assetReducer, initAsset);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
   const [peer, setPeer] = useState("0.0.0.0:8011");
@@ -133,10 +162,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
     }
 
     postSwap(protocol, {
-      alpha_ledger: { name: alphaLedger.name, network: alphaLedger.network },
-      beta_ledger: { name: betaLedger.name, network: betaLedger.network },
-      alpha_asset: { name: alphaAsset.name, quantity: alphaAsset.quantity },
-      beta_asset: { name: betaAsset.name, quantity: betaAsset.quantity },
+      ...state.formData,
       alpha_ledger_refund_identity: params.alphaRefundIdentity,
       beta_ledger_redeem_identity: params.betaRedeemIdentity,
       alpha_expiry: params.alphaExpiry,
@@ -157,6 +183,11 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
     protocol = protocol[0];
   }
 
+  const alphaLedger = state.formData.alpha_ledger;
+  const betaLedger = state.formData.beta_ledger;
+  const alphaAsset = state.formData.alpha_asset;
+  const betaAsset = state.formData.beta_asset;
+
   return (
     <React.Fragment>
       <Paper elevation={1} className={classes.root}>
@@ -168,27 +199,48 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             <Grid item={true} xs={12}>
               <fieldset className={classes.root}>
                 <legend>Alpha</legend>
-                <LedgerSelect
-                  ledger={alphaLedger}
-                  onLedgerChange={ledger =>
-                    alphaLedgerDispatch({
-                      type: "change-ledger",
-                      payload: { newLedger: ledger }
+                <Select
+                  selection={alphaLedger}
+                  options={["bitcoin", "ethereum"]}
+                  disabledOptions={[betaLedger.name]}
+                  onSelectionChange={selection =>
+                    dispatch({
+                      type: "change-selection",
+                      of: "alpha_ledger",
+                      payload: { newSelection: selection }
                     })
                   }
                   onParameterChange={(name, value) =>
-                    alphaLedgerDispatch({
+                    dispatch({
+                      of: "alpha_ledger",
                       type: "change-parameter",
                       payload: { name, newValue: value }
                     })
                   }
-                  disabledValues={[betaLedger.name]}
+                  parameters={[]}
+                  label={"Ledger"}
                 />
                 {alphaLedger.name && (
-                  <AssetSelect
-                    ledger={alphaLedger.name}
-                    asset={alphaAsset}
-                    dispatch={alphaAssetDispatch}
+                  <Select
+                    selection={alphaAsset}
+                    options={assetsByLedger[alphaLedger.name] || []}
+                    onSelectionChange={selection =>
+                      dispatch({
+                        type: "change-selection",
+                        of: "alpha_asset",
+                        payload: { newSelection: selection }
+                      })
+                    }
+                    onParameterChange={(name, value) =>
+                      dispatch({
+                        type: "change-parameter",
+                        of: "alpha_asset",
+                        payload: { name, newValue: value }
+                      })
+                    }
+                    disabledOptions={[]}
+                    parameters={[]}
+                    label={"Asset"}
                   />
                 )}
               </fieldset>
@@ -196,27 +248,48 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             <Grid item={true} xs={12}>
               <fieldset className={classes.root}>
                 <legend>Beta</legend>
-                <LedgerSelect
-                  ledger={betaLedger}
-                  onLedgerChange={ledger =>
-                    betaLedgerDispatch({
-                      type: "change-ledger",
-                      payload: { newLedger: ledger }
+                <Select
+                  selection={betaLedger}
+                  options={["bitcoin", "ethereum"]}
+                  disabledOptions={[alphaLedger.name]}
+                  onSelectionChange={selection =>
+                    dispatch({
+                      of: "beta_ledger",
+                      type: "change-selection",
+                      payload: { newSelection: selection }
                     })
                   }
                   onParameterChange={(name, value) =>
-                    betaLedgerDispatch({
+                    dispatch({
                       type: "change-parameter",
+                      of: "beta_ledger",
                       payload: { name, newValue: value }
                     })
                   }
-                  disabledValues={[betaLedger.name]}
+                  parameters={[]}
+                  label={"Ledger"}
                 />
                 {betaLedger.name && (
-                  <AssetSelect
-                    ledger={betaLedger.name}
-                    asset={betaAsset}
-                    dispatch={betaAssetDispatch}
+                  <Select
+                    selection={betaAsset}
+                    options={assetsByLedger[betaLedger.name] || []}
+                    onSelectionChange={selection =>
+                      dispatch({
+                        of: "beta_asset",
+                        type: "change-selection",
+                        payload: { newSelection: selection }
+                      })
+                    }
+                    onParameterChange={(name, value) =>
+                      dispatch({
+                        type: "change-parameter",
+                        of: "beta_asset",
+                        payload: { name, newValue: value }
+                      })
+                    }
+                    disabledOptions={[]}
+                    parameters={[]}
+                    label={"Asset"}
                   />
                 )}
               </fieldset>
@@ -226,7 +299,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                 <legend>Protocol Parameters</legend>
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor={"protocol"}>Protocol</InputLabel>
-                  <Select
+                  <MUISelect
                     native={true}
                     required={true}
                     value={protocol}
@@ -240,7 +313,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                   >
                     <option value={""} />
                     <option value={"rfc003"}>RFC003</option>
-                  </Select>
+                  </MUISelect>
                 </FormControl>
                 {protocol === "rfc003" && (
                   <Rfc003ParamsForm

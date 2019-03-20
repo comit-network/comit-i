@@ -1,23 +1,29 @@
-import { FormControl, Grid, InputLabel, Select } from "@material-ui/core";
+import {
+  FormControl,
+  Grid,
+  InputLabel,
+  Select as MUISelect,
+  TextField
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import pascalCase from "pascal-case";
 import React from "react";
 
-const useLedgerSelectStyles = makeStyles(theme => ({
+const useLedgerMUISelectStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing.unit,
     minWidth: "10rem"
   }
 }));
 
-export interface Ledger {
+export interface Selection {
   name: string;
-  parameters: Parameter[];
   [parameter: string]: any;
 }
 
 export enum ParameterKind {
-  Network
+  Network,
+  Quantity
 }
 
 export interface Parameter {
@@ -26,55 +32,57 @@ export interface Parameter {
   options: string[];
 }
 
-interface LedgerSelectProps {
-  ledger: Ledger;
-  onLedgerChange: (ledger: string) => void;
+interface SelectProps {
+  selection: Selection;
+  options: string[];
+  disabledOptions?: string[];
+  label: string;
+  parameters: Parameter[];
+  onSelectionChange: (selection: string) => void;
   onParameterChange: (name: string, value: string) => void;
-  disabledValues: string[];
 }
 
-function ledgerOptions(): string[] {
-  return ["bitcoin", "ethereum"];
-}
-
-function LedgerSelect({
-  ledger,
-  onLedgerChange,
-  onParameterChange,
-  disabledValues
-}: LedgerSelectProps) {
-  const classes = useLedgerSelectStyles();
-  const inputName = "ledger-input";
+function Select({
+  selection,
+  options,
+  disabledOptions = [],
+  parameters,
+  label,
+  onSelectionChange,
+  onParameterChange
+}: SelectProps) {
+  const classes = useLedgerMUISelectStyles();
+  const inputName = `${label}-input`;
 
   return (
     <Grid item={true} xs={12} container={true} spacing={0}>
       <Grid item={true} xs={12} md={6}>
         <FormControl className={classes.formControl}>
-          <InputLabel htmlFor={inputName}>Ledger</InputLabel>
-          <Select
+          <InputLabel htmlFor={inputName}>{label}</InputLabel>
+          <MUISelect
             native={true}
             required={true}
             variant="outlined"
-            value={ledger.name}
-            onChange={event => onLedgerChange(event.target.value)}
+            value={selection.name}
+            onChange={event => onSelectionChange(event.target.value)}
             inputProps={{
               name: inputName
             }}
           >
             <option value={""} />
-            {ledgerOptions().map(ledger => (
+            {options.map(option => (
               <option
-                disabled={disabledValues.indexOf(ledger) !== -1}
-                value={ledger}
+                disabled={disabledOptions.indexOf(option) !== -1}
+                value={option}
               >
-                {pascalCase(ledger)}
+                {pascalCase(option)}
               </option>
             ))}
-          </Select>
+          </MUISelect>
         </FormControl>
       </Grid>
-      {ledger &&
-        ledger.parameters.map(param => {
+      {selection &&
+        parameters.map(param => {
           switch (param.type) {
             case ParameterKind.Network: {
               const inputName = "network-input";
@@ -82,10 +90,10 @@ function LedgerSelect({
                 <Grid item={true} xs={12} md={6}>
                   <FormControl className={classes.formControl}>
                     <InputLabel htmlFor={inputName}> Network </InputLabel>
-                    <Select
+                    <MUISelect
                       native={true}
                       required={true}
-                      value={ledger[param.name] || ""}
+                      value={selection[param.name] || ""}
                       onChange={event =>
                         onParameterChange(param.name, event.target.value)
                       }
@@ -98,8 +106,24 @@ function LedgerSelect({
                           {pascalCase(value)}
                         </option>
                       ))}
-                    </Select>
+                    </MUISelect>
                   </FormControl>
+                </Grid>
+              );
+            }
+            case ParameterKind.Quantity: {
+              return (
+                <Grid key={param.name} item={true} xs={12} md={6}>
+                  <TextField
+                    required={true}
+                    className={classes.formControl}
+                    type="number"
+                    value={selection[param.name] || ""}
+                    onChange={event => {
+                      onParameterChange(param.name, event.target.value);
+                    }}
+                    label="Quantity"
+                  />
                 </Grid>
               );
             }
@@ -109,4 +133,4 @@ function LedgerSelect({
   );
 }
 
-export default LedgerSelect;
+export default Select;
