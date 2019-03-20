@@ -15,13 +15,12 @@ import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
-import {
+import AssetSelect, {
   Asset,
   AssetAction,
   ParameterKind as AssetParameterKind
 } from "./AssetSelect";
-import LedgerFieldSet from "./LedgerFieldset";
-import {
+import LedgerSelect, {
   Ledger,
   LedgerAction,
   ParameterKind as LedgerParameterKind
@@ -164,24 +163,38 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
         <form onSubmit={handleFormSubmit}>
           <Grid container={true} spacing={40}>
             <Grid item={true} xs={12}>
-              <LedgerFieldSet
-                label={"Alpha"}
-                ledger={alphaLedger}
-                ledgerDispatch={alphaLedgerDispatch}
-                asset={alphaAsset}
-                assetDispatch={alphaAssetDispatch}
-                otherLedger={betaLedger}
-              />
+              <fieldset className={classes.root}>
+                <legend>Alpha</legend>
+                <LedgerSelect
+                  ledger={alphaLedger}
+                  dispatch={alphaLedgerDispatch}
+                  disabledValues={[betaLedger.name]}
+                />
+                {alphaLedger.name && (
+                  <AssetSelect
+                    ledger={alphaLedger.name}
+                    asset={alphaAsset}
+                    dispatch={alphaAssetDispatch}
+                  />
+                )}
+              </fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <LedgerFieldSet
-                label={"Beta"}
-                ledger={betaLedger}
-                ledgerDispatch={betaLedgerDispatch}
-                asset={betaAsset}
-                assetDispatch={betaAssetDispatch}
-                otherLedger={alphaLedger}
-              />
+              <fieldset className={classes.root}>
+                <legend>Beta</legend>
+                <LedgerSelect
+                  ledger={betaLedger}
+                  dispatch={betaLedgerDispatch}
+                  disabledValues={[betaLedger.name]}
+                />
+                {betaLedger.name && (
+                  <AssetSelect
+                    ledger={betaLedger.name}
+                    asset={betaAsset}
+                    dispatch={betaAssetDispatch}
+                  />
+                )}
+              </fieldset>
             </Grid>
             <Grid item={true} xs={12}>
               <fieldset className={classes.fieldset}>
