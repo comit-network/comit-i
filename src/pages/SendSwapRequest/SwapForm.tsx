@@ -149,53 +149,42 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   const betaLedgerParameters = betaLedgerSpec ? betaLedgerSpec.parameters : [];
   const betaAssetParameters = betaAssetSpec ? betaAssetSpec.parameters : [];
 
+  const onSelectionChange = (of: keyof Swap) => (selection: string) =>
+    dispatch({
+      type: "change-selection",
+      of,
+      payload: { newSelection: selection }
+    });
+  const onParameterChange = (of: keyof Swap) => (name: string, value: string) =>
+    dispatch({
+      of,
+      type: "change-parameter",
+      payload: { name, newValue: value }
+    });
+
   return (
     <React.Fragment>
       <Grid item={true} xs={12}>
         <fieldset>
           <legend>Alpha</legend>
           <Select
+            label={"Ledger"}
             selection={alphaLedger}
             options={ledgerOptions}
             disabledOptions={[betaLedger.name]}
-            onSelectionChange={selection =>
-              dispatch({
-                type: "change-selection",
-                of: "alpha_ledger",
-                payload: { newSelection: selection }
-              })
-            }
-            onParameterChange={(name, value) =>
-              dispatch({
-                of: "alpha_ledger",
-                type: "change-parameter",
-                payload: { name, newValue: value }
-              })
-            }
+            onSelectionChange={onSelectionChange("alpha_ledger")}
+            onParameterChange={onParameterChange("alpha_ledger")}
             parameters={alphaLedgerParameters}
-            label={"Ledger"}
           />
           {alphaLedger.name && (
             <Select
+              label={"Asset"}
               selection={alphaAsset}
               options={alphaAssets}
-              onSelectionChange={selection =>
-                dispatch({
-                  type: "change-selection",
-                  of: "alpha_asset",
-                  payload: { newSelection: selection }
-                })
-              }
-              onParameterChange={(name, value) =>
-                dispatch({
-                  type: "change-parameter",
-                  of: "alpha_asset",
-                  payload: { name, newValue: value }
-                })
-              }
               disabledOptions={[]}
+              onSelectionChange={onSelectionChange("alpha_asset")}
+              onParameterChange={onParameterChange("alpha_asset")}
               parameters={alphaAssetParameters}
-              label={"Asset"}
             />
           )}
         </fieldset>
@@ -204,47 +193,23 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
         <fieldset>
           <legend>Beta</legend>
           <Select
+            label={"Ledger"}
             selection={betaLedger}
             options={ledgerOptions}
             disabledOptions={[alphaLedger.name]}
-            onSelectionChange={selection =>
-              dispatch({
-                of: "beta_ledger",
-                type: "change-selection",
-                payload: { newSelection: selection }
-              })
-            }
-            onParameterChange={(name, value) =>
-              dispatch({
-                type: "change-parameter",
-                of: "beta_ledger",
-                payload: { name, newValue: value }
-              })
-            }
+            onSelectionChange={onSelectionChange("beta_ledger")}
+            onParameterChange={onParameterChange("beta_ledger")}
             parameters={betaLedgerParameters}
-            label={"Ledger"}
           />
           {betaLedger.name && (
             <Select
+              label={"Asset"}
               selection={betaAsset}
               options={betaAssets}
-              onSelectionChange={selection =>
-                dispatch({
-                  of: "beta_asset",
-                  type: "change-selection",
-                  payload: { newSelection: selection }
-                })
-              }
-              onParameterChange={(name, value) =>
-                dispatch({
-                  type: "change-parameter",
-                  of: "beta_asset",
-                  payload: { name, newValue: value }
-                })
-              }
               disabledOptions={[]}
+              onSelectionChange={onSelectionChange("beta_asset")}
+              onParameterChange={onParameterChange("beta_asset")}
               parameters={betaAssetParameters}
-              label={"Asset"}
             />
           )}
         </fieldset>
