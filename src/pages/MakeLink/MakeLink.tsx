@@ -108,15 +108,27 @@ const MakeLink = () => {
           <SubTitle text={"The generated link"} />
           <Paper elevation={2}>
             <Grid container={true} xs={12} spacing={16} alignItems={"center"}>
-              <Grid item={true} container={true} xs={1} justify={"center"}>
+              <Grid
+                item={true}
+                container={true}
+                xs={2}
+                md={1}
+                justify={"center"}
+              >
                 {icon}
               </Grid>
-              <Grid item={true} xs={10}>
+              <Grid item={true} xs={8} md={10}>
                 <Typography variant={"body2"} align={"center"}>
                   {uri.toString()}
                 </Typography>
               </Grid>
-              <Grid item={true} container={true} xs={1} justify={"center"}>
+              <Grid
+                item={true}
+                container={true}
+                xs={2}
+                md={1}
+                justify={"center"}
+              >
                 {!linkIsValid ? (
                   <Tooltip
                     title={"Please complete the form before copying the link."}
