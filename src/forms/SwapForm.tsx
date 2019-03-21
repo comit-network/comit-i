@@ -41,23 +41,16 @@ const emptyAssetSpec = {
   parameters: []
 };
 
+export interface SwapValue {
+  name: string;
+  [parameter: string]: string | undefined;
+}
+
 export interface Swap {
-  alpha_ledger: {
-    name: string;
-    [parameter: string]: string | undefined;
-  };
-  alpha_asset: {
-    name: string;
-    [parameter: string]: string | undefined;
-  };
-  beta_ledger: {
-    name: string;
-    [parameter: string]: string | undefined;
-  };
-  beta_asset: {
-    name: string;
-    [parameter: string]: string | undefined;
-  };
+  alpha_ledger: SwapValue;
+  alpha_asset: SwapValue;
+  beta_ledger: SwapValue;
+  beta_asset: SwapValue;
 }
 
 export type Action =

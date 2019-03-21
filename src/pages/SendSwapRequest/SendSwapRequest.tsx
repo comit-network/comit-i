@@ -1,13 +1,6 @@
-import {
-  Button,
-  createStyles,
-  FormControl,
-  Grid,
-  InputLabel,
-  Select as MUISelect
-} from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
-import { makeStyles, withStyles, WithStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import queryString from "query-string";
 import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -15,6 +8,7 @@ import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
+import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
@@ -26,20 +20,7 @@ import SwapForm, {
 import ledgers from "../../ledgerSpec";
 import PeerTextField from "./PeerTextField";
 
-// Have to use any to access custom mixins
-const styles = (theme: any) =>
-  createStyles({
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: "10rem"
-    }
-  });
-
-interface SendSwapProps
-  extends RouteComponentProps,
-    WithStyles<typeof styles> {}
-
-const SendSwap = ({ location, history, classes }: SendSwapProps) => {
+const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
 
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
@@ -83,24 +64,22 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
             <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
             <Grid item={true} xs={12}>
               <Fieldset legend="Protocol Parameters">
-                <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor={"protocol"}>Protocol</InputLabel>
-                  <MUISelect
-                    native={true}
-                    required={true}
-                    value={protocol}
-                    onChange={event => {
-                      setProtocol(event.target.value);
-                      setParams(defaultRfc003Params);
-                    }}
-                    inputProps={{
-                      name: "protocol"
-                    }}
-                  >
-                    <option value={""} />
-                    <option value={"rfc003"}>RFC003</option>
-                  </MUISelect>
-                </FormControl>
+                <TextField
+                  label={"Protocol"}
+                  required={true}
+                  value={protocol}
+                  onChange={event => {
+                    setProtocol(event.target.value);
+                    setParams(defaultRfc003Params);
+                  }}
+                  select={true}
+                  SelectProps={{
+                    native: true
+                  }}
+                >
+                  <option value={""} />
+                  <option value={"rfc003"}>RFC003</option>
+                </TextField>
                 {protocol === "rfc003" && (
                   <Rfc003ParamsForm
                     alphaLedger={swap.alpha_ledger.name}
@@ -157,4 +136,4 @@ function SendButton() {
   );
 }
 
-export default withRouter(withStyles(styles)(SendSwap));
+export default withRouter(SendSwap);
