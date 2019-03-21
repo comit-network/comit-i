@@ -4,9 +4,7 @@ import {
   FormControl,
   Grid,
   InputLabel,
-  Paper,
-  Select as MUISelect,
-  Typography
+  Select as MUISelect
 } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import { makeStyles, withStyles, WithStyles } from "@material-ui/styles";
@@ -15,32 +13,22 @@ import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
-import PeerTextField from "./PeerTextField";
+import Fieldset from "../../components/Fieldset";
+import Page from "../../components/Page";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
-} from "./Rfc003ParamsForm";
-import { ParameterKind } from "./Select";
-import SwapForm, { emptySwap, reducer as swapReducer } from "./SwapForm";
+} from "../../forms/Rfc003ParamsForm";
+import SwapForm, {
+  emptySwap,
+  reducer as swapReducer
+} from "../../forms/SwapForm";
+import ledgers from "../../ledgerSpec";
+import PeerTextField from "./PeerTextField";
 
 // Have to use any to access custom mixins
 const styles = (theme: any) =>
   createStyles({
-    root: {
-      margin: "auto",
-      [theme.breakpoints.up("md")]: {
-        maxWidth: "50vw"
-      },
-      [theme.breakpoints.up("xl")]: {
-        maxWidth: "40vw"
-      },
-      padding: theme.spacing.unit * 3
-    },
-    group: theme.mixins.border(theme),
-    title: {
-      marginBottom: theme.spacing.unit * 3
-    },
-    fieldset: theme.mixins.border(theme),
     formControl: {
       margin: theme.spacing.unit,
       minWidth: "10rem"
@@ -57,51 +45,6 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
   const [peer, setPeer] = useState("0.0.0.0:8011");
   const [displayError, setDisplayError] = useState(false);
-
-  const ledgers = [
-    {
-      name: "bitcoin",
-      parameters: [
-        {
-          name: "network",
-          type: ParameterKind.Network,
-          options: ["mainnet", "testnet", "regtest"]
-        }
-      ],
-      assets: [
-        {
-          name: "bitcoin",
-          parameters: [
-            {
-              name: "quantity",
-              type: ParameterKind.Quantity
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: "ethereum",
-      parameters: [
-        {
-          name: "network",
-          type: ParameterKind.Network,
-          options: ["mainnet", "ropsten", "regtest"]
-        }
-      ],
-      assets: [
-        {
-          name: "ether",
-          parameters: [
-            {
-              name: "quantity",
-              type: ParameterKind.Quantity
-            }
-          ]
-        }
-      ]
-    }
-  ];
 
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
@@ -134,16 +77,12 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
 
   return (
     <React.Fragment>
-      <Paper elevation={1} className={classes.root}>
-        <Typography className={classes.title} variant="h4">
-          Send a swap request
-        </Typography>
+      <Page title={"Send a swap request"}>
         <form onSubmit={handleFormSubmit}>
           <Grid container={true} spacing={40}>
             <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
             <Grid item={true} xs={12}>
-              <fieldset className={classes.fieldset}>
-                <legend>Protocol Parameters</legend>
+              <Fieldset legend="Protocol Parameters">
                 <FormControl className={classes.formControl}>
                   <InputLabel htmlFor={"protocol"}>Protocol</InputLabel>
                   <MUISelect
@@ -170,7 +109,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
                     setParams={setParams}
                   />
                 )}
-              </fieldset>
+              </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
               <PeerTextField
@@ -183,7 +122,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
           </Grid>
           <SendButton />
         </form>
-      </Paper>
+      </Page>
       <ErrorSnackbar
         message={"Failed to create swap."}
         onClose={hideError}

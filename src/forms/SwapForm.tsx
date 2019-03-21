@@ -1,6 +1,8 @@
 import { Grid } from "@material-ui/core";
 import React, { Dispatch } from "react";
-import Select, { Parameter } from "./Select";
+import Fieldset from "../components/Fieldset";
+import { Parameter } from "../ledgerSpec";
+import Select from "../pages/SendSwapRequest/Select";
 
 function findLedgerSpec(ledgers: LedgerSpec[], ledger: string) {
   return (
@@ -166,8 +168,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   return (
     <React.Fragment>
       <Grid item={true} xs={12}>
-        <fieldset>
-          <legend>Alpha</legend>
+        <Fieldset legend={"Alpha"}>
           <Select
             label={"Ledger"}
             selection={alphaLedger}
@@ -188,11 +189,10 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
               parameters={alphaAssetSpec.parameters}
             />
           )}
-        </fieldset>
+        </Fieldset>
       </Grid>
       <Grid item={true} xs={12}>
-        <fieldset>
-          <legend>Beta</legend>
+        <Fieldset legend={"Beta"}>
           <Select
             label={"Ledger"}
             selection={betaLedger}
@@ -213,7 +213,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
               parameters={betaAssetSpec.parameters}
             />
           )}
-        </fieldset>
+        </Fieldset>
       </Grid>
     </React.Fragment>
   );

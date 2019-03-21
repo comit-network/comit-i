@@ -8,6 +8,7 @@ import {
 import { makeStyles } from "@material-ui/styles";
 import pascalCase from "pascal-case";
 import React from "react";
+import { Parameter, ParameterKind } from "../../ledgerSpec";
 
 const useLedgerMUISelectStyles = makeStyles(theme => ({
   formControl: {
@@ -19,17 +20,6 @@ const useLedgerMUISelectStyles = makeStyles(theme => ({
 export interface Selection {
   name: string;
   [parameter: string]: any;
-}
-
-export enum ParameterKind {
-  Network,
-  Quantity
-}
-
-export interface Parameter {
-  name: string;
-  type: ParameterKind;
-  options?: string[];
 }
 
 interface SelectProps {
