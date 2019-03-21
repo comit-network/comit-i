@@ -8,6 +8,7 @@
     "@material-ui/styles": "^3.0.0-alpha.10",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
+    "copy-to-clipboard": "^3.0.8",
     "pascal-case": "^2.0.1",
     "promise-polyfill": "^8.1.0",
     "query-string": "^6.3.0",
