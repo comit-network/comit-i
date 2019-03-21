@@ -18,7 +18,6 @@ import SwapForm, {
   reducer as swapReducer
 } from "../../forms/SwapForm";
 import ledgers from "../../ledgerSpec";
-import PeerTextField from "./PeerTextField";
 
 const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
@@ -91,12 +90,14 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <PeerTextField
-                selected={peer}
-                setSelected={setPeer}
-                label={"Peer"}
-                helperText={"IPv4 Socket Address"}
-              />
+              <Fieldset legend={"To"}>
+                <TextField
+                  value={peer}
+                  onChange={event => setPeer(event.target.value)}
+                  label={"Peer"}
+                  helperText={"IPv4 Socket Address"}
+                />
+              </Fieldset>
             </Grid>
           </Grid>
           <SendButton />
