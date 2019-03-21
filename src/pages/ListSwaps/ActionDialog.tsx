@@ -3,55 +3,106 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
-  DialogTitle
+  DialogTitle,
+  TextField
 } from "@material-ui/core";
 import axios from "axios";
-import React from "react";
+import React, { useReducer } from "react";
+
+interface Action {
+  name: string;
+  url: string;
+}
 
 interface ActionDialogProps {
-  actionName: string;
-  setActionName: (actionName: string) => void;
-  actionUrl: string;
-  setActionUrl: (actionUrl: string) => void;
-  isOpen: boolean;
+  action: Action;
+  acceptFields: string[];
   setOpen: (isOpen: boolean) => void;
 }
 
-function ActionDialog({
-  actionName,
-  setActionName,
-  actionUrl,
-  setActionUrl,
-  isOpen,
-  setOpen
-}: ActionDialogProps) {
+interface AcceptActionField {
+  name: string;
+  value: string;
+}
+
+function acceptReducer(currentState: object, field: AcceptActionField) {
+  return { ...currentState, [field.name]: field.value };
+}
+
+function ActionDialog({ action, acceptFields, setOpen }: ActionDialogProps) {
+  const initialAcceptRequest = {};
+  const [acceptBody, dispatchAccept] = useReducer(
+    acceptReducer,
+    initialAcceptRequest
+  );
   const handleCloseDialog = () => {
-    setActionName("");
-    setActionUrl("");
     setOpen(false);
   };
 
+  const chooseComponents = (actionName: string) => {
+    switch (actionName) {
+      case "decline":
+        return [
+          null,
+          <Button
+            key={actionName + "-button"}
+            onClick={() => {
+              axios
+                .post("http://localhost:8010" + action.url)
+                .then(handleCloseDialog);
+            }}
+            color="primary"
+          >
+            {"Decline"}
+          </Button>
+        ];
+      case "accept": {
+        return [
+          <React.Fragment key="accept-form">
+            {acceptFields.map(field => (
+              <TextField
+                key={field}
+                required={true}
+                label={field}
+                value={acceptBody[field] || ""}
+                onChange={event =>
+                  dispatchAccept({
+                    name: field,
+                    value: event.target.value
+                  })
+                }
+              />
+            ))}
+          </React.Fragment>,
+          <Button
+            key={actionName + "-button"}
+            onClick={() => {
+              axios
+                .post("http://localhost:8010" + action.url, acceptBody)
+                .then(handleCloseDialog);
+            }}
+            color="primary"
+          >
+            {"Accept"}
+          </Button>
+        ];
+      }
+      default: {
+        return [];
+      }
+    }
+  };
+
+  const [content, button] = chooseComponents(action.name);
+
   return (
-    <Dialog open={isOpen} onClose={handleCloseDialog}>
-      <DialogTitle>{actionName}</DialogTitle>
-      <DialogContent>
-        <DialogContentText>
-          You can do the {actionName} action.
-        </DialogContentText>
-      </DialogContent>
+    <Dialog open={true} onClose={handleCloseDialog}>
+      <DialogTitle>{action.name}</DialogTitle>
+      <DialogContent>{content}</DialogContent>
       <DialogActions>
+        {button}
         <Button onClick={handleCloseDialog} color="primary">
           Cancel
-        </Button>
-        <Button
-          onClick={() => {
-            axios.post("http://localhost:8010" + actionUrl);
-            handleCloseDialog();
-          }}
-          color="primary"
-        >
-          {actionName}
         </Button>
       </DialogActions>
     </Dialog>
