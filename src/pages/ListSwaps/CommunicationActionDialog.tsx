@@ -14,7 +14,7 @@ interface Action {
   url: string;
 }
 
-interface ActionDialogProps {
+interface CommunicationActionDialogProps {
   action: Action;
   acceptFields: string[];
   setOpen: (isOpen: boolean) => void;
@@ -29,7 +29,11 @@ function acceptReducer(currentState: object, field: AcceptActionField) {
   return { ...currentState, [field.name]: field.value };
 }
 
-function ActionDialog({ action, acceptFields, setOpen }: ActionDialogProps) {
+function CommunicationActionDialog({
+  action,
+  acceptFields,
+  setOpen
+}: CommunicationActionDialogProps) {
   const initialAcceptRequest = {};
   const [acceptBody, dispatchAccept] = useReducer(
     acceptReducer,
@@ -109,4 +113,4 @@ function ActionDialog({ action, acceptFields, setOpen }: ActionDialogProps) {
   );
 }
 
-export default ActionDialog;
+export default CommunicationActionDialog;

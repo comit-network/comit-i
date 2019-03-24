@@ -2,7 +2,7 @@ import { Button, TableCell, TableRow } from "@material-ui/core";
 import { useState } from "react";
 import React from "react";
 import { Asset, Swap } from "../../api/get_swaps";
-import ActionDialog from "./ActionDialog";
+import CommunicationActionDialog from "./CommunicationActionDialog";
 
 interface AssetCellProps {
   asset: Asset;
@@ -76,7 +76,7 @@ function SwapRow(swap: Swap) {
         <TableCell>{actionButtons}</TableCell>
       </TableRow>
       {actionOpen && (
-        <ActionDialog
+        <CommunicationActionDialog
           action={currentAction}
           acceptFields={acceptFields}
           setOpen={setActionOpen}
