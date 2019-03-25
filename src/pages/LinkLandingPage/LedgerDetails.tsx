@@ -1,6 +1,6 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
-import FieldSet from "../../components/FieldSet";
+import Fieldset from "../../components/Fieldset";
 import { Asset, Ledger } from "./LinkLandingPage";
 
 interface LedgerDetailProps {
@@ -11,7 +11,7 @@ interface LedgerDetailProps {
 
 function LedgerDetail({ label, ledger, asset }: LedgerDetailProps) {
   return (
-    <FieldSet label={label}>
+    <Fieldset legend={label}>
       <Typography variant="body2">
         Ledger: {ledger.name} on {ledger.network}
         <br />
@@ -23,7 +23,7 @@ function LedgerDetail({ label, ledger, asset }: LedgerDetailProps) {
           </React.Fragment>
         )}
       </Typography>
-    </FieldSet>
+    </Fieldset>
   );
 }
 

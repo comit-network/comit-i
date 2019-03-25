@@ -14,7 +14,7 @@ import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
-} from "../SendSwapRequest/Rfc003ParamsForm";
+} from "../../forms/Rfc003ParamsForm";
 import { SwapParams } from "./LinkLandingPage";
 
 // Have to use any to access custom mixins

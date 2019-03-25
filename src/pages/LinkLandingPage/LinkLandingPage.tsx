@@ -4,7 +4,7 @@ import { WithStyles } from "@material-ui/styles/withStyles";
 import queryString, { ParsedQuery } from "query-string";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import FieldSet from "../../components/FieldSet";
+import Fieldset from "../../components/Fieldset";
 import LedgerDetails from "./LedgerDetails";
 import LinkLandingForm from "./LinkLandingForm";
 
@@ -46,7 +46,6 @@ export const styles = (theme: any) =>
     title: {
       marginBottom: theme.spacing.unit * 3
     },
-    fieldset: theme.mixins.border(theme),
     formControl: {
       margin: theme.spacing.unit,
       minWidth: "10rem"
@@ -156,7 +155,7 @@ const LinkLandingPage = ({ location, classes }: LinkLandingProps) => {
         </Typography>
         <Grid container={true} spacing={40}>
           <Grid item={true} xs={12}>
-            <FieldSet label="Offer Details">
+            <Fieldset legend="Offer Details">
               <Grid item={true} xs={6}>
                 {swapParams && (
                   <LedgerDetails
@@ -176,7 +175,7 @@ const LinkLandingPage = ({ location, classes }: LinkLandingProps) => {
                 )}
               </Grid>
               <Grid xs={12}>
-                <FieldSet label="Peer Detail">
+                <Fieldset legend="Peer Detail">
                   {swapParams && (
                     <Typography variant="body2">
                       Peer: {swapParams.peer} <br />
@@ -184,10 +183,10 @@ const LinkLandingPage = ({ location, classes }: LinkLandingProps) => {
                       Trade ID: {swapParams.id} <br />
                     </Typography>
                   )}
-                </FieldSet>
+                </Fieldset>
               </Grid>
               {showError && <div className="error-message">{errorMessage}</div>}
-            </FieldSet>
+            </Fieldset>
           </Grid>
           <Grid item={true} xs={12}>
             {swapParams && <LinkLandingForm swapParams={swapParams} />}
