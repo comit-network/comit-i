@@ -1,8 +1,8 @@
 import { storiesOf } from "@storybook/react";
-import React from "react";
 import { Button, Dialog } from "@material-ui/core";
 import LedgerActionDialogBody from "../src/pages/ListSwaps/LedgerActionDialogBody";
 import { Store, withState } from "@dump247/storybook-state";
+import React from "react";
 
 interface DialogStoryState {
   open: boolean;
@@ -26,7 +26,7 @@ storiesOf("LedgerActionDialog", module)
         <Button onClick={openDialog(store)}>Open dialog</Button>
         <Dialog open={store.state.open}>
           <LedgerActionDialogBody
-            onCloseButtonClicked={closeDialog(store)}
+            onClose={closeDialog(store)}
             action={{
               type: "bitcoin-send-amount-to-address",
               payload: {
@@ -47,7 +47,7 @@ storiesOf("LedgerActionDialog", module)
         <Button onClick={openDialog(store)}>Open dialog</Button>
         <Dialog open={store.state.open}>
           <LedgerActionDialogBody
-            onCloseButtonClicked={closeDialog(store)}
+            onClose={closeDialog(store)}
             action={{
               type: "bitcoin-broadcast-signed-transaction",
               payload: {

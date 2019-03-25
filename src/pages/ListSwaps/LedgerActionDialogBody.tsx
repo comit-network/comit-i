@@ -6,44 +6,16 @@ import {
   Typography
 } from "@material-ui/core";
 import React from "react";
+import { LedgerAction } from "../../api/get_action";
 import CopyToClipboard from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
-  onCloseButtonClicked: (event: React.MouseEvent) => void;
+  onClose: (event: React.MouseEvent) => void;
   action: LedgerAction;
 }
 
-type LedgerAction =
-  | {
-      type: "bitcoin-send-amount-to-address";
-      payload: { to: string; amount: string; network: string };
-    }
-  | {
-      type: "bitcoin-broadcast-signed-transaction";
-      payload: { hex: string; network: string };
-    }
-  | {
-      type: "ethereum-deploy-contract";
-      payload: {
-        data: string;
-        amount: string;
-        gas_limit: string;
-        network: string;
-      };
-    }
-  | {
-      type: "ethereum-invoke-contract";
-      payload: {
-        contract_address: string;
-        data: string;
-        amount: string;
-        gas_limit: string;
-        network: string;
-      };
-    };
-
 function LedgerActionDialogBody({
-  onCloseButtonClicked,
+  onClose,
   action
 }: LedgerActionDialogBodyProps) {
   switch (action.type) {
@@ -67,7 +39,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <CopyToClipboard element={action.payload.hex} name="transaction" />
-            <Button onClick={onCloseButtonClicked} color="secondary">
+            <Button onClick={onClose} color="secondary">
               Close
             </Button>
           </DialogActions>
@@ -95,7 +67,7 @@ function LedgerActionDialogBody({
           <DialogActions>
             <CopyToClipboard element={action.payload.amount} name="amount" />
             <CopyToClipboard element={action.payload.to} name="address" />
-            <Button onClick={onCloseButtonClicked} color="secondary">
+            <Button onClick={onClose} color="secondary">
               Close
             </Button>
           </DialogActions>
@@ -108,7 +80,7 @@ function LedgerActionDialogBody({
           <DialogTitle>Deploy Ethereum contract</DialogTitle>
           <DialogContent>Here goes the content!</DialogContent>
           <DialogActions>
-            <Button onClick={onCloseButtonClicked} color="secondary">
+            <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
           </DialogActions>
@@ -121,7 +93,7 @@ function LedgerActionDialogBody({
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
           <DialogContent>Here goes the content!</DialogContent>
           <DialogActions>
-            <Button onClick={onCloseButtonClicked} color="secondary">
+            <Button onClick={onClose} color="secondary">
               Cancel
             </Button>
           </DialogActions>

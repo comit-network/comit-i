@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useReducer } from "react";
+import { acceptReducer } from "../../api/post_action";
 
 interface Action {
   name: string;
@@ -17,22 +18,13 @@ interface Action {
 interface CommunicationActionDialogProps {
   action: Action;
   acceptFields: string[];
-  setOpen: (isOpen: boolean) => void;
-}
-
-interface AcceptActionField {
-  name: string;
-  value: string;
-}
-
-function acceptReducer(currentState: object, field: AcceptActionField) {
-  return { ...currentState, [field.name]: field.value };
+  onClose: () => void;
 }
 
 function CommunicationActionDialog({
   action,
   acceptFields,
-  setOpen
+  onClose
 }: CommunicationActionDialogProps) {
   const initialAcceptRequest = {};
   const [acceptBody, dispatchAccept] = useReducer(
@@ -40,7 +32,7 @@ function CommunicationActionDialog({
     initialAcceptRequest
   );
   const handleCloseDialog = () => {
-    setOpen(false);
+    onClose();
   };
 
   const chooseComponents = (actionName: string) => {

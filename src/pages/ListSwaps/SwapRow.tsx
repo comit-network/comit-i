@@ -3,6 +3,7 @@ import { useState } from "react";
 import React from "react";
 import { Asset, Swap } from "../../api/get_swaps";
 import CommunicationActionDialog from "./CommunicationActionDialog";
+import LedgerActionDialog from "./LedgerActionDialog";
 
 interface AssetCellProps {
   asset: Asset;
@@ -26,25 +27,52 @@ function AssetCell({ asset }: AssetCellProps) {
   }
 }
 
+enum DialogState {
+  Closed,
+  CommunicationDialogOpen,
+  LedgerDialogOpen
+}
+
 function SwapRow(swap: Swap) {
-  const [actionOpen, setActionOpen] = useState(false);
-  const [currentAction, setCurrentAction] = useState({ name: "", url: "" });
+  const [dialogState, setDialogState] = useState(DialogState.Closed);
+  const [communicationAction, setCommunicationAction] = useState({
+    name: "",
+    url: ""
+  });
+  const [ledgerActionUrl, setLedgerActionUrl] = useState("");
 
   const alphaIsTransitive = swap.parameters.alpha_ledger.name === "bitcoin";
   const betaIsTransitive = swap.parameters.beta_ledger.name === "bitcoin";
 
   const actionButtons = Object.entries(swap._links)
     .filter(([key, _]) => key !== "self")
-    .map(([actionName, actionUrl]) => (
-      <Button
-        variant="outlined"
-        color="primary"
-        key={actionName}
-        onClick={() => handleClickAction(actionName, actionUrl.href)}
-      >
-        {actionName}
-      </Button>
-    ));
+    .map(([actionName, actionUrl]) => {
+      if (actionName === "accept" || actionName === "decline") {
+        return (
+          <Button
+            variant="outlined"
+            color="primary"
+            key={actionName}
+            onClick={() =>
+              handleClickCommunicationAction(actionName, actionUrl.href)
+            }
+          >
+            {actionName}
+          </Button>
+        );
+      } else {
+        return (
+          <Button
+            variant="outlined"
+            color="primary"
+            key={actionName}
+            onClick={() => handleClickLedgerAction(actionUrl.href)}
+          >
+            {actionName}
+          </Button>
+        );
+      }
+    });
 
   const acceptFields = [];
   if (!alphaIsTransitive) {
@@ -54,9 +82,14 @@ function SwapRow(swap: Swap) {
     acceptFields.push("beta_ledger_refund_identity");
   }
 
-  const handleClickAction = (name: string, url: string) => {
-    setCurrentAction({ name, url });
-    setActionOpen(true);
+  const handleClickCommunicationAction = (name: string, url: string) => {
+    setCommunicationAction({ name, url });
+    setDialogState(DialogState.CommunicationDialogOpen);
+  };
+
+  const handleClickLedgerAction = (url: string) => {
+    setLedgerActionUrl(url);
+    setDialogState(DialogState.LedgerDialogOpen);
   };
 
   return (
@@ -75,11 +108,17 @@ function SwapRow(swap: Swap) {
         <TableCell>{swap.role}</TableCell>
         <TableCell>{actionButtons}</TableCell>
       </TableRow>
-      {actionOpen && (
+      {dialogState === DialogState.CommunicationDialogOpen && (
         <CommunicationActionDialog
-          action={currentAction}
+          action={communicationAction}
           acceptFields={acceptFields}
-          setOpen={setActionOpen}
+          onClose={() => setDialogState(DialogState.Closed)}
+        />
+      )}
+      {dialogState === DialogState.LedgerDialogOpen && (
+        <LedgerActionDialog
+          url={ledgerActionUrl}
+          onClose={() => setDialogState(DialogState.Closed)}
         />
       )}
     </React.Fragment>
