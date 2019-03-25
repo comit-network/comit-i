@@ -1,12 +1,9 @@
-import {
-  createStyles,
-  SvgIcon,
-  WithStyles,
-  withStyles
-} from "@material-ui/core";
+import { SvgIcon } from "@material-ui/core";
+import { SvgIconProps } from "@material-ui/core/SvgIcon";
+import { makeStyles } from "@material-ui/styles";
 import React from "react";
 
-const styles = createStyles({
+const useStyles = makeStyles({
   st0: {
     fill: "#E2761B",
     stroke: "#E2761B",
@@ -69,11 +66,11 @@ const styles = createStyles({
   }
 });
 
-interface Props extends WithStyles<typeof styles> {}
+function MetamaskIcon({ ...svgProps }: SvgIconProps) {
+  const classes = useStyles();
 
-function MetamaskIcon({ classes }: Props) {
   return (
-    <SvgIcon viewBox={"0 0 318.6 318.6"}>
+    <SvgIcon {...svgProps} viewBox={"0 0 318.6 318.6"}>
       <polygon
         className={classes.st0}
         points="274.1,35.5 174.6,109.4 193,65.8 "
@@ -208,4 +205,4 @@ function MetamaskIcon({ classes }: Props) {
   );
 }
 
-export default withStyles(styles)(MetamaskIcon);
+export default MetamaskIcon;
