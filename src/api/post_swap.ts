@@ -1,20 +1,10 @@
 import axios from "axios";
 
-export interface Ledger {
-  name: string;
-  network: string;
-}
-
-export interface Asset {
-  name: string;
-  quantity: string;
-}
-
 export interface PostRfc003SwapRequest {
-  alpha_ledger: Ledger;
-  beta_ledger: Ledger;
-  alpha_asset: Asset;
-  beta_asset: Asset;
+  alpha_ledger: any;
+  beta_ledger: any;
+  alpha_asset: any;
+  beta_asset: any;
   alpha_ledger_refund_identity?: string;
   beta_ledger_redeem_identity?: string;
   alpha_expiry?: number;

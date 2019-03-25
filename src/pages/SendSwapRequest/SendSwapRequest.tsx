@@ -1,65 +1,27 @@
-import {
-  Button,
-  createStyles,
-  FormControl,
-  Grid,
-  InputLabel,
-  Paper,
-  Select,
-  Typography
-} from "@material-ui/core";
+import { Button, Grid } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
-import { makeStyles, withStyles, WithStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import queryString from "query-string";
-import React, { useState } from "react";
+import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
-import LedgerFieldSet from "./LedgerFieldset";
-import PeerTextField from "./PeerTextField";
+import Fieldset from "../../components/Fieldset";
+import Page from "../../components/Page";
+import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
-  resetParams,
   Rfc003Params
-} from "./Rfc003ParamsForm";
+} from "../../forms/Rfc003ParamsForm";
+import SwapForm, {
+  emptySwap,
+  reducer as swapReducer
+} from "../../forms/SwapForm";
+import ledgers from "../../ledgerSpec";
 
-// Have to use any to access custom mixins
-const styles = (theme: any) =>
-  createStyles({
-    root: {
-      margin: "auto",
-      [theme.breakpoints.up("md")]: {
-        maxWidth: "50vw"
-      },
-      [theme.breakpoints.up("xl")]: {
-        maxWidth: "40vw"
-      },
-      padding: theme.spacing.unit * 3
-    },
-    group: theme.mixins.border(theme),
-    title: {
-      marginBottom: theme.spacing.unit * 3
-    },
-    fieldset: theme.mixins.border(theme),
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: "10rem"
-    }
-  });
+const SendSwap = ({ location, history }: RouteComponentProps) => {
+  const [swap, dispatch] = useReducer(swapReducer, emptySwap);
 
-interface SendSwapProps
-  extends RouteComponentProps,
-    WithStyles<typeof styles> {}
-
-const SendSwap = ({ location, history, classes }: SendSwapProps) => {
-  const [alphaLedger, setAlphaLedger] = useState("");
-  const [betaLedger, setBetaLedger] = useState("");
-  const [alphaAsset, setAlphaAsset] = useState("bitcoin");
-  const [betaAsset, setBetaAsset] = useState("ether");
-  const [alphaNetwork, setAlphaNetwork] = useState("regtest");
-  const [betaNetwork, setBetaNetwork] = useState("regtest");
-  const [alphaQuantity, setAlphaQuantity] = useState("1");
-  const [betaQuantity, setBetaQuantity] = useState("100");
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
   const [peer, setPeer] = useState("0.0.0.0:8011");
   const [displayError, setDisplayError] = useState(false);
@@ -72,10 +34,7 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
     }
 
     postSwap(protocol, {
-      alpha_ledger: { name: alphaLedger, network: alphaNetwork },
-      beta_ledger: { name: betaLedger, network: betaNetwork },
-      alpha_asset: { name: alphaAsset, quantity: alphaQuantity },
-      beta_asset: { name: betaAsset, quantity: betaQuantity },
+      ...swap,
       alpha_ledger_refund_identity: params.alphaRefundIdentity,
       beta_ledger_redeem_identity: params.betaRedeemIdentity,
       alpha_expiry: params.alphaExpiry,
@@ -98,89 +57,52 @@ const SendSwap = ({ location, history, classes }: SendSwapProps) => {
 
   return (
     <React.Fragment>
-      <Paper elevation={1} className={classes.root}>
-        <Typography className={classes.title} variant="h4">
-          Send a swap request
-        </Typography>
+      <Page title={"Send a swap request"}>
         <form onSubmit={handleFormSubmit}>
           <Grid container={true} spacing={40}>
+            <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
             <Grid item={true} xs={12}>
-              <LedgerFieldSet
-                label={"Alpha"}
-                ledger={alphaLedger}
-                setLedger={ledger => {
-                  setAlphaLedger(ledger);
-                  setParams(resetParams(params));
-                }}
-                network={alphaNetwork}
-                setNetwork={setAlphaNetwork}
-                asset={alphaAsset}
-                setAsset={setAlphaAsset}
-                quantity={alphaQuantity}
-                setQuantity={setAlphaQuantity}
-                otherLedger={betaLedger}
-              />
-            </Grid>
-            <Grid item={true} xs={12}>
-              <LedgerFieldSet
-                label={"Beta"}
-                ledger={betaLedger}
-                setLedger={ledger => {
-                  setBetaLedger(ledger);
-                  setParams(resetParams(params));
-                }}
-                network={betaNetwork}
-                setNetwork={setBetaNetwork}
-                asset={betaAsset}
-                setAsset={setBetaAsset}
-                quantity={betaQuantity}
-                setQuantity={setBetaQuantity}
-                otherLedger={alphaLedger}
-              />
-            </Grid>
-            <Grid item={true} xs={12}>
-              <fieldset className={classes.fieldset}>
-                <legend>Protocol Parameters</legend>
-                <FormControl className={classes.formControl}>
-                  <InputLabel htmlFor={"protocol"}>Protocol</InputLabel>
-                  <Select
-                    native={true}
-                    required={true}
-                    value={protocol}
-                    onChange={event => {
-                      setProtocol(event.target.value);
-                      setParams(defaultRfc003Params);
-                    }}
-                    inputProps={{
-                      name: "protocol"
-                    }}
-                  >
-                    <option value={""} />
-                    <option value={"rfc003"}>RFC003</option>
-                  </Select>
-                </FormControl>
+              <Fieldset legend="Protocol Parameters">
+                <TextField
+                  label={"Protocol"}
+                  required={true}
+                  value={protocol}
+                  onChange={event => {
+                    setProtocol(event.target.value);
+                    setParams(defaultRfc003Params);
+                  }}
+                  select={true}
+                  SelectProps={{
+                    native: true
+                  }}
+                >
+                  <option value={""} />
+                  <option value={"rfc003"}>RFC003</option>
+                </TextField>
                 {protocol === "rfc003" && (
                   <Rfc003ParamsForm
-                    alphaLedger={alphaLedger}
-                    betaLedger={betaLedger}
+                    alphaLedger={swap.alpha_ledger.name}
+                    betaLedger={swap.beta_ledger.name}
                     params={params}
                     setParams={setParams}
                   />
                 )}
-              </fieldset>
+              </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <PeerTextField
-                selected={peer}
-                setSelected={setPeer}
-                label={"Peer"}
-                helperText={"IPv4 Socket Address"}
-              />
+              <Fieldset legend={"To"}>
+                <TextField
+                  value={peer}
+                  onChange={event => setPeer(event.target.value)}
+                  label={"Peer"}
+                  helperText={"IPv4 Socket Address"}
+                />
+              </Fieldset>
             </Grid>
           </Grid>
           <SendButton />
         </form>
-      </Paper>
+      </Page>
       <ErrorSnackbar
         message={"Failed to create swap."}
         onClose={hideError}
@@ -215,4 +137,4 @@ function SendButton() {
   );
 }
 
-export default withRouter(withStyles(styles)(SendSwap));
+export default withRouter(SendSwap);
