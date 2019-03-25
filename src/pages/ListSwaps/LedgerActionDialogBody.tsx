@@ -3,12 +3,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Tooltip,
   Typography
 } from "@material-ui/core";
-import FileCopy from "@material-ui/icons/FileCopy";
-import copyToClipboard from "copy-to-clipboard";
 import React from "react";
+import CopyToClipboard from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
   onCloseButtonClicked: (event: React.MouseEvent) => void;
@@ -56,7 +54,7 @@ function LedgerActionDialogBody({
           <DialogContent>
             <Typography paragraph={true}>
               Please broadcast the following signed transaction on the{" "}
-              <b>{action.payload.network}</b> network.
+              <b>{action.payload.network}</b> network:
             </Typography>
             <Typography
               variant={"body1"}
@@ -68,19 +66,7 @@ function LedgerActionDialogBody({
             </Typography>
           </DialogContent>
           <DialogActions>
-            <Tooltip
-              disableHoverListener={true}
-              title={"Copied!"}
-              placement={"top"}
-            >
-              <Button
-                onClick={() => copyToClipboard(action.payload.hex)}
-                color="primary"
-              >
-                <FileCopy fontSize={"small"} />
-                &nbsp;Copy to clipboard
-              </Button>
-            </Tooltip>
+            <CopyToClipboard element={action.payload.hex} name="transaction" />
             <Button onClick={onCloseButtonClicked} color="secondary">
               Close
             </Button>
@@ -92,10 +78,25 @@ function LedgerActionDialogBody({
       return (
         <React.Fragment>
           <DialogTitle>Send Bitcoin</DialogTitle>
-          <DialogContent>Here goes the content!</DialogContent>
+          <DialogContent>
+            <Typography paragraph={true}>
+              Please send <b>{action.payload.amount}</b> satoshi to the
+              following <b>{action.payload.network}</b> address:
+            </Typography>
+            <Typography
+              variant={"body1"}
+              style={{
+                wordWrap: "break-word"
+              }}
+            >
+              {action.payload.to}
+            </Typography>
+          </DialogContent>
           <DialogActions>
+            <CopyToClipboard element={action.payload.amount} name="amount" />
+            <CopyToClipboard element={action.payload.to} name="address" />
             <Button onClick={onCloseButtonClicked} color="secondary">
-              Cancel
+              Close
             </Button>
           </DialogActions>
         </React.Fragment>

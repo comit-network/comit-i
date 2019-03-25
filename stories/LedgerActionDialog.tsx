@@ -30,9 +30,9 @@ storiesOf("LedgerActionDialog", module)
             action={{
               type: "bitcoin-send-amount-to-address",
               payload: {
-                to: "",
-                amount: "",
-                network: ""
+                to: "bcrt1q4vmcukhvmd2lajgk9az24s3fndm4swrkl633lq",
+                amount: "100000000",
+                network: "regtest"
               }
             }}
           />
@@ -40,7 +40,8 @@ storiesOf("LedgerActionDialog", module)
       </div>
     ))
   )
-  .add("BitcoinBroadcastSignedTransaction",
+  .add(
+    "BitcoinBroadcastSignedTransaction",
     withState({ open: false })(({ store }) => (
       <div>
         <Button onClick={openDialog(store)}>Open dialog</Button>
