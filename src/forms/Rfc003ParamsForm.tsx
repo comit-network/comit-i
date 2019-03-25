@@ -35,8 +35,6 @@ export interface Rfc003Params {
 export const defaultRfc003Params = {
   alphaExpiry: 30,
   betaExpiry: 15,
-  /* These must be undefined, otherwise an empty string will be sent
-   * for one of them when Bitcoin is one of the ledgers */
   alphaRefundIdentity: undefined,
   betaRedeemIdentity: undefined
 };
@@ -86,6 +84,7 @@ function Rfc003ParamsForm({
             InputProps={{
               endAdornment: <InputAdornment position="end">min</InputAdornment>
             }}
+            data-cy="alpha-expiry-input"
           />
         </Grid>
         {alphaLedger === "ethereum" && (
@@ -101,6 +100,7 @@ function Rfc003ParamsForm({
                   alphaRefundIdentity: event.target.value
                 })
               }
+              data-cy="alpha-refund-identity-input"
             />
           </Grid>
         )}
@@ -122,6 +122,7 @@ function Rfc003ParamsForm({
             InputProps={{
               endAdornment: <InputAdornment position="end">min</InputAdornment>
             }}
+            data-cy="beta-expiry-input"
           />
         </Grid>
         {betaLedger === "ethereum" && (
@@ -137,6 +138,7 @@ function Rfc003ParamsForm({
                   betaRedeemIdentity: event.target.value
                 })
               }
+              data-cy="beta-redeem-identity-input"
             />
           </Grid>
         )}

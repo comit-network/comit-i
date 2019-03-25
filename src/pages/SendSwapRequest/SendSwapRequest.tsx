@@ -75,6 +75,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                   SelectProps={{
                     native: true
                   }}
+                  data-cy="protocol-select"
                 >
                   <option value={""} />
                   <option value={"rfc003"}>RFC003</option>
@@ -96,6 +97,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                   onChange={event => setPeer(event.target.value)}
                   label={"Peer"}
                   helperText={"IPv4 Socket Address"}
+                  data-cy="peer-input"
                 />
               </Fieldset>
             </Grid>
@@ -126,6 +128,7 @@ function SendButton() {
 
   return (
     <Button
+      data-cy="send-button"
       type="submit"
       variant="contained"
       color="primary"

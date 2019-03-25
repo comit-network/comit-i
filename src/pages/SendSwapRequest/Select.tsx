@@ -17,6 +17,7 @@ interface SelectProps {
   parameters: Parameter[];
   onSelectionChange: (selection: string) => void;
   onParameterChange: (name: string, value: string) => void;
+  dataCy?: string;
 }
 
 function Select({
@@ -26,7 +27,8 @@ function Select({
   parameters,
   label,
   onSelectionChange,
-  onParameterChange
+  onParameterChange,
+  dataCy
 }: SelectProps) {
   return (
     <Grid item={true} xs={12} container={true} spacing={0}>
@@ -40,6 +42,7 @@ function Select({
           SelectProps={{
             native: true
           }}
+          data-cy={dataCy}
         >
           <option key={""} />
           {options
@@ -72,6 +75,7 @@ function Select({
                     SelectProps={{
                       native: true
                     }}
+                    data-cy="network-select"
                   >
                     <option key={""} />
                     {param.options &&
@@ -95,6 +99,7 @@ function Select({
                     onChange={event => {
                       onParameterChange(param.name, event.target.value);
                     }}
+                    data-cy="quantity-input"
                   />
                 </Grid>
               );
