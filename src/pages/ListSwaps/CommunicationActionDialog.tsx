@@ -8,11 +8,19 @@ import {
 } from "@material-ui/core";
 import axios from "axios";
 import React, { useReducer } from "react";
-import { acceptReducer } from "../../api/post_action";
 
 interface Action {
   name: string;
   url: string;
+}
+
+interface AcceptActionField {
+  name: string;
+  value: string;
+}
+
+function acceptReducer(currentState: object, field: AcceptActionField) {
+  return { ...currentState, [field.name]: field.value };
 }
 
 interface CommunicationActionDialogProps {

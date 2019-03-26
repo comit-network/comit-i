@@ -7,7 +7,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { LedgerAction } from "../../api/get_action";
-import CopyToClipboard from "./CopyToClipboard";
+import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
   onClose: (event: React.MouseEvent) => void;
@@ -38,7 +38,10 @@ function LedgerActionDialogBody({
             </Typography>
           </DialogContent>
           <DialogActions>
-            <CopyToClipboard element={action.payload.hex} name="transaction" />
+            <CopyToClipboardButton
+              content={action.payload.hex}
+              name="transaction"
+            />
             <Button onClick={onClose} color="secondary">
               Close
             </Button>
@@ -55,18 +58,14 @@ function LedgerActionDialogBody({
               Please send <b>{action.payload.amount}</b> satoshi to the
               following <b>{action.payload.network}</b> address:
             </Typography>
-            <Typography
-              variant={"body1"}
-              style={{
-                wordWrap: "break-word"
-              }}
-            >
-              {action.payload.to}
-            </Typography>
+            {action.payload.to}
           </DialogContent>
           <DialogActions>
-            <CopyToClipboard element={action.payload.amount} name="amount" />
-            <CopyToClipboard element={action.payload.to} name="address" />
+            <CopyToClipboardButton
+              content={action.payload.amount}
+              name="amount"
+            />
+            <CopyToClipboardButton content={action.payload.to} name="address" />
             <Button onClick={onClose} color="secondary">
               Close
             </Button>

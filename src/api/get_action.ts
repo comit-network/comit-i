@@ -32,5 +32,5 @@ export type LedgerAction =
 export default async function getAction(url: string) {
   return axios
     .get<LedgerAction>("http://localhost:8010" + url)
-    .then(res => res.data.payload);
+    .then(res => res.data);
 }
