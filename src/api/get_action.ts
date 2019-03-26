@@ -30,8 +30,9 @@ export type LedgerAction =
       };
     };
 
-export default async function getAction(url: string) {
+export default function getAction(path: string) {
   return axios
-    .get<LedgerAction>("http://" + getHostAndPort() + url)
-    .then(res => res.data);
+    .get("http://" + getHostAndPort() + path)
+    .then(res => res.data)
+    .then(body => body as LedgerAction);
 }

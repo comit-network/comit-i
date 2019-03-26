@@ -21,16 +21,21 @@ function FetchingActionDialogBody() {
 }
 
 interface LedgerActionDialogProps {
-  url: string;
+  path: string;
   onClose: () => void;
 }
 
-function LedgerActionDialog({ url, onClose }: LedgerActionDialogProps) {
-  const { data, isLoading } = useAsync(getAction(url));
+const getActionFn = async ({ path }: any) => {
+  return getAction(path);
+};
+
+function LedgerActionDialog({ path, onClose }: LedgerActionDialogProps) {
+  const { isLoading, data } = useAsync({ promiseFn: getActionFn, path });
+
   const body = isLoading ? (
     <FetchingActionDialogBody />
   ) : (
-    <LedgerActionDialogBody action={data} onClose={onClose} />
+    data && <LedgerActionDialogBody action={data} onClose={onClose} />
   );
   return <Dialog open={true}>{body}</Dialog>;
 }

@@ -117,7 +117,7 @@ function SwapRow(swap: Swap) {
       )}
       {dialogState === DialogState.LedgerDialogOpen && (
         <LedgerActionDialog
-          url={ledgerActionUrl}
+          path={ledgerActionUrl}
           onClose={() => setDialogState(DialogState.Closed)}
         />
       )}

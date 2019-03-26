@@ -40,7 +40,7 @@ export interface GetSwapsResponse {
 
 export default function getSwaps() {
   return axios
-    .get<GetSwapsResponse>("http://" + getHostAndPort() + "/swaps", {
+    .get("http://" + getHostAndPort() + "/swaps", {
       timeout: 2000
     })
     .then(response => response.data)
