@@ -6,14 +6,8 @@ import * as React from "react";
 
 const useTextFieldStyles = makeStyles(theme => ({
   textField: {
-    margin: theme.spacing.unit,
-    [theme.breakpoints.up("xs")]: {
-      width: "100%"
-    },
-    [theme.breakpoints.up("md")]: {
-      width: "90%",
-      maxWidth: "15rem"
-    }
+    display: "flex",
+    margin: theme.spacing.unit
   }
 }));
 

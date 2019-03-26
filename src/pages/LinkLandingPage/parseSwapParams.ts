@@ -1,21 +1,11 @@
+import { SwapValue } from "../../forms/SwapForm";
 import { QueryParams } from "./parseQuery";
 
-export interface Ledger {
-  name: string;
-  network: string;
-}
-
-export interface Asset {
-  symbol: string;
-  amount: string;
-  tokenId?: string;
-}
-
 export interface SwapParams {
-  alphaLedger: Ledger;
-  alphaAsset: Asset;
-  betaLedger: Ledger;
-  betaAsset: Asset;
+  alphaLedger: SwapValue;
+  alphaAsset: SwapValue;
+  betaLedger: SwapValue;
+  betaAsset: SwapValue;
   protocol: string;
   peer: string;
   id: string;
@@ -43,7 +33,7 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
   };
 }
 
-function parseLedger(input: string | undefined, ledger: string): Ledger {
+function parseLedger(input: string | undefined, ledger: string): SwapValue {
   if (!input) {
     throw new Error(ledger + " undefined");
   }
@@ -58,7 +48,33 @@ function parseLedger(input: string | undefined, ledger: string): Ledger {
   return { name, network };
 }
 
-function parseAsset(input: string | undefined, asset: string): Asset {
+function symbolToAssetName(symbol: string) {
+  switch (symbol) {
+    case "BTC": {
+      return "bitcoin";
+    }
+    case "ETH": {
+      return "ether";
+    }
+    case "ERC20": {
+      return "erc20";
+    }
+    default:
+      return "";
+  }
+}
+
+function tokenIdToAssetParameter(asset: string, tokenId: string) {
+  switch (asset) {
+    case "erc20": {
+      return {
+        token_contract: tokenId
+      };
+    }
+  }
+}
+
+function parseAsset(input: string | undefined, asset: string): SwapValue {
   if (!input) {
     throw new Error(asset + " undefined");
   }
@@ -68,11 +84,14 @@ function parseAsset(input: string | undefined, asset: string): Asset {
   if (!match.length || !match[1] || !match[2]) {
     throw new Error(asset + " asset could not be parsed. Was: " + input);
   }
-  const amount = match[1];
+  const quantity = match[1];
   const symbol = match[2];
-  const tokenId = match[4] || undefined;
+  const tokenId = match[4];
 
-  return { amount, symbol, tokenId };
+  const name = symbolToAssetName(symbol);
+  const tokenIdParameters = tokenIdToAssetParameter(name, tokenId);
+
+  return { name, quantity, ...tokenIdParameters };
 }
 
 function parsePeer(peer: string | string[] | undefined | null) {

@@ -1,20 +1,37 @@
 export enum ParameterKind {
   Network,
-  Quantity
+  Quantity,
+  Address
 }
 
 export interface Parameter {
   name: string;
+  label: string;
   type: ParameterKind;
   options?: string[];
 }
 
-const ledgers = [
+export interface LedgerSpec {
+  name: string;
+  label: string;
+  parameters: Parameter[];
+  assets: AssetSpec[];
+}
+
+interface AssetSpec {
+  name: string;
+  label: string;
+  parameters: Parameter[];
+}
+
+const ledgers: LedgerSpec[] = [
   {
     name: "bitcoin",
+    label: "Bitcoin",
     parameters: [
       {
         name: "network",
+        label: "Network",
         type: ParameterKind.Network,
         options: ["mainnet", "testnet", "regtest"]
       }
@@ -22,9 +39,11 @@ const ledgers = [
     assets: [
       {
         name: "bitcoin",
+        label: "Bitcoin",
         parameters: [
           {
             name: "quantity",
+            label: "Quantity",
             type: ParameterKind.Quantity
           }
         ]
@@ -33,9 +52,11 @@ const ledgers = [
   },
   {
     name: "ethereum",
+    label: "Ethereum",
     parameters: [
       {
         name: "network",
+        label: "Network",
         type: ParameterKind.Network,
         options: ["mainnet", "ropsten", "regtest"]
       }
@@ -43,10 +64,28 @@ const ledgers = [
     assets: [
       {
         name: "ether",
+        label: "Ether",
         parameters: [
           {
             name: "quantity",
+            label: "Quantity",
             type: ParameterKind.Quantity
+          }
+        ]
+      },
+      {
+        name: "erc20",
+        label: "ERC20",
+        parameters: [
+          {
+            name: "quantity",
+            label: "Quantity",
+            type: ParameterKind.Quantity
+          },
+          {
+            name: "token_contract",
+            label: "Token Contract Address",
+            type: ParameterKind.Address
           }
         ]
       }

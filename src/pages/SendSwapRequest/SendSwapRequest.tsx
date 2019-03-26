@@ -1,13 +1,13 @@
-import { Button, Grid } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-import { makeStyles } from "@material-ui/styles";
-import queryString from "query-string";
+import { Grid } from "@material-ui/core";
 import React, { useReducer, useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import postSwap from "../../api/post_swap";
+import URI from "urijs";
+import postRfc003Swap from "../../api/postRfc003Swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
+import ProtocolTextField from "../../components/ProtocolTextField";
+import SendButton from "../../components/SendButton";
 import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
@@ -26,60 +26,40 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [peer, setPeer] = useState("0.0.0.0:8011");
   const [displayError, setDisplayError] = useState(false);
 
+  const queryParams = URI.parseQuery(location.search) as {
+    protocol: string | undefined;
+  };
+  const protocol = queryParams.protocol || "";
+
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
 
-    if (protocol instanceof Array) {
-      protocol = protocol[0];
-    }
-
-    postSwap(protocol, {
-      ...swap,
-      alpha_ledger_refund_identity: params.alphaRefundIdentity,
-      beta_ledger_redeem_identity: params.betaRedeemIdentity,
-      alpha_expiry: params.alphaExpiry,
-      beta_expiry: params.betaExpiry,
-      peer
-    })
+    postRfc003Swap(swap, params, peer)
       .then(() => history.push("/"))
       .catch(() => setDisplayError(true));
   };
 
-  const hideError = () => setDisplayError(false);
-
   const setProtocol = (protocolName: string) => {
     history.push({ search: `?protocol=${protocolName}` });
   };
-  let protocol = queryString.parse(location.search).protocol || "";
-  if (protocol instanceof Array) {
-    protocol = protocol[0];
-  }
 
   return (
     <React.Fragment>
       <Page title={"Send a swap request"}>
         <form onSubmit={handleFormSubmit}>
-          <Grid container={true} spacing={40}>
+          <Grid container={true} spacing={16}>
             <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
             <Grid item={true} xs={12}>
               <Fieldset legend="Protocol Parameters">
-                <TextField
-                  label={"Protocol"}
-                  required={true}
-                  value={protocol}
-                  onChange={event => {
-                    setProtocol(event.target.value);
-                    setParams(defaultRfc003Params);
-                  }}
-                  select={true}
-                  SelectProps={{
-                    native: true
-                  }}
-                  data-cy="protocol-select"
-                >
-                  <option value={""} />
-                  <option value={"rfc003"}>RFC003</option>
-                </TextField>
+                <Grid item={true} xs={12} md={6}>
+                  <ProtocolTextField
+                    protocol={protocol}
+                    onChange={newProtocol => {
+                      setProtocol(newProtocol);
+                      setParams(defaultRfc003Params);
+                    }}
+                  />
+                </Grid>
                 {protocol === "rfc003" && (
                   <Rfc003ParamsForm
                     alphaLedger={swap.alpha_ledger.name}
@@ -101,43 +81,19 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                 />
               </Fieldset>
             </Grid>
+            <Grid item={true} xs={12}>
+              <SendButton />
+            </Grid>
           </Grid>
-          <SendButton />
         </form>
       </Page>
       <ErrorSnackbar
         message={"Failed to create swap."}
-        onClose={hideError}
+        onClose={() => setDisplayError(false)}
         open={displayError}
       />
     </React.Fragment>
   );
 };
-
-const useSendButtonStyles = makeStyles(theme => ({
-  button: {
-    margin: theme.spacing.unit * 2
-  },
-  icon: {
-    marginLeft: theme.spacing.unit
-  }
-}));
-
-function SendButton() {
-  const classes = useSendButtonStyles();
-
-  return (
-    <Button
-      data-cy="send-button"
-      type="submit"
-      variant="contained"
-      color="primary"
-      className={classes.button}
-    >
-      Send
-      <SendIcon className={classes.icon} />
-    </Button>
-  );
-}
 
 export default withRouter(SendSwap);
