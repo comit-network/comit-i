@@ -1,7 +1,7 @@
 import { Typography } from "@material-ui/core";
 import React from "react";
 import Fieldset from "../../components/Fieldset";
-import { Asset, Ledger } from "./LinkLandingPage";
+import { Asset, Ledger } from "./parseSwapParams";
 
 interface LedgerDetailProps {
   label: string;

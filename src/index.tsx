@@ -30,6 +30,12 @@ const appTheme = createMuiTheme({
 
 install();
 
+navigator.registerProtocolHandler(
+  "web+comit",
+  "http://localhost:3000/from_link?%s",
+  "COMIT-i"
+);
+
 ReactDOM.render(
   <ThemeProvider theme={appTheme}>
     <Web3Provider>

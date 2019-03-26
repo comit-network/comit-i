@@ -1,22 +1,15 @@
-import { Grid, InputAdornment, TextField } from "@material-ui/core";
+import { Grid, InputAdornment } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
+import TextField from "../components/TextField";
 
-const useRfc003ParamsStyles = makeStyles(theme => ({
-  expiry: {
-    margin: theme.spacing.unit,
-    width: "10rem"
-  },
-  identity: {
-    margin: theme.spacing.unit,
-    width: "100%"
-  },
+const useRfc003ParamsStyles = makeStyles({
   grid: {
     /* FIXME: border-bottom does not respect the margin completely with
      * this style */
     overflow: "hidden"
   }
-}));
+});
 
 interface Rfc003ParamsProps {
   alphaLedger: string;
@@ -71,7 +64,6 @@ function Rfc003ParamsForm({
         <Grid item={true} md={6} xs={12}>
           <TextField
             required={true}
-            className={classes.expiry}
             label="Alpha Expiry"
             value={alphaExpiry || ""}
             onChange={event => {
@@ -91,7 +83,6 @@ function Rfc003ParamsForm({
           <Grid className={classes.grid} item={true} md={6} xs={12}>
             <TextField
               required={true}
-              className={classes.identity}
               label="Alpha Refund Identity"
               value={alphaRefundIdentity || ""}
               onChange={event =>
@@ -109,7 +100,6 @@ function Rfc003ParamsForm({
         <Grid item={true} md={6} xs={12}>
           <TextField
             required={true}
-            className={classes.expiry}
             label="Beta Expiry"
             value={betaExpiry || ""}
             onChange={event =>
@@ -129,7 +119,6 @@ function Rfc003ParamsForm({
           <Grid className={classes.grid} item={true} md={6} xs={12}>
             <TextField
               required={true}
-              className={classes.identity}
               label="Beta Redeem Identity"
               value={betaRedeemIdentity || ""}
               onChange={event =>

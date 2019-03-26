@@ -1,51 +1,23 @@
-import {
-  Button,
-  createStyles,
-  FormControl,
-  InputLabel,
-  Select
-} from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
-import { makeStyles, withStyles, WithStyles } from "@material-ui/styles";
+import { makeStyles } from "@material-ui/styles";
 import React, { useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router";
 import postSwap from "../../api/post_swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
+import Fieldset from "../../components/Fieldset";
+import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
 } from "../../forms/Rfc003ParamsForm";
-import { SwapParams } from "./LinkLandingPage";
+import { SwapParams } from "./parseSwapParams";
 
-// Have to use any to access custom mixins
-const styles = (theme: any) =>
-  createStyles({
-    root: {
-      margin: "auto",
-      [theme.breakpoints.up("md")]: {
-        maxWidth: "50vw"
-      },
-      [theme.breakpoints.up("xl")]: {
-        maxWidth: "40vw"
-      },
-      padding: theme.spacing.unit * 3
-    },
-    group: theme.mixins.border(theme),
-    title: {
-      marginBottom: theme.spacing.unit * 3
-    },
-    fieldset: theme.mixins.border(theme),
-    formControl: {
-      margin: theme.spacing.unit,
-      minWidth: "10rem"
-    }
-  });
-
-interface Props extends RouteComponentProps, WithStyles<typeof styles> {
+interface Props extends RouteComponentProps {
   swapParams: SwapParams;
 }
 
-const LinkLandingForm = ({ swapParams, history, classes }: Props) => {
+const LinkLandingForm = ({ swapParams, history }: Props) => {
   const alphaLedger = swapParams.alphaLedger;
   const betaLedger = swapParams.betaLedger;
   const protocol = swapParams.protocol;
@@ -82,25 +54,21 @@ const LinkLandingForm = ({ swapParams, history, classes }: Props) => {
   return (
     <React.Fragment>
       <form onSubmit={handleFormSubmit}>
-        <fieldset className={classes.fieldset}>
-          <legend>Input Parameters</legend>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor={"protocol"}>Protocol</InputLabel>
-            <Select
-              native={true}
-              required={true}
-              value={protocol}
-              onChange={() => {
-                setParams(defaultRfc003Params);
-              }}
-              inputProps={{
-                name: "protocol"
-              }}
-            >
-              <option value={""} />
-              <option value={"rfc003"}>RFC003</option>
-            </Select>
-          </FormControl>
+        <Fieldset legend={"Input Parameters"}>
+          <TextField
+            select={true}
+            SelectProps={{
+              native: true
+            }}
+            value={protocol}
+            onChange={() => {
+              setParams(defaultRfc003Params);
+            }}
+            label={"Protocol"}
+          >
+            <option value={""} />
+            <option value={"rfc003"}>RFC003</option>
+          </TextField>
           {protocol === "rfc003" && (
             <Rfc003ParamsForm
               alphaLedger={alphaLedger.name}
@@ -109,8 +77,7 @@ const LinkLandingForm = ({ swapParams, history, classes }: Props) => {
               setParams={setParams}
             />
           )}
-        </fieldset>
-
+        </Fieldset>
         <SendButton />
       </form>
       <ErrorSnackbar
@@ -147,4 +114,4 @@ function SendButton() {
   );
 }
 
-export default withRouter(withStyles(styles)(LinkLandingForm));
+export default withRouter(LinkLandingForm);
