@@ -1,4 +1,5 @@
 import axios from "axios";
+import getHostAndPort from "./getHostAndPort";
 
 export type LedgerAction =
   | {
@@ -31,6 +32,6 @@ export type LedgerAction =
 
 export default async function getAction(url: string) {
   return axios
-    .get<LedgerAction>("http://localhost:8010" + url)
+    .get<LedgerAction>("http://" + getHostAndPort() + url)
     .then(res => res.data);
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import getHostAndPort from "./getHostAndPort";
 
 export interface Links {
   [rel: string]: {
@@ -39,7 +40,9 @@ export interface GetSwapsResponse {
 
 export default function getSwaps() {
   return axios
-    .get<GetSwapsResponse>("http://localhost:8010/swaps", { timeout: 2000 })
+    .get<GetSwapsResponse>("http://" + getHostAndPort() + "/swaps", {
+      timeout: 2000
+    })
     .then(response => response.data)
     .then(body => body as GetSwapsResponse)
     .then(body => body._embedded.swaps);

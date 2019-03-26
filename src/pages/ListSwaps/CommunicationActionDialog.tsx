@@ -6,8 +6,8 @@ import {
   DialogTitle,
   TextField
 } from "@material-ui/core";
-import axios from "axios";
 import React, { useReducer } from "react";
+import postAction from "../../api/post_action";
 
 interface Action {
   name: string;
@@ -51,9 +51,7 @@ function CommunicationActionDialog({
           <Button
             key={actionName + "-button"}
             onClick={() => {
-              axios
-                .post("http://localhost:8010" + action.url)
-                .then(handleCloseDialog);
+              postAction(action.url).then(handleCloseDialog);
             }}
             color="primary"
           >
@@ -81,9 +79,7 @@ function CommunicationActionDialog({
           <Button
             key={actionName + "-button"}
             onClick={() => {
-              axios
-                .post("http://localhost:8010" + action.url, acceptBody)
-                .then(handleCloseDialog);
+              postAction(action.url, acceptBody).then(handleCloseDialog);
             }}
             color="primary"
           >
