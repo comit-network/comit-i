@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useContext } from "react";
 import Web3 from "web3";
 
-const Web3Context = React.createContext<Web3 | null>(null);
+const Web3Context = React.createContext<Web3 | undefined>(undefined);
 
 interface Web3ProviderProps {
   children: ReactNode;
@@ -10,7 +10,7 @@ interface Web3ProviderProps {
 export function Web3Provider({ children }: Web3ProviderProps) {
   return (
     <Web3Context.Provider
-      value={window.web3 ? new Web3(window.web3.currentProvider) : null}
+      value={window.web3 ? new Web3(window.web3.currentProvider) : undefined}
     >
       {children}
     </Web3Context.Provider>
@@ -31,4 +31,8 @@ export function Web3Loader({
       {web3 => (web3 ? ifPresent(web3) : ifNotPresent())}
     </Web3Context.Consumer>
   );
+}
+
+export function useWeb3() {
+  return useContext(Web3Context);
 }
