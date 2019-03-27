@@ -114,9 +114,9 @@ function LedgerActionDialogBody({
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
           <DialogContent>
             <Typography paragraph={true}>
-              Send a <b>{action.payload.amount}</b> wei transaction to the
-              contract at <b>{action.payload.contract_address}</b> on the
-              Ethereum <b>{action.payload.network}</b> network with this data:
+              Invoke the contract at <b>{action.payload.contract_address}</b> on
+              the Ethereum <b>{action.payload.network}</b> network with this
+              data:
             </Typography>
             <Typography
               variant={"body1"}
