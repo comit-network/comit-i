@@ -29,7 +29,7 @@ export const SubTitle = ({ text }: TitleProps) => {
   const classes = useStyles();
 
   return (
-    <Typography variant={"h5"} className={classes.margin3}>
+    <Typography variant={"h5"} className={classes.margin2}>
       {text}
     </Typography>
   );

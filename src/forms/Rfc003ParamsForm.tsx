@@ -1,22 +1,15 @@
-import { Grid, InputAdornment, TextField } from "@material-ui/core";
+import { Grid, InputAdornment } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
+import TextField from "../components/TextField";
 
-const useRfc003ParamsStyles = makeStyles(theme => ({
-  expiry: {
-    margin: theme.spacing.unit,
-    width: "10rem"
-  },
-  identity: {
-    margin: theme.spacing.unit,
-    width: "100%"
-  },
+const useRfc003ParamsStyles = makeStyles({
   grid: {
     /* FIXME: border-bottom does not respect the margin completely with
      * this style */
     overflow: "hidden"
   }
-}));
+});
 
 interface Rfc003ParamsProps {
   alphaLedger: string;
@@ -26,24 +19,25 @@ interface Rfc003ParamsProps {
 }
 
 export interface Rfc003Params {
-  alphaExpiry?: number;
-  betaExpiry?: number;
-  alphaRefundIdentity?: string;
-  betaRedeemIdentity?: string;
+  alpha_expiry?: number;
+  beta_expiry?: number;
+  alpha_ledger_refund_identity?: string;
+  beta_ledger_redeem_identity?: string;
 }
 
-export const defaultRfc003Params = {
-  alphaExpiry: 30,
-  betaExpiry: 15,
-  alphaRefundIdentity: undefined,
-  betaRedeemIdentity: undefined
+export const defaultRfc003Params: Rfc003Params = {
+  alpha_expiry: 30,
+  beta_expiry: 15,
+  alpha_ledger_refund_identity: undefined,
+  beta_ledger_redeem_identity: undefined
 };
 
 export function resetParams(currentParams: Rfc003Params) {
   return {
     ...currentParams,
-    alphaRefundIdentity: defaultRfc003Params.alphaRefundIdentity,
-    betaRedeemIdentity: defaultRfc003Params.betaRedeemIdentity
+    alpha_ledger_refund_identity:
+      defaultRfc003Params.alpha_ledger_refund_identity,
+    beta_ledger_redeem_identity: defaultRfc003Params.beta_ledger_redeem_identity
   };
 }
 
@@ -55,10 +49,10 @@ function Rfc003ParamsForm({
 }: Rfc003ParamsProps) {
   const classes = useRfc003ParamsStyles();
   const {
-    alphaExpiry,
-    betaExpiry,
-    alphaRefundIdentity,
-    betaRedeemIdentity
+    alpha_expiry,
+    beta_expiry,
+    alpha_ledger_refund_identity,
+    beta_ledger_redeem_identity
   } = params;
 
   const parseExpiry = (expiry: string) => {
@@ -71,13 +65,12 @@ function Rfc003ParamsForm({
         <Grid item={true} md={6} xs={12}>
           <TextField
             required={true}
-            className={classes.expiry}
             label="Alpha Expiry"
-            value={alphaExpiry || ""}
+            value={alpha_expiry || ""}
             onChange={event => {
               setParams({
                 ...params,
-                alphaExpiry: parseExpiry(event.target.value)
+                alpha_expiry: parseExpiry(event.target.value)
               });
             }}
             type="number"
@@ -91,13 +84,12 @@ function Rfc003ParamsForm({
           <Grid className={classes.grid} item={true} md={6} xs={12}>
             <TextField
               required={true}
-              className={classes.identity}
               label="Alpha Refund Identity"
-              value={alphaRefundIdentity || ""}
+              value={alpha_ledger_refund_identity || ""}
               onChange={event =>
                 setParams({
                   ...params,
-                  alphaRefundIdentity: event.target.value
+                  alpha_ledger_refund_identity: event.target.value
                 })
               }
               data-cy="alpha-refund-identity-input"
@@ -109,13 +101,12 @@ function Rfc003ParamsForm({
         <Grid item={true} md={6} xs={12}>
           <TextField
             required={true}
-            className={classes.expiry}
             label="Beta Expiry"
-            value={betaExpiry || ""}
+            value={beta_expiry || ""}
             onChange={event =>
               setParams({
                 ...params,
-                betaExpiry: parseExpiry(event.target.value)
+                beta_expiry: parseExpiry(event.target.value)
               })
             }
             type="number"
@@ -129,13 +120,12 @@ function Rfc003ParamsForm({
           <Grid className={classes.grid} item={true} md={6} xs={12}>
             <TextField
               required={true}
-              className={classes.identity}
               label="Beta Redeem Identity"
-              value={betaRedeemIdentity || ""}
+              value={beta_ledger_redeem_identity || ""}
               onChange={event =>
                 setParams({
                   ...params,
-                  betaRedeemIdentity: event.target.value
+                  beta_ledger_redeem_identity: event.target.value
                 })
               }
               data-cy="beta-redeem-identity-input"

@@ -9,15 +9,21 @@ export interface Selection {
   [parameter: string]: any;
 }
 
+export interface Option {
+  key: string;
+  label: string;
+}
+
 interface SelectProps {
   selection: Selection;
-  options: string[];
+  options: Option[];
   disabledOptions?: string[];
   label: string;
   parameters: Parameter[];
   onSelectionChange: (selection: string) => void;
   onParameterChange: (name: string, value: string) => void;
   dataCy?: string;
+  disabled?: boolean;
 }
 
 function Select({
@@ -28,7 +34,8 @@ function Select({
   label,
   onSelectionChange,
   onParameterChange,
-  dataCy
+  dataCy,
+  disabled
 }: SelectProps) {
   return (
     <Grid item={true} xs={12} container={true} spacing={0}>
@@ -43,17 +50,18 @@ function Select({
             native: true
           }}
           data-cy={dataCy}
+          disabled={disabled}
         >
           <option key={""} />
           {options
-            .filter(item => item !== "")
+            .filter(item => item.key !== "")
             .map(option => (
               <option
-                key={option}
-                disabled={disabledOptions.indexOf(option) !== -1}
-                value={option}
+                key={option.key}
+                disabled={disabledOptions.indexOf(option.key) !== -1}
+                value={option.key}
               >
-                {pascalCase(option)}
+                {option.label}
               </option>
             ))}
         </TextField>
@@ -65,7 +73,7 @@ function Select({
               return (
                 <Grid key={param.name} item={true} xs={12} md={6}>
                   <TextField
-                    label={"Network"}
+                    label={param.label}
                     required={true}
                     value={selection[param.name] || ""}
                     onChange={event =>
@@ -76,6 +84,7 @@ function Select({
                       native: true
                     }}
                     data-cy="network-select"
+                    disabled={disabled}
                   >
                     <option key={""} />
                     {param.options &&
@@ -92,7 +101,7 @@ function Select({
               return (
                 <Grid key={param.name} item={true} xs={12} md={6}>
                   <TextField
-                    label="Quantity"
+                    label={param.label}
                     required={true}
                     type="number"
                     value={selection[param.name] || ""}
@@ -100,6 +109,23 @@ function Select({
                       onParameterChange(param.name, event.target.value);
                     }}
                     data-cy="quantity-input"
+                    disabled={disabled}
+                  />
+                </Grid>
+              );
+            }
+            case ParameterKind.Address: {
+              return (
+                <Grid key={param.name} item={true} xs={12} md={12}>
+                  <TextField
+                    label={param.label}
+                    required={true}
+                    value={selection[param.name] || ""}
+                    onChange={event => {
+                      onParameterChange(param.name, event.target.value);
+                    }}
+                    data-cy="address-input"
+                    disabled={disabled}
                   />
                 </Grid>
               );

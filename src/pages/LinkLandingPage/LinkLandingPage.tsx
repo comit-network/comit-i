@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
-import React, { useReducer, useState } from "react";
+import { Location } from "history";
+import React, { useState } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import URI from "urijs";
 import postRfc003Swap from "../../api/postRfc003Swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Fieldset from "../../components/Fieldset";
@@ -13,25 +13,63 @@ import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
 } from "../../forms/Rfc003ParamsForm";
-import SwapForm, {
-  emptySwap,
-  reducer as swapReducer
-} from "../../forms/SwapForm";
+import SwapForm, { emptySwap } from "../../forms/SwapForm";
 import ledgers from "../../ledgerSpec";
+import ErrorMessage from "./ErrorMessage";
+import InfoMessage from "./InfoMessage";
+import parseQuery from "./parseQuery";
+import parseSwapParams from "./parseSwapParams";
 
-const SendSwap = ({ location, history }: RouteComponentProps) => {
-  const [swap, dispatch] = useReducer(swapReducer, emptySwap);
+function parseSwapParameters(location: Location) {
+  try {
+    const parsedQuery = parseSwapParams(parseQuery(location.search));
 
+    const {
+      alphaLedger,
+      betaLedger,
+      alphaAsset,
+      betaAsset,
+      peer,
+      protocol
+    } = parsedQuery;
+
+    const swap = {
+      alpha_ledger: {
+        ...alphaLedger
+      },
+      beta_ledger: {
+        ...betaLedger
+      },
+      alpha_asset: {
+        ...alphaAsset
+      },
+      beta_asset: {
+        ...betaAsset
+      }
+    };
+
+    return {
+      swap,
+      peer,
+      protocol,
+      error: false
+    };
+  } catch (error) {
+    return {
+      swap: emptySwap,
+      peer: "",
+      protocol: "",
+      error: true
+    };
+  }
+}
+
+const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const [peer, setPeer] = useState("0.0.0.0:8011");
+  const { swap, peer, protocol, error } = parseSwapParameters(location);
   const [displayError, setDisplayError] = useState(false);
 
-  const queryParams = URI.parseQuery(location.search) as {
-    protocol: string | undefined;
-  };
-  const protocol = queryParams.protocol || "";
-
-  const handleFormSubmit = (e: any) => {
+  const onSubmit = (e: any) => {
     e.preventDefault();
 
     postRfc003Swap(swap, params, peer)
@@ -39,26 +77,24 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
       .catch(() => setDisplayError(true));
   };
 
-  const setProtocol = (protocolName: string) => {
-    history.push({ search: `?protocol=${protocolName}` });
-  };
-
   return (
     <React.Fragment>
       <Page title={"Send a swap request"}>
-        <form onSubmit={handleFormSubmit}>
+        <form onSubmit={onSubmit}>
           <Grid container={true} spacing={16}>
-            <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
+            <Grid item={true} xs={12}>
+              {error ? <ErrorMessage /> : <InfoMessage />}
+            </Grid>
+            <SwapForm
+              swap={swap}
+              ledgers={ledgers}
+              dispatch={() => undefined}
+              disabled={true}
+            />
             <Grid item={true} xs={12}>
               <Fieldset legend="Protocol Parameters">
                 <Grid item={true} xs={12} md={6}>
-                  <ProtocolTextField
-                    protocol={protocol}
-                    onChange={newProtocol => {
-                      setProtocol(newProtocol);
-                      setParams(defaultRfc003Params);
-                    }}
-                  />
+                  <ProtocolTextField protocol={protocol} disabled={true} />
                 </Grid>
                 {protocol === "rfc003" && (
                   <Rfc003ParamsForm
@@ -74,10 +110,11 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
               <Fieldset legend={"To"}>
                 <TextField
                   value={peer}
-                  onChange={event => setPeer(event.target.value)}
                   label={"Peer"}
                   helperText={"IPv4 Socket Address"}
                   data-cy="peer-input"
+                  disabled={true}
+                  required={true}
                 />
               </Fieldset>
             </Grid>
@@ -87,6 +124,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
           </Grid>
         </form>
       </Page>
+
       <ErrorSnackbar
         message={"Failed to create swap."}
         onClose={() => setDisplayError(false)}
@@ -96,4 +134,4 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   );
 };
 
-export default withRouter(SendSwap);
+export default withRouter(LinkLandingPage);

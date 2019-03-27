@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React, { Dispatch } from "react";
 import Fieldset from "../components/Fieldset";
-import { Parameter } from "../ledgerSpec";
+import { LedgerSpec } from "../ledgerSpec";
 import Select from "../pages/SendSwapRequest/Select";
 
 function findLedgerSpec(ledgers: LedgerSpec[], ledger: string) {
@@ -19,25 +19,16 @@ function findAssetSpec(ledgers: LedgerSpec[], ledger: string, asset: string) {
   );
 }
 
-interface LedgerSpec {
-  name: string;
-  parameters: Parameter[];
-  assets: AssetSpec[];
-}
-
 const emptyLedgerSpec = {
   name: "",
+  label: "",
   parameters: [],
   assets: []
 };
 
-interface AssetSpec {
-  name: string;
-  parameters: Parameter[];
-}
-
 const emptyAssetSpec = {
   name: "",
+  label: "",
   parameters: []
 };
 
@@ -124,9 +115,10 @@ interface Props {
   swap: Swap;
   ledgers: LedgerSpec[];
   dispatch: Dispatch<Action>;
+  disabled?: boolean;
 }
 
-function SwapForm({ swap, ledgers, dispatch }: Props) {
+function SwapForm({ swap, ledgers, dispatch, disabled = false }: Props) {
   const alphaLedger = swap.alpha_ledger;
   const betaLedger = swap.beta_ledger;
   const alphaAsset = swap.alpha_asset;
@@ -141,9 +133,18 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   const betaLedgerSpec = findLedgerSpec(ledgers, betaLedger.name);
   const betaAssetSpec = findAssetSpec(ledgers, betaLedger.name, betaAsset.name);
 
-  const ledgerOptions = ledgers.map(ledger => ledger.name);
-  const alphaAssetOptions = alphaLedgerSpec.assets.map(asset => asset.name);
-  const betaAssetOptions = betaLedgerSpec.assets.map(asset => asset.name);
+  const ledgerOptions = ledgers.map(ledger => ({
+    key: ledger.name,
+    label: ledger.label
+  }));
+  const alphaAssetOptions = alphaLedgerSpec.assets.map(asset => ({
+    key: asset.name,
+    label: asset.label
+  }));
+  const betaAssetOptions = betaLedgerSpec.assets.map(asset => ({
+    key: asset.name,
+    label: asset.label
+  }));
 
   const onSelectionChange = (of: keyof Swap) => (selection: string) =>
     dispatch({
@@ -161,7 +162,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
   return (
     <React.Fragment>
       <Grid item={true} xs={12}>
-        <Fieldset legend={"Alpha"} dataCy="alpha-fieldset">
+        <Fieldset legend={"Alpha"} dataCy="alpha-fieldset" disabled={disabled}>
           <Select
             label={"Ledger"}
             selection={alphaLedger}
@@ -171,6 +172,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
             onParameterChange={onParameterChange("alpha_ledger")}
             parameters={alphaLedgerSpec.parameters}
             dataCy="ledger-select"
+            disabled={disabled}
           />
           {alphaLedger.name && (
             <Select
@@ -182,12 +184,13 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
               onParameterChange={onParameterChange("alpha_asset")}
               parameters={alphaAssetSpec.parameters}
               dataCy="asset-select"
+              disabled={disabled}
             />
           )}
         </Fieldset>
       </Grid>
       <Grid item={true} xs={12}>
-        <Fieldset legend={"Beta"} dataCy="beta-fieldset">
+        <Fieldset legend={"Beta"} dataCy="beta-fieldset" disabled={disabled}>
           <Select
             label={"Ledger"}
             selection={betaLedger}
@@ -197,6 +200,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
             onParameterChange={onParameterChange("beta_ledger")}
             parameters={betaLedgerSpec.parameters}
             dataCy="ledger-select"
+            disabled={disabled}
           />
           {betaLedger.name && (
             <Select
@@ -208,6 +212,7 @@ function SwapForm({ swap, ledgers, dispatch }: Props) {
               onParameterChange={onParameterChange("beta_asset")}
               parameters={betaAssetSpec.parameters}
               dataCy="asset-select"
+              disabled={disabled}
             />
           )}
         </Fieldset>
