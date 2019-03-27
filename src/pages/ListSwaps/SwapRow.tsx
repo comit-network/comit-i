@@ -9,7 +9,9 @@ import {
 } from "@material-ui/core";
 import { useReducer, useState } from "react";
 import React from "react";
+import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
+import { fromWei } from "web3-utils";
 import { Asset, Swap } from "../../api/get_swaps";
 import TextField from "../../components/TextField";
 import CommunicationActionDialog from "./CommunicationActionDialog";
@@ -21,11 +23,11 @@ interface AssetCellProps {
 
 function AssetCell({ asset }: AssetCellProps) {
   switch (asset.name) {
-    case "Ether": {
-      return <span>{asset.quantity} wei</span>;
+    case "ether": {
+      return <span>{fromWei(asset.quantity, "ether")} ETH</span>;
     }
-    case "Bitcoin": {
-      return <span>{asset.quantity} sats</span>;
+    case "bitcoin": {
+      return <span>{toBitcoin(asset.quantity)} BTC</span>;
     }
     default: {
       return (
