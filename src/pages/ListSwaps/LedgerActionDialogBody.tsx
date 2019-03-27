@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { LedgerAction } from "../../api/get_action";
+import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
 import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
@@ -77,10 +78,31 @@ function LedgerActionDialogBody({
       return (
         <React.Fragment>
           <DialogTitle>Deploy Ethereum contract</DialogTitle>
-          <DialogContent>Here goes the content!</DialogContent>
+          <DialogContent>
+            <Typography paragraph={true}>
+              Deploy the following contract to the Ethereum{" "}
+              <b>{action.payload.network}</b> network with{" "}
+              <b>{action.payload.amount}</b> wei:
+            </Typography>
+            <Typography
+              variant={"body1"}
+              style={{
+                wordWrap: "break-word"
+              }}
+            >
+              {action.payload.data}
+            </Typography>
+          </DialogContent>
           <DialogActions>
+            <Web3SendTransactionButton
+              transaction={{
+                data: action.payload.data,
+                value: action.payload.amount,
+                gas: action.payload.gas_limit
+              }}
+            />
             <Button onClick={onClose} color="secondary">
-              Cancel
+              Close
             </Button>
           </DialogActions>
         </React.Fragment>
@@ -90,10 +112,31 @@ function LedgerActionDialogBody({
       return (
         <React.Fragment>
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
-          <DialogContent>Here goes the content!</DialogContent>
+          <DialogContent>
+            <Typography paragraph={true}>
+              Send a <b>{action.payload.amount}</b> wei transaction to the
+              contract at <b>{action.payload.contract_address}</b> on the
+              Ethereum <b>{action.payload.network}</b> network with this data:
+            </Typography>
+            <Typography
+              variant={"body1"}
+              style={{
+                wordWrap: "break-word"
+              }}
+            >
+              {action.payload.data}
+            </Typography>
+          </DialogContent>
           <DialogActions>
+            <Web3SendTransactionButton
+              transaction={{
+                to: action.payload.contract_address,
+                data: action.payload.data,
+                gas: action.payload.gas_limit
+              }}
+            />
             <Button onClick={onClose} color="secondary">
-              Cancel
+              Close
             </Button>
           </DialogActions>
         </React.Fragment>

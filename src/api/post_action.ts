@@ -1,6 +1,7 @@
 import axios from "axios";
 import getHostAndPort from "./getHostAndPort";
 
-export default async function postAction(url: string, body?: object) {
-  return axios.post("http://" + getHostAndPort() + url, body);
+export default async function postAction(url: uri.URI, body?: object) {
+  const uri = url.authority(getHostAndPort()).toString();
+  return axios.post(uri, body);
 }

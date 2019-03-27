@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { useAsync } from "react-async";
-import getAction from "../../api/get_action";
+import getAction, { LedgerAction } from "../../api/get_action";
 import LedgerActionDialogBody from "./LedgerActionDialogBody";
 
 function FetchingActionDialogBody() {
@@ -21,7 +21,7 @@ function FetchingActionDialogBody() {
 }
 
 interface LedgerActionDialogProps {
-  path: string;
+  path: uri.URI;
   onClose: () => void;
 }
 
@@ -30,14 +30,26 @@ const getActionFn = async ({ path }: any) => {
 };
 
 function LedgerActionDialog({ path, onClose }: LedgerActionDialogProps) {
-  const { isLoading, data } = useAsync({ promiseFn: getActionFn, path });
+  const { isLoading, data, error } = useAsync({ promiseFn: getActionFn, path });
 
-  const body = isLoading ? (
-    <FetchingActionDialogBody />
-  ) : (
-    data && <LedgerActionDialogBody action={data} onClose={onClose} />
-  );
-  return <Dialog open={true}>{body}</Dialog>;
+  if (isLoading) {
+    return (
+      <Dialog open={true}>
+        <FetchingActionDialogBody />
+      </Dialog>
+    );
+  } else if (error) {
+    return <Dialog open={true}>{error.toString()}</Dialog>;
+  } else {
+    return (
+      <Dialog open={true}>
+        <LedgerActionDialogBody
+          action={data as LedgerAction}
+          onClose={onClose}
+        />
+      </Dialog>
+    );
+  }
 }
 
 export default LedgerActionDialog;

@@ -11,7 +11,7 @@ import postAction from "../../api/post_action";
 
 interface Action {
   name: string;
-  url: string;
+  url: uri.URI;
 }
 
 interface AcceptActionField {
