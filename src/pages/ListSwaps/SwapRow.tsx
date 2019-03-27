@@ -12,7 +12,7 @@ import React from "react";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
-import { Asset, Swap } from "../../api/get_swaps";
+import { Asset, Swap } from "../../api/getSwaps";
 import TextField from "../../components/TextField";
 import CommunicationActionDialog from "./CommunicationActionDialog";
 import LedgerActionDialog from "./LedgerActionDialog";

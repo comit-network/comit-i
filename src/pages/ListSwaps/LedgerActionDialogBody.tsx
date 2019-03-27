@@ -6,7 +6,7 @@ import {
   Typography
 } from "@material-ui/core";
 import React from "react";
-import { LedgerAction } from "../../api/get_action";
+import { LedgerAction } from "../../api/getAction";
 import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
 import CopyToClipboardButton from "./CopyToClipboard";
 

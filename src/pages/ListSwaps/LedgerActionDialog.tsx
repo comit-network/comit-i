@@ -6,7 +6,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { useAsync } from "react-async";
-import getAction, { LedgerAction } from "../../api/get_action";
+import getAction, { LedgerAction } from "../../api/getAction";
 import LedgerActionDialogBody from "./LedgerActionDialogBody";
 
 function FetchingActionDialogBody() {

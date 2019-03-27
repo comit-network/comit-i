@@ -6,7 +6,7 @@ import {
   TableRow
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import getSwaps, { Swap } from "../../api/get_swaps";
+import getSwaps, { Swap } from "../../api/getSwaps";
 import CenteredProgress from "../../components/CenteredProgress";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import EmptySwapListTableRow from "./EmptySwapListTableRow";

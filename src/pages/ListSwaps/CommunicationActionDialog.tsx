@@ -7,7 +7,7 @@ import {
   TextField
 } from "@material-ui/core";
 import React, { useReducer } from "react";
-import postAction from "../../api/post_action";
+import postAction from "../../api/postAction";
 
 interface Action {
   name: string;
