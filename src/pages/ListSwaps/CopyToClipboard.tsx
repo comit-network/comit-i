@@ -9,12 +9,11 @@ interface CopyToClipboardButtonProps {
 }
 
 function CopyToClipboardButton({ content, name }: CopyToClipboardButtonProps) {
-  name = name + " ";
   return (
     <Tooltip disableHoverListener={true} title={"Copied!"} placement={"top"}>
       <Button onClick={() => copyToClipboard(content)} color="primary">
         <FileCopy fontSize={"small"} />
-        &nbsp;Copy {name}to clipboard
+        {name ? `Copy ${name} to clipboard` : `Copy to clipboard`}
       </Button>
     </Tooltip>
   );
