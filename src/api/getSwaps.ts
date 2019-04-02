@@ -39,8 +39,10 @@ export interface GetSwapsResponse {
 }
 
 export default function getSwaps() {
+  const uri = getHostAndPort() + "/swaps";
+
   return axios
-    .get("http://" + getHostAndPort() + "/swaps", {
+    .get(uri, {
       timeout: 2000
     })
     .then(response => response.data)

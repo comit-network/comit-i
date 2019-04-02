@@ -1,3 +1,5 @@
+import storage from "../storage";
+
 export default function getHostAndPort() {
-  return localStorage.getItem("hostAndPort") || "localhost:8000";
+  return storage.getHost() + ":" + storage.getPort().toString();
 }
