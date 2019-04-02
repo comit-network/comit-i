@@ -75,6 +75,7 @@ function CommunicationActionDialog({
           <DialogContent>
             {acceptFields.map(field => (
               <TextField
+                key={field}
                 required={true}
                 label={field}
                 value={acceptBody[field] || ""}
