@@ -42,6 +42,10 @@ function CommunicationActionDialog({
   const handleCloseDialog = () => {
     onClose();
   };
+  const handleSentResponse = () => {
+    onClose();
+    location.reload();
+  };
 
   switch (action.name) {
     case "decline":
@@ -51,7 +55,7 @@ function CommunicationActionDialog({
           <DialogActions>
             <Button
               onClick={() => {
-                postAction(action.url).then(handleCloseDialog);
+                postAction(action.url).then(handleSentResponse);
               }}
               color="primary"
             >
@@ -86,7 +90,7 @@ function CommunicationActionDialog({
           <DialogActions>
             <Button
               onClick={() => {
-                postAction(action.url, acceptBody).then(handleCloseDialog);
+                postAction(action.url, acceptBody).then(handleSentResponse);
               }}
               color="primary"
             >
