@@ -4,9 +4,10 @@ import {
   DialogContent,
   DialogTitle
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import { useAsync } from "react-async";
 import getAction, { LedgerAction } from "../../api/getAction";
+import ErrorSnackbar from "../../components/ErrorSnackbar";
 import LedgerActionDialogBody from "./LedgerActionDialogBody";
 
 function FetchingActionDialogBody() {
@@ -31,6 +32,7 @@ const getActionFn = async ({ path }: any) => {
 
 function LedgerActionDialog({ path, onClose }: LedgerActionDialogProps) {
   const { isLoading, data, error } = useAsync({ promiseFn: getActionFn, path });
+  const [displayError, setDisplayError] = useState(false);
 
   if (isLoading) {
     return (
@@ -39,7 +41,13 @@ function LedgerActionDialog({ path, onClose }: LedgerActionDialogProps) {
       </Dialog>
     );
   } else if (error) {
-    return <Dialog open={true}>{error.toString()}</Dialog>;
+    return (
+      <ErrorSnackbar
+        message={"Failed to fetch action. Is your COMIT node running?"}
+        onClose={() => setDisplayError(false)}
+        open={displayError}
+      />
+    );
   } else {
     return (
       <Dialog open={true}>
