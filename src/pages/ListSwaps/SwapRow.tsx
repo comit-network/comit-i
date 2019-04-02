@@ -157,6 +157,7 @@ function SwapRow(swap: Swap) {
         } else {
           setDialogState(DialogState.LedgerDialogOpen);
         }
+        break;
     }
   };
 
