@@ -50,7 +50,6 @@ function CommunicationActionDialog({
           <DialogTitle>Decline</DialogTitle>
           <DialogActions>
             <Button
-              key={"decline-button"}
               onClick={() => {
                 postAction(action.url).then(handleCloseDialog);
               }}
@@ -72,7 +71,6 @@ function CommunicationActionDialog({
           <DialogContent>
             {acceptFields.map(field => (
               <TextField
-                key={field}
                 required={true}
                 label={field}
                 value={acceptBody[field] || ""}
@@ -87,7 +85,6 @@ function CommunicationActionDialog({
           </DialogContent>
           <DialogActions>
             <Button
-              key={"accept-button"}
               onClick={() => {
                 postAction(action.url, acceptBody).then(handleCloseDialog);
               }}
