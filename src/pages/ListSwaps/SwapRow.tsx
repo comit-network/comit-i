@@ -91,8 +91,6 @@ function actionLedger(swap: Swap, action: string) {
       return swap.role === "Alice"
         ? swap.parameters.alpha_ledger
         : swap.parameters.beta_ledger;
-    default:
-      return null;
   }
 }
 
@@ -144,6 +142,7 @@ function SwapRow(swap: Swap) {
       case "accept":
       case "decline":
         setDialogState(DialogState.CommunicationDialogOpen);
+        break;
       case "fund":
       case "redeem":
       case "refund":
