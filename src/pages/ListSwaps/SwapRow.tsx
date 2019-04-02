@@ -46,7 +46,12 @@ enum DialogState {
   LedgerDialogOpen
 }
 
-function actionQueryParams(swap: Swap, actionName: string) {
+interface LedgerActionSpec {
+  field_name: string;
+  form_label: string;
+}
+
+function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
   const ledger = actionLedger(swap, actionName);
 
   if (!ledger) {
@@ -57,14 +62,13 @@ function actionQueryParams(swap: Swap, actionName: string) {
     ledger.name === "bitcoin" &&
     (actionName === "redeem" || actionName === "refund")
   ) {
-    return [{ name: "address" }, { name: "fee_per_byte" }];
+    return [
+      { field_name: "address", form_label: "Bitcoin address" },
+      { field_name: "fee_per_byte", form_label: "Fee per byte" }
+    ];
   } else {
     return [];
   }
-}
-
-interface LedgerActionSpec {
-  name: string;
 }
 
 interface LedgerParamsField {
@@ -187,13 +191,13 @@ function SwapRow(swap: Swap) {
           <DialogContent>
             {ledgerActionParamSpec.map(spec => (
               <TextField
-                key={spec.name}
-                label={spec.name}
+                key={spec.field_name}
+                label={spec.form_label}
                 required={true}
-                value={ledgerActionParams[spec.name] || ""}
+                value={ledgerActionParams[spec.field_name] || ""}
                 onChange={event =>
                   dispatchLedgerActionParams({
-                    name: spec.name,
+                    name: spec.field_name,
                     value: event.target.value
                   })
                 }
