@@ -157,8 +157,6 @@ function SwapRow(swap: Swap) {
     }
   };
 
-  const ledger = actionLedger(swap, action.name);
-
   return (
     <React.Fragment key={swap._links.self.href}>
       <TableRow data-cy="swap-row">
@@ -184,9 +182,7 @@ function SwapRow(swap: Swap) {
       )}
       {dialogState === DialogState.LedgerDialogParamsOpen && (
         <Dialog open={true}>
-          <DialogTitle>
-            {ledger ? `${ledger.name} ${action.name} parameters` : ""}
-          </DialogTitle>
+          <DialogTitle>Please supply these parameters</DialogTitle>
           <DialogContent>
             {ledgerActionParamSpec.map(spec => (
               <TextField
