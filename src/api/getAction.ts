@@ -1,5 +1,4 @@
 import axios from "axios";
-import getHostAndPort from "./getHostAndPort";
 
 export type LedgerAction =
   | {
@@ -30,11 +29,9 @@ export type LedgerAction =
       };
     };
 
-export default function getAction(path: uri.URI) {
-  const uri = path.authority(getHostAndPort()).toString();
-
+export default function getAction(uri: uri.URI) {
   return axios
-    .get(uri)
+    .get(uri.toString())
     .then(res => res.data)
     .then(body => body as LedgerAction);
 }

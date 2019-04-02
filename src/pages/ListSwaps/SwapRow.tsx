@@ -7,11 +7,12 @@ import {
   TableCell,
   TableRow
 } from "@material-ui/core";
-import { useReducer, useState } from "react";
 import React from "react";
+import { useReducer, useState } from "react";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
+import apiEndpoint from "../../api/apiEndpoint";
 import { Asset, Swap } from "../../api/getSwaps";
 import TextField from "../../components/TextField";
 import CommunicationActionDialog from "./CommunicationActionDialog";
@@ -120,7 +121,9 @@ function SwapRow(swap: Swap) {
           variant="outlined"
           color="primary"
           key={actionName}
-          onClick={() => handleClickAction(actionName, URI(actionUrl.href))}
+          onClick={() =>
+            handleClickAction(actionName, apiEndpoint().path(actionUrl.href))
+          }
         >
           {actionName}
         </Button>

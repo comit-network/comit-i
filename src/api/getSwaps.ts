@@ -1,6 +1,5 @@
 import axios from "axios";
-import URI from "urijs";
-import storage from "../storage";
+import apiEndpoint from "./apiEndpoint";
 
 export interface Links {
   [rel: string]: {
@@ -40,12 +39,9 @@ export interface GetSwapsResponse {
 }
 
 export default function getSwaps() {
-  const uri = new URI({
-    protocol: "http",
-    hostname: storage.getHost(),
-    port: storage.getPort().toString(),
-    path: "swaps"
-  }).toString();
+  const uri = apiEndpoint()
+    .path("swaps")
+    .toString();
 
   return axios
     .get(uri, {
