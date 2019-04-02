@@ -182,7 +182,7 @@ function SwapRow(swap: Swap) {
       )}
       {dialogState === DialogState.LedgerDialogParamsOpen && (
         <Dialog open={true}>
-          <DialogTitle>Please supply these parameters</DialogTitle>
+          <DialogTitle>Action parameters</DialogTitle>
           <DialogContent>
             {ledgerActionParamSpec.map(spec => (
               <TextField
