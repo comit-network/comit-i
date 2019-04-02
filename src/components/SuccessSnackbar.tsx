@@ -48,7 +48,7 @@ function SuccessSnackbar({
       open={open}
       onClose={onClose}
       ClickAwayListenerProps={{
-        onClickAway: () => {} // tslint:disable-line no-empty
+        onClickAway: () => undefined
       }}
     >
       <SnackbarContent
