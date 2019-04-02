@@ -113,33 +113,16 @@ function SwapRow(swap: Swap) {
   const actionButtons = Object.entries(swap._links)
     .filter(([key, _]) => key !== "self")
     .map(([actionName, actionUrl]) => {
-      if (actionName === "accept" || actionName === "decline") {
-        return (
-          <Button
-            variant="outlined"
-            color="primary"
-            key={actionName}
-            onClick={() =>
-              handleClickCommunicationAction(actionName, URI(actionUrl.href))
-            }
-          >
-            {actionName}
-          </Button>
-        );
-      } else {
-        return (
-          <Button
-            variant="outlined"
-            color="primary"
-            key={actionName}
-            onClick={() =>
-              handleClickLedgerAction(actionName, URI(actionUrl.href))
-            }
-          >
-            {actionName}
-          </Button>
-        );
-      }
+      return (
+        <Button
+          variant="outlined"
+          color="primary"
+          key={actionName}
+          onClick={() => handleClickAction(actionName, URI(actionUrl.href))}
+        >
+          {actionName}
+        </Button>
+      );
     });
 
   const acceptFields = [];
@@ -150,21 +133,24 @@ function SwapRow(swap: Swap) {
     acceptFields.push("beta_ledger_refund_identity");
   }
 
-  const handleClickCommunicationAction = (name: string, url: uri.URI) => {
-    setAction({ name, url });
-    setDialogState(DialogState.CommunicationDialogOpen);
-  };
-
-  const handleClickLedgerAction = (name: string, url: uri.URI) => {
-    const params = actionQueryParams(swap, name);
-
+  const handleClickAction = (name: string, url: uri.URI) => {
     setAction({ name, url });
 
-    if (params.length > 0) {
-      setLedgerActionParamSpec(params);
-      setDialogState(DialogState.LedgerDialogParamsOpen);
-    } else {
-      setDialogState(DialogState.LedgerDialogOpen);
+    switch (name) {
+      case "accept":
+      case "decline":
+        setDialogState(DialogState.CommunicationDialogOpen);
+      case "fund":
+      case "redeem":
+      case "refund":
+        const params = actionQueryParams(swap, name);
+
+        if (params.length > 0) {
+          setLedgerActionParamSpec(params);
+          setDialogState(DialogState.LedgerDialogParamsOpen);
+        } else {
+          setDialogState(DialogState.LedgerDialogOpen);
+        }
     }
   };
 
