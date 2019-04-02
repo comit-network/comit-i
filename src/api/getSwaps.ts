@@ -1,4 +1,5 @@
 import axios from "axios";
+import apiEndpoint from "./apiEndpoint";
 
 export interface Links {
   [rel: string]: {
@@ -38,8 +39,14 @@ export interface GetSwapsResponse {
 }
 
 export default function getSwaps() {
+  const uri = apiEndpoint()
+    .path("swaps")
+    .toString();
+
   return axios
-    .get<GetSwapsResponse>("http://localhost:8000/swaps", { timeout: 2000 })
+    .get(uri, {
+      timeout: 2000
+    })
     .then(response => response.data)
     .then(body => body as GetSwapsResponse)
     .then(body => body._embedded.swaps);

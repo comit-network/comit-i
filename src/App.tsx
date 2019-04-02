@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import InboxIcon from "@material-ui/icons/Inbox";
 import SendIcon from "@material-ui/icons/Send";
+import SettingsIcon from "@material-ui/icons/Settings";
 import React from "react";
 import { Route, RouteComponentProps, withRouter } from "react-router-dom";
 import LinkPlusIcon from "./components/LinkPlus";
@@ -22,6 +23,7 @@ import LinkLandingPage from "./pages/LinkLandingPage/LinkLandingPage";
 import ListSwaps from "./pages/ListSwaps/ListSwaps";
 import MakeLink from "./pages/MakeLink/MakeLink";
 import SendSwap from "./pages/SendSwapRequest/SendSwapRequest";
+import Settings from "./pages/Settings/Settings";
 
 const drawerWidth = 240;
 
@@ -56,6 +58,7 @@ function App({ classes, history }: AppProps) {
   const goToRoot = () => history.push("/");
   const goToMakeLink = () => history.push("/make_link");
   const goToSendSwap = () => history.push("/send_swap");
+  const goToSettings = () => history.push("/settings");
 
   return (
     <div className={classes.root}>
@@ -97,6 +100,12 @@ function App({ classes, history }: AppProps) {
             </ListItemIcon>
             <ListItemText primary={"Send swap request"} />
           </ListItem>
+          <ListItem button={true} key={"settings"} onClick={goToSettings}>
+            <ListItemIcon>
+              <SettingsIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Settings"} />
+          </ListItem>
         </List>
       </Drawer>
       <main className={classes.content}>
@@ -105,6 +114,7 @@ function App({ classes, history }: AppProps) {
         <Route path="/make_link" component={MakeLink} />
         <Route path="/send_swap" component={SendSwap} />
         <Route path="/from_link" component={LinkLandingPage} />
+        <Route path="/settings" component={Settings} />
       </main>
     </div>
   );

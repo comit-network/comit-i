@@ -1,3 +1,4 @@
+// TODO: Create generic Snackbar component out of this and ErrorSnackbar
 import {
   createStyles,
   IconButton,
@@ -9,13 +10,13 @@ import {
   withStyles
 } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import ErrorIcon from "@material-ui/icons/Error";
+import DoneIcon from "@material-ui/icons/Done";
 import React from "react";
 
 const styles = (theme: Theme) =>
   createStyles({
     content: {
-      backgroundColor: theme.palette.error.dark
+      backgroundColor: theme.palette.primary.dark
     },
     message: {
       display: "flex",
@@ -26,21 +27,20 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface ErrorSnackbarProps extends WithStyles<typeof styles> {
+interface SuccessSnackbarProps extends WithStyles<typeof styles> {
   open: boolean;
   onClose: () => void;
   message: string;
 }
 
-function ErrorSnackbar({
+function SuccessSnackbar({
   open,
   onClose,
   message,
   classes
-}: ErrorSnackbarProps) {
+}: SuccessSnackbarProps) {
   return (
     <Snackbar
-      data-cy="error-snackbar"
       anchorOrigin={{
         vertical: "bottom",
         horizontal: "left"
@@ -58,7 +58,7 @@ function ErrorSnackbar({
         }}
         message={
           <React.Fragment>
-            <ErrorIcon className={classes.icon} />
+            <DoneIcon className={classes.icon} />
             <Typography color={"inherit"}>{message}</Typography>
           </React.Fragment>
         }
@@ -77,4 +77,4 @@ function ErrorSnackbar({
   );
 }
 
-export default withStyles(styles)(ErrorSnackbar);
+export default withStyles(styles)(SuccessSnackbar);

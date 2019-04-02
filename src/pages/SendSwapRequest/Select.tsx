@@ -88,7 +88,7 @@ function Select({
                   >
                     <option key={""} />
                     {param.options &&
-                      param.options.map(value => (
+                      (param.options as string[]).map(value => (
                         <option value={value} key={value}>
                           {pascalCase(value)}
                         </option>

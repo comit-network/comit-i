@@ -14,9 +14,11 @@
     "promise-polyfill": "^8.1.0",
     "query-string": "^6.4.0",
     "react": "^16.8.3",
+    "react-async": "^5.1.2",
     "react-dom": "^16.8.3",
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
+    "satoshi-bitcoin-ts": "^0.2.4",
     "urijs": "^1.19.1",
     "web3": "^1.0.0-beta.48"
   },

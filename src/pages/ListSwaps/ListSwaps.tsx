@@ -6,32 +6,11 @@ import {
   TableRow
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import getSwaps, { Asset, Swap } from "../../api/get_swaps";
+import getSwaps, { Swap } from "../../api/getSwaps";
 import CenteredProgress from "../../components/CenteredProgress";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import EmptySwapListTableRow from "./EmptySwapListTableRow";
-
-interface AssetCellProps {
-  asset: Asset;
-}
-
-function AssetCell({ asset }: AssetCellProps) {
-  switch (asset.name) {
-    case "Ether": {
-      return <span>{asset.quantity} wei</span>;
-    }
-    case "Bitcoin": {
-      return <span>{asset.quantity} sats</span>;
-    }
-    default: {
-      return (
-        <span>
-          {asset.quantity} {asset.name}
-        </span>
-      );
-    }
-  }
-}
+import SwapRow from "./SwapRow";
 
 function FetchSwaps() {
   const [swaps, setSwaps] = useState<Swap[]>([]);
@@ -82,25 +61,7 @@ function SwapList({ swaps }: SwapListProps) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {hasSwaps &&
-          swaps.map(row => (
-            <TableRow key={row._links.self.href} data-cy="swap-row">
-              <TableCell>{row.parameters.alpha_ledger.name}</TableCell>
-              <TableCell>
-                <AssetCell asset={row.parameters.alpha_asset} />
-              </TableCell>
-              <TableCell>{row.parameters.beta_ledger.name}</TableCell>
-              <TableCell>
-                <AssetCell asset={row.parameters.beta_asset} />
-              </TableCell>
-              <TableCell>{row.protocol}</TableCell>
-              <TableCell>{row.status}</TableCell>
-              <TableCell>{row.role}</TableCell>
-              <TableCell>
-                {Object.keys(row._links).filter(key => key !== "self")}
-              </TableCell>
-            </TableRow>
-          ))}
+        {hasSwaps && swaps.map(SwapRow)}
         {!hasSwaps && <EmptySwapListTableRow />}
       </TableBody>
     </Table>

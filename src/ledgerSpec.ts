@@ -8,7 +8,7 @@ export interface Parameter {
   name: string;
   label: string;
   type: ParameterKind;
-  options?: string[];
+  [key: string]: any;
 }
 
 export interface LedgerSpec {
@@ -44,7 +44,8 @@ const ledgers: LedgerSpec[] = [
           {
             name: "quantity",
             label: "Quantity",
-            type: ParameterKind.Quantity
+            type: ParameterKind.Quantity,
+            unit: "BTC"
           }
         ]
       }
@@ -80,7 +81,8 @@ const ledgers: LedgerSpec[] = [
           {
             name: "quantity",
             label: "Quantity",
-            type: ParameterKind.Quantity
+            type: ParameterKind.Quantity,
+            unit: "ETH"
           },
           {
             name: "token_contract",
