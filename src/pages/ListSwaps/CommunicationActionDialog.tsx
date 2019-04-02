@@ -43,24 +43,33 @@ function CommunicationActionDialog({
     onClose();
   };
 
-  const chooseComponents = (actionName: string) => {
-    switch (actionName) {
-      case "decline":
-        return [
-          null,
-          <Button
-            key={actionName + "-button"}
-            onClick={() => {
-              postAction(action.url).then(handleCloseDialog);
-            }}
-            color="primary"
-          >
-            {"Decline"}
-          </Button>
-        ];
-      case "accept": {
-        return [
-          <React.Fragment key="accept-form">
+  switch (action.name) {
+    case "decline":
+      return (
+        <Dialog open={true} onClose={handleCloseDialog}>
+          <DialogTitle>Decline</DialogTitle>
+          <DialogActions>
+            <Button
+              key={"decline-button"}
+              onClick={() => {
+                postAction(action.url).then(handleCloseDialog);
+              }}
+              color="primary"
+            >
+              Decline
+            </Button>
+            <Button onClick={handleCloseDialog} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+
+    case "accept":
+      return (
+        <Dialog open={true} onClose={handleCloseDialog}>
+          <DialogTitle>Accept</DialogTitle>
+          <DialogContent>
             {acceptFields.map(field => (
               <TextField
                 key={field}
@@ -75,38 +84,27 @@ function CommunicationActionDialog({
                 }
               />
             ))}
-          </React.Fragment>,
-          <Button
-            key={actionName + "-button"}
-            onClick={() => {
-              postAction(action.url, acceptBody).then(handleCloseDialog);
-            }}
-            color="primary"
-          >
-            {"Accept"}
-          </Button>
-        ];
-      }
-      default: {
-        return [];
-      }
+          </DialogContent>
+          <DialogActions>
+            <Button
+              key={"accept-button"}
+              onClick={() => {
+                postAction(action.url, acceptBody).then(handleCloseDialog);
+              }}
+              color="primary"
+            >
+              Accept
+            </Button>
+            <Button onClick={handleCloseDialog} color="primary">
+              Cancel
+            </Button>
+          </DialogActions>
+        </Dialog>
+      );
+    default: {
+      return null;
     }
-  };
-
-  const [content, button] = chooseComponents(action.name);
-
-  return (
-    <Dialog open={true} onClose={handleCloseDialog}>
-      <DialogTitle>{action.name}</DialogTitle>
-      <DialogContent>{content}</DialogContent>
-      <DialogActions>
-        {button}
-        <Button onClick={handleCloseDialog} color="primary">
-          Cancel
-        </Button>
-      </DialogActions>
-    </Dialog>
-  );
+  }
 }
 
 export default CommunicationActionDialog;
