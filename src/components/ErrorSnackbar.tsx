@@ -28,7 +28,7 @@ const styles = (theme: Theme) =>
 
 interface ErrorSnackbarProps extends WithStyles<typeof styles> {
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   message: string;
 }
 
@@ -62,16 +62,18 @@ function ErrorSnackbar({
             <Typography color={"inherit"}>{message}</Typography>
           </React.Fragment>
         }
-        action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={onClose}
-          >
-            <CloseIcon />
-          </IconButton>
-        ]}
+        action={
+          onClose && [
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="inherit"
+              onClick={onClose}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]
+        }
       />
     </Snackbar>
   );

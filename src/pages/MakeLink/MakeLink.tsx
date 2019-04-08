@@ -107,7 +107,7 @@ const MakeLink = () => {
         <Grid item={true} xs={12}>
           <SubTitle text={"The generated link"} />
           <Paper elevation={2}>
-            <Grid container={true} xs={12} spacing={16} alignItems={"center"}>
+            <Grid container={true} spacing={16} alignItems={"center"}>
               <Grid
                 item={true}
                 container={true}
