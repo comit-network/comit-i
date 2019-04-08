@@ -1,14 +1,14 @@
 language: node_js
 cache:
   directories:
-  - "~/.cache/Cypress"
-  - "~/.cache/yarn"
+    - "~/.cache/Cypress"
+    - "~/.cache/yarn"
 script:
-- yarn run prettier
-- yarn run lint
-- yarn run test
-- yarn run build
-- yarn run serveAndRunUiTests
+  - yarn run prettier
+  - yarn run lint
+  - yarn run test
+  - yarn run build
+  - yarn run serveAndRunUiTests
 deploy:
   provider: releases
   api_key:
