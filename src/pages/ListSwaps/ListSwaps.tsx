@@ -5,7 +5,7 @@ import {
   TableHead,
   TableRow
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
 import { useAsync } from "react-async";
 import getSwaps, { Swap } from "../../api/getSwaps";
 import CenteredProgress from "../../components/CenteredProgress";
@@ -17,7 +17,6 @@ function FetchSwaps() {
   const { isLoading, data, error } = useAsync({
     promiseFn: getSwaps
   });
-  const [displayError, setDisplayError] = useState(!error);
 
   if (isLoading) {
     return <CenteredProgress />;
@@ -25,11 +24,12 @@ function FetchSwaps() {
     return (
       <React.Fragment>
         <SwapList swaps={[]} />
-        <ErrorSnackbar
-          message={"Failed to fetch swaps. Is your COMIT node running?"}
-          onClose={() => setDisplayError(false)}
-          open={displayError}
-        />
+        {
+          <ErrorSnackbar
+            message={"Failed to fetch swaps. Is your COMIT node running?"}
+            open={true}
+          />
+        }
       </React.Fragment>
     );
   } else {
