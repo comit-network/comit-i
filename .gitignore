@@ -10,6 +10,7 @@
 
 # production
 /build
+bundle.zip
 
 # misc
 .DS_Store

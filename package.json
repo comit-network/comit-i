@@ -38,6 +38,7 @@
     "@types/urijs": "^1.15.38",
     "awesome-typescript-loader": "^5.2.1",
     "babel-loader": "^8.0.5",
+    "bestzip": "^2.1.2",
     "cypress": "^3.1.5",
     "prettier": "^1.16.4",
     "serve": "^10.1.2",
@@ -50,7 +51,7 @@
   "scripts": {
     "prestart": "git config core.hooksPath .githooks",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build && bestzip bundle.zip build/*",
     "test": "react-scripts test --passWithNoTests",
     "eject": "react-scripts eject",
     "lint": "tslint -p .",
