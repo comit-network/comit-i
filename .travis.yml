@@ -9,6 +9,7 @@ script:
   - yarn run test
   - yarn run build
   - yarn run serveAndRunUiTests
+before_deploy: "yarn run bestzip bundle.zip build/*"
 deploy:
   provider: releases
   api_key:
