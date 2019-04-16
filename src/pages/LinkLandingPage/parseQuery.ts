@@ -19,14 +19,16 @@ function firstOrValue(value: string | string[]) {
 }
 
 export default function parseQuery(query: string): QueryParams {
-  const normalizedQuery = URI.decodeQuery(query).replace("web+comit:swap", "");
+  const queryString = query.charAt(0) === "?" ? query.substr(1) : query;
 
-  const parsedQuery = URI.parseQuery(normalizedQuery);
+  const normalizedQuery = URI.decodeQuery(queryString);
+  const link = new URI(normalizedQuery);
+  const linkQuery = URI.parseQuery(link.query());
 
-  return Object.keys(parsedQuery)
+  return Object.keys(linkQuery)
     .map(key => {
       // @ts-ignore
-      const value = parsedQuery[key];
+      const value = linkQuery[key];
 
       return {
         [key]: firstOrValue(value)

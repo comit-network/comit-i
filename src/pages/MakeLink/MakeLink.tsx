@@ -20,7 +20,10 @@ const MakeLink = () => {
   const [protocol, setProtocol] = useState("");
   const [peer, setPeer] = useState("");
 
-  let uri = URI("web+comit:swap");
+  let uri = new URI({
+    protocol: "web+comit",
+    hostname: "swap"
+  });
 
   const alphaLedgerQueryValue = ledgerToQueryValue(swap.alpha_ledger);
   if (alphaLedgerQueryValue) {
