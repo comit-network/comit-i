@@ -19,7 +19,8 @@ function firstOrValue(value: string | string[]) {
 }
 
 export default function parseQuery(query: string): QueryParams {
-  const queryString = query.replace("?", "");
+  const queryString = query.charAt(0) === "?" ? query.substr(1) : query;
+
   const normalizedQuery = URI.decodeQuery(queryString);
   const link = new URI(normalizedQuery);
   const linkQuery = URI.parseQuery(link.query());
