@@ -76,7 +76,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                   value={peer}
                   onChange={event => setPeer(event.target.value)}
                   label={"Peer"}
-                  helperText={"IPv4 Socket Address"}
+                  helperText={"Peer id"}
                   data-cy="peer-input"
                 />
               </Fieldset>
