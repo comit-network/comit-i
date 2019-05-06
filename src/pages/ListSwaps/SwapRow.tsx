@@ -147,6 +147,7 @@ function SwapRow(swap: Swap) {
         setDialogState(DialogState.CommunicationDialogOpen);
         break;
       case "fund":
+      case "deploy":
       case "redeem":
       case "refund":
         const params = actionQueryParams(swap, name);
