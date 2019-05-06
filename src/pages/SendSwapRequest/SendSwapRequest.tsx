@@ -23,7 +23,9 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
 
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const [peer, setPeer] = useState("0.0.0.0:8011");
+  const [peer, setPeer] = useState(
+    "QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd"
+  );
   const [displayError, setDisplayError] = useState(false);
 
   const queryParams = URI.parseQuery(location.search) as {
