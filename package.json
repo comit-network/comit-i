@@ -6,6 +6,7 @@
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "@material-ui/styles": "^3.0.0-alpha.10",
+    "@types/title-case": "1.1.2",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
@@ -19,6 +20,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "2.1.5",
     "satoshi-bitcoin-ts": "^0.2.4",
+    "title-case": "^2.1.1",
     "urijs": "^1.19.1",
     "web3": "^1.0.0-beta.48"
   },
