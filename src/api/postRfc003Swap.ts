@@ -3,6 +3,11 @@ import { Rfc003Params } from "../forms/Rfc003ParamsForm";
 import { Swap } from "../forms/SwapForm";
 import apiEndpoint from "./apiEndpoint";
 
+function minutesToTimestamp(minutes: number) {
+  const now = Math.floor((Date.now ? Date.now() : new Date().getTime()) / 1000);
+  return now + minutes * 60;
+}
+
 export default function postRfc003Swap(
   swap: Swap,
   params: Rfc003Params,
@@ -11,6 +16,9 @@ export default function postRfc003Swap(
   const uri = apiEndpoint()
     .path("swaps/rfc003")
     .toString();
+
+  params.alpha_expiry = minutesToTimestamp(params.alpha_expiry);
+  params.beta_expiry = minutesToTimestamp(params.beta_expiry);
 
   return axios.post(
     uri,
