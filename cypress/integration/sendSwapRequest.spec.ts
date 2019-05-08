@@ -70,7 +70,7 @@ describe("The page for sending a swap request", () => {
       cy.get("[data-cy=peer-input]")
         .find("input")
         .clear()
-        .type("0.0.0.0:8011");
+        .type("QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd");
     });
 
     it("should display an error if form is submitted without connection to a comit node", () => {
