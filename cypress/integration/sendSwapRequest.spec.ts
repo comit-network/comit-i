@@ -62,7 +62,7 @@ describe("The page for sending a swap request", () => {
         .find("input")
         .clear()
         .type("40");
-      cy.get("[data-cy=beta-redeem-identity-input]")
+      cy.get("[data-cy=beta-ledger-redeem-identity-input]")
         .find("input")
         .clear()
         .type("0xcb8c88bcf1e3902e3b0083b60a29a9af94422d57");
