@@ -41,25 +41,6 @@ export function resetParams(currentParams: Rfc003Params) {
   };
 }
 
-interface IdentityInputProps {
-  value: string;
-  label: string;
-  onChange: (expiry: string) => void;
-  dataCy: string;
-}
-
-function IdentityInput({ value, label, onChange, dataCy }: IdentityInputProps) {
-  return (
-    <TextField
-      required={true}
-      label={label}
-      value={value || ""}
-      onChange={event => onChange(event.target.value)}
-      data-cy={dataCy}
-    />
-  );
-}
-
 interface ExpiryInputProps {
   value: number;
   label: string;
@@ -119,16 +100,17 @@ function Rfc003ParamsForm({
         </Grid>
         {alphaLedger === "ethereum" && (
           <Grid className={classes.grid} item={true} md={6} xs={12}>
-            <IdentityInput
-              value={alpha_ledger_refund_identity}
-              label="Alpha Refund Identity"
-              onChange={(identity: string) => {
+            <TextField
+              required={true}
+              value={alpha_ledger_refund_identity || ""}
+              label={"Alpha Refund Identity"}
+              onChange={event =>
                 setParams({
                   ...params,
-                  alpha_ledger_refund_identity: identity
-                });
-              }}
-              dataCy="alpha-refund-identity-input"
+                  alpha_ledger_refund_identity: event.target.value
+                })
+              }
+              data-cy="alpha-refund-identity-input"
             />
           </Grid>
         )}
@@ -149,16 +131,17 @@ function Rfc003ParamsForm({
         </Grid>
         {betaLedger === "ethereum" && (
           <Grid className={classes.grid} item={true} md={6} xs={12}>
-            <IdentityInput
-              label="Beta Refund Identity"
-              value={beta_ledger_redeem_identity}
-              onChange={(identity: string) => {
+            <TextField
+              required={true}
+              value={beta_ledger_redeem_identity || ""}
+              label={"Beta Refund Identity"}
+              onChange={event =>
                 setParams({
                   ...params,
-                  beta_ledger_redeem_identity: identity
-                });
-              }}
-              dataCy="beta-redeem-identity-input"
+                  beta_ledger_redeem_identity: event.target.value
+                })
+              }
+              data-cy="beta-redeem-identity-input"
             />
           </Grid>
         )}
