@@ -1,7 +1,6 @@
 import { Grid, InputAdornment } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
-import titleCase from "title-case";
 import TextField from "../components/TextField";
 
 const useRfc003ParamsStyles = makeStyles({
@@ -22,15 +21,15 @@ interface Rfc003ParamsProps {
 export interface Rfc003Params {
   alpha_expiry: number;
   beta_expiry: number;
-  alpha_ledger_refund_identity?: string;
-  beta_ledger_redeem_identity?: string;
+  alpha_ledger_refund_identity: string;
+  beta_ledger_redeem_identity: string;
 }
 
 export const defaultRfc003Params: Rfc003Params = {
-  alpha_expiry: 30,
-  beta_expiry: 15,
-  alpha_ledger_refund_identity: undefined,
-  beta_ledger_redeem_identity: undefined
+  alpha_expiry: 5,
+  beta_expiry: 3,
+  alpha_ledger_refund_identity: "",
+  beta_ledger_redeem_identity: ""
 };
 
 export function resetParams(currentParams: Rfc003Params) {
@@ -40,6 +39,48 @@ export function resetParams(currentParams: Rfc003Params) {
       defaultRfc003Params.alpha_ledger_refund_identity,
     beta_ledger_redeem_identity: defaultRfc003Params.beta_ledger_redeem_identity
   };
+}
+
+interface IdentityInputProps {
+  value: string;
+  label: string;
+  onChange: (expiry: string) => void;
+  dataCy: string;
+}
+
+function IdentityInput({ value, label, onChange, dataCy }: IdentityInputProps) {
+  return (
+    <TextField
+      required={true}
+      label={label}
+      value={value || ""}
+      onChange={event => onChange(event.target.value)}
+      data-cy={dataCy}
+    />
+  );
+}
+
+interface ExpiryInputProps {
+  value: number;
+  label: string;
+  onChange: (expiry: string) => void;
+  dataCy: string;
+}
+
+function ExpiryInput({ value, label, onChange, dataCy }: ExpiryInputProps) {
+  return (
+    <TextField
+      required={true}
+      label={label}
+      value={value || ""}
+      onChange={event => onChange(event.target.value)}
+      type="number"
+      InputProps={{
+        endAdornment: <InputAdornment position="end">min</InputAdornment>
+      }}
+      data-cy={dataCy}
+    />
+  );
 }
 
 function Rfc003ParamsForm({
@@ -57,75 +98,71 @@ function Rfc003ParamsForm({
   } = params;
 
   const parseExpiry = (expiry: string) => {
-    return expiry !== "" ? parseInt(expiry, 10) : undefined;
+    return parseInt(expiry, 10);
   };
 
-  function LedgerFields(
-    ledger: string,
-    expiryKey: string,
-    identityKey: string,
-    expiry: number,
-    identity: string | undefined
-  ) {
-    const expiryLabel = titleCase(expiryKey);
-    const identityLabel = titleCase(identityKey);
-
-    return (
+  return (
+    <React.Fragment>
       <Grid item={true} xs={12} container={true} spacing={0}>
         <Grid item={true} md={6} xs={12}>
-          <TextField
-            required={true}
-            label={expiryLabel}
-            value={expiry || ""}
-            onChange={event => {
+          <ExpiryInput
+            value={alpha_expiry}
+            label="Alpha Expiry"
+            onChange={(expiry: string) => {
               setParams({
                 ...params,
-                [expiryKey]: parseExpiry(event.target.value)
+                alpha_expiry: parseExpiry(expiry)
               });
             }}
-            type="number"
-            InputProps={{
-              endAdornment: <InputAdornment position="end">min</InputAdornment>
-            }}
-            data-cy={expiryKey.split("_").join("-") + "-input"}
+            dataCy="alpha-expiry-input"
           />
         </Grid>
-        {ledger === "ethereum" && (
+        {alphaLedger === "ethereum" && (
           <Grid className={classes.grid} item={true} md={6} xs={12}>
-            <TextField
-              required={true}
-              label={identityLabel}
-              value={identity || ""}
-              onChange={event => {
+            <IdentityInput
+              value={alpha_ledger_refund_identity}
+              label="Alpha Refund Identity"
+              onChange={(identity: string) => {
                 setParams({
                   ...params,
-                  [identityKey]: event.target.value
+                  alpha_ledger_refund_identity: identity
                 });
               }}
-              data-cy={identityKey.split("_").join("-") + "-input"}
+              dataCy="alpha-refund-identity-input"
             />
           </Grid>
         )}
       </Grid>
-    );
-  }
-
-  return (
-    <React.Fragment>
-      {LedgerFields(
-        alphaLedger,
-        "alpha_expiry",
-        "alpha_ledger_refund_identity",
-        alpha_expiry,
-        alpha_ledger_refund_identity
-      )}
-      {LedgerFields(
-        betaLedger,
-        "beta_expiry",
-        "beta_ledger_redeem_identity",
-        beta_expiry,
-        beta_ledger_redeem_identity
-      )}
+      <Grid item={true} xs={12} container={true} spacing={0}>
+        <Grid item={true} md={6} xs={12}>
+          <ExpiryInput
+            value={beta_expiry}
+            label="Beta Expiry"
+            onChange={(expiry: string) => {
+              setParams({
+                ...params,
+                beta_expiry: parseExpiry(expiry)
+              });
+            }}
+            dataCy="beta-expiry-input"
+          />
+        </Grid>
+        {betaLedger === "ethereum" && (
+          <Grid className={classes.grid} item={true} md={6} xs={12}>
+            <IdentityInput
+              label="Beta Refund Identity"
+              value={beta_ledger_redeem_identity}
+              onChange={(identity: string) => {
+                setParams({
+                  ...params,
+                  beta_ledger_redeem_identity: identity
+                });
+              }}
+              dataCy="beta-redeem-identity-input"
+            />
+          </Grid>
+        )}
+      </Grid>
     </React.Fragment>
   );
 }
