@@ -15,17 +15,23 @@ interface Action {
 }
 
 interface AcceptActionField {
-  name: string;
+  key: string;
   value: string;
 }
 
+interface AcceptField {
+  key: string;
+  label: string;
+  default: string;
+}
+
 function acceptReducer(currentState: object, field: AcceptActionField) {
-  return { ...currentState, [field.name]: field.value };
+  return { ...currentState, [field.key]: field.value };
 }
 
 interface CommunicationActionDialogProps {
   action: Action;
-  acceptFields: string[];
+  acceptFields: AcceptField[];
   onClose: () => void;
 }
 
@@ -34,7 +40,10 @@ function CommunicationActionDialog({
   acceptFields,
   onClose
 }: CommunicationActionDialogProps) {
-  const initialAcceptRequest = {};
+  const initialAcceptRequest = acceptFields.reduce<{
+    [key: string]: any;
+  }>((obj, item) => ((obj[item.key] = item.default), obj), {});
+
   const [acceptBody, dispatchAccept] = useReducer(
     acceptReducer,
     initialAcceptRequest
@@ -75,13 +84,13 @@ function CommunicationActionDialog({
           <DialogContent>
             {acceptFields.map(field => (
               <TextField
-                key={field}
+                key={field.key}
                 required={true}
-                label={field}
-                value={acceptBody[field] || ""}
+                label={field.label}
+                value={acceptBody[field.key] || ""}
                 onChange={event =>
                   dispatchAccept({
-                    name: field,
+                    key: field.key,
                     value: event.target.value
                   })
                 }
