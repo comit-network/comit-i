@@ -21,15 +21,15 @@ interface Rfc003ParamsProps {
 export interface Rfc003Params {
   alpha_expiry: number;
   beta_expiry: number;
-  alpha_ledger_refund_identity: string;
-  beta_ledger_redeem_identity: string;
+  alpha_ledger_refund_identity?: string;
+  beta_ledger_redeem_identity?: string;
 }
 
 export const defaultRfc003Params: Rfc003Params = {
   alpha_expiry: 5,
   beta_expiry: 3,
-  alpha_ledger_refund_identity: "",
-  beta_ledger_redeem_identity: ""
+  alpha_ledger_refund_identity: undefined,
+  beta_ledger_redeem_identity: undefined
 };
 
 export function resetParams(currentParams: Rfc003Params) {
