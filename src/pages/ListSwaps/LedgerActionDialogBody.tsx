@@ -131,7 +131,28 @@ function LedgerActionDialogBody({
         </React.Fragment>
       );
     }
-    case "ethereum-invoke-contract": {
+    case "ethereum-call-contract": {
+      const expiry = action.payload.min_block_timestamp;
+      if (!!expiry && expiry > now()) {
+        const tryAgainWhen = moment.unix(expiry).fromNow();
+
+        return (
+          <React.Fragment>
+            <DialogTitle>Unavailable action</DialogTitle>
+            <DialogContent>
+              <Typography paragraph={true}>
+                Please try again {tryAgainWhen}.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onClose} color="secondary">
+                Close
+              </Button>
+            </DialogActions>
+          </React.Fragment>
+        );
+      }
+
       return (
         <React.Fragment>
           <DialogTitle>Invoke Ethereum contract</DialogTitle>

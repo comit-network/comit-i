@@ -19,13 +19,14 @@ export type LedgerAction =
       };
     }
   | {
-      type: "ethereum-invoke-contract";
+      type: "ethereum-call-contract";
       payload: {
         contract_address: string;
         data: string;
         amount: string;
         gas_limit: string;
         network: string;
+        min_block_timestamp?: number;
       };
     };
 
