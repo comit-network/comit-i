@@ -5,9 +5,11 @@ import {
   DialogTitle,
   Typography
 } from "@material-ui/core";
+import moment from "moment";
 import React from "react";
 import { LedgerAction } from "../../api/getAction";
 import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
+import { now } from "../../time";
 import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
@@ -21,6 +23,27 @@ function LedgerActionDialogBody({
 }: LedgerActionDialogBodyProps) {
   switch (action.type) {
     case "bitcoin-broadcast-signed-transaction": {
+      const expiry = action.payload.min_median_block_time;
+      if (!!expiry && expiry > now()) {
+        const tryAgainWhen = moment.unix(expiry).fromNow();
+
+        return (
+          <React.Fragment>
+            <DialogTitle>Unavailable action</DialogTitle>
+            <DialogContent>
+              <Typography paragraph={true}>
+                Please try again {tryAgainWhen}.
+              </Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={onClose} color="secondary">
+                Close
+              </Button>
+            </DialogActions>
+          </React.Fragment>
+        );
+      }
+
       return (
         <React.Fragment>
           <DialogTitle>Broadcast Bitcoin transaction</DialogTitle>

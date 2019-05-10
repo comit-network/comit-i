@@ -48,8 +48,9 @@ enum DialogState {
 }
 
 interface LedgerActionSpec {
-  field_name: string;
-  form_label: string;
+  key: string;
+  label: string;
+  default?: string;
 }
 
 function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
@@ -64,8 +65,12 @@ function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
     (actionName === "redeem" || actionName === "refund")
   ) {
     return [
-      { field_name: "address", form_label: "Bitcoin address" },
-      { field_name: "fee_per_byte", form_label: "Fee per byte" }
+      {
+        key: "address",
+        label: "Bitcoin address",
+        default: "mzhTtsedWiarRgXRRv8KAe1tc83AzcyMjB"
+      },
+      { key: "fee_per_byte", label: "Fee per byte", default: "20" }
     ];
   } else {
     return [];
@@ -163,7 +168,19 @@ function SwapRow(swap: Swap) {
 
         if (params.length > 0) {
           setLedgerActionParamSpec(params);
-          setDialogState(DialogState.LedgerDialogParamsOpen);
+
+          if (params.every(param => !!param.default)) {
+            const queryObject = params.reduce<{
+              [key: string]: any;
+            }>((obj, item) => ((obj[item.key] = item.default), obj), {});
+
+            url = url.query(queryObject);
+
+            setAction({ ...action, url });
+            setDialogState(DialogState.LedgerDialogOpen);
+          } else {
+            setDialogState(DialogState.LedgerDialogParamsOpen);
+          }
         } else {
           setDialogState(DialogState.LedgerDialogOpen);
         }
@@ -200,13 +217,13 @@ function SwapRow(swap: Swap) {
           <DialogContent>
             {ledgerActionParamSpec.map(spec => (
               <TextField
-                key={spec.field_name}
-                label={spec.form_label}
+                key={spec.key}
+                label={spec.label}
                 required={true}
-                value={ledgerActionParams[spec.field_name] || ""}
+                value={ledgerActionParams[spec.key] || ""}
                 onChange={event =>
                   dispatchLedgerActionParams({
-                    name: spec.field_name,
+                    name: spec.key,
                     value: event.target.value
                   })
                 }
