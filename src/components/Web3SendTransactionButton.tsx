@@ -9,6 +9,7 @@ import { useWeb3 } from "./Web3Context";
 
 interface Props {
   transaction: Transaction;
+  actionReady: boolean;
 }
 
 enum TransactionState {
@@ -18,7 +19,7 @@ enum TransactionState {
   Error
 }
 
-function Web3SendTransactionButton({ transaction }: Props) {
+function Web3SendTransactionButton({ transaction, actionReady }: Props) {
   const web3 = useWeb3();
   const [state, setState] = useState(TransactionState.Initial);
 
@@ -43,7 +44,11 @@ function Web3SendTransactionButton({ transaction }: Props) {
   return (
     <NoWeb3Tooltip title={"Please enable Metamask first."}>
       {state === TransactionState.Initial && (
-        <Button disabled={!web3} color={"primary"} onClick={onClickHandler}>
+        <Button
+          disabled={!actionReady || !web3}
+          color={"primary"}
+          onClick={onClickHandler}
+        >
           Send transaction &nbsp;
           <MetamaskIcon fontSize={"small"} />
         </Button>

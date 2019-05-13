@@ -17,34 +17,6 @@ interface LedgerActionDialogBodyProps {
   action: LedgerAction;
 }
 
-interface UnavailableActionDialogProps {
-  expiry: number;
-  onClose: (event: React.MouseEvent) => void;
-}
-
-function UnavailableActionDialogBody({
-  expiry,
-  onClose
-}: UnavailableActionDialogProps) {
-  const tryAgainWhen = moment.unix(expiry).fromNow();
-
-  return (
-    <React.Fragment>
-      <DialogTitle>Unavailable action</DialogTitle>
-      <DialogContent>
-        <Typography paragraph={true}>
-          Please try again {tryAgainWhen}.
-        </Typography>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          Close
-        </Button>
-      </DialogActions>
-    </React.Fragment>
-  );
-}
-
 function LedgerActionDialogBody({
   onClose,
   action
@@ -52,11 +24,8 @@ function LedgerActionDialogBody({
   switch (action.type) {
     case "bitcoin-broadcast-signed-transaction": {
       const expiry = action.payload.min_median_block_time;
-      if (!!expiry && expiry > now()) {
-        return (
-          <UnavailableActionDialogBody expiry={expiry} onClose={onClose} />
-        );
-      }
+      const whenReadyMessage =
+        !expiry || expiry <= now() ? "now" : moment.unix(expiry).fromNow();
 
       return (
         <React.Fragment>
@@ -64,7 +33,7 @@ function LedgerActionDialogBody({
           <DialogContent>
             <Typography paragraph={true}>
               Please broadcast the following signed transaction on the{" "}
-              <b>{action.payload.network}</b> network:
+              <b>{action.payload.network}</b> network {whenReadyMessage}:
             </Typography>
             <Typography
               variant={"body1"}
@@ -132,6 +101,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Web3SendTransactionButton
+              actionReady={true}
               transaction={{
                 data: action.payload.data,
                 value: action.payload.amount,
@@ -147,11 +117,8 @@ function LedgerActionDialogBody({
     }
     case "ethereum-call-contract": {
       const expiry = action.payload.min_block_timestamp;
-      if (!!expiry && expiry > now()) {
-        return (
-          <UnavailableActionDialogBody expiry={expiry} onClose={onClose} />
-        );
-      }
+      const whenReadyMessage =
+        !expiry || expiry <= now() ? "now" : moment.unix(expiry).fromNow();
 
       return (
         <React.Fragment>
@@ -160,7 +127,7 @@ function LedgerActionDialogBody({
             <Typography paragraph={true}>
               Invoke the contract at <b>{action.payload.contract_address}</b> on
               the Ethereum <b>{action.payload.network}</b> network with this
-              data:
+              data {whenReadyMessage}:
             </Typography>
             <Typography
               variant={"body1"}
@@ -173,6 +140,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Web3SendTransactionButton
+              actionReady={!expiry || expiry <= now()}
               transaction={{
                 to: action.payload.contract_address,
                 data: action.payload.data,
