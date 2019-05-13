@@ -23,7 +23,6 @@ export type LedgerAction =
       payload: {
         contract_address: string;
         data: string;
-        amount: string;
         gas_limit: string;
         network: string;
         min_block_timestamp?: number;
