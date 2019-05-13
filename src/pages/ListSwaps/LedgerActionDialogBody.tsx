@@ -17,6 +17,34 @@ interface LedgerActionDialogBodyProps {
   action: LedgerAction;
 }
 
+interface UnavailableActionDialogProps {
+  expiry: number;
+  onClose: (event: React.MouseEvent) => void;
+}
+
+function UnavailableActionDialogBody({
+  expiry,
+  onClose
+}: UnavailableActionDialogProps) {
+  const tryAgainWhen = moment.unix(expiry).fromNow();
+
+  return (
+    <React.Fragment>
+      <DialogTitle>Unavailable action</DialogTitle>
+      <DialogContent>
+        <Typography paragraph={true}>
+          Please try again {tryAgainWhen}.
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} color="secondary">
+          Close
+        </Button>
+      </DialogActions>
+    </React.Fragment>
+  );
+}
+
 function LedgerActionDialogBody({
   onClose,
   action
@@ -25,22 +53,8 @@ function LedgerActionDialogBody({
     case "bitcoin-broadcast-signed-transaction": {
       const expiry = action.payload.min_median_block_time;
       if (!!expiry && expiry > now()) {
-        const tryAgainWhen = moment.unix(expiry).fromNow();
-
         return (
-          <React.Fragment>
-            <DialogTitle>Unavailable action</DialogTitle>
-            <DialogContent>
-              <Typography paragraph={true}>
-                Please try again {tryAgainWhen}.
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={onClose} color="secondary">
-                Close
-              </Button>
-            </DialogActions>
-          </React.Fragment>
+          <UnavailableActionDialogBody expiry={expiry} onClose={onClose} />
         );
       }
 
@@ -134,22 +148,8 @@ function LedgerActionDialogBody({
     case "ethereum-call-contract": {
       const expiry = action.payload.min_block_timestamp;
       if (!!expiry && expiry > now()) {
-        const tryAgainWhen = moment.unix(expiry).fromNow();
-
         return (
-          <React.Fragment>
-            <DialogTitle>Unavailable action</DialogTitle>
-            <DialogContent>
-              <Typography paragraph={true}>
-                Please try again {tryAgainWhen}.
-              </Typography>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={onClose} color="secondary">
-                Close
-              </Button>
-            </DialogActions>
-          </React.Fragment>
+          <UnavailableActionDialogBody expiry={expiry} onClose={onClose} />
         );
       }
 
