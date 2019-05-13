@@ -43,14 +43,13 @@ function AssetCell({ asset }: AssetCellProps) {
 enum DialogState {
   Closed,
   CommunicationDialogOpen,
-  LedgerDialogParamsOpen,
+  LedgerParamsDialogOpen,
   LedgerDialogOpen
 }
 
 interface LedgerActionSpec {
   key: string;
   label: string;
-  default?: string;
 }
 
 function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
@@ -67,10 +66,9 @@ function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
     return [
       {
         key: "address",
-        label: "Bitcoin address",
-        default: "mzhTtsedWiarRgXRRv8KAe1tc83AzcyMjB"
+        label: "Bitcoin address"
       },
-      { key: "fee_per_byte", label: "Fee per byte", default: "20" }
+      { key: "fee_per_byte", label: "Fee per byte" }
     ];
   } else {
     return [];
@@ -168,19 +166,7 @@ function SwapRow(swap: Swap) {
 
         if (params.length > 0) {
           setLedgerActionParamSpec(params);
-
-          if (params.every(param => !!param.default)) {
-            const queryObject = params.reduce<{
-              [key: string]: any;
-            }>((obj, item) => ((obj[item.key] = item.default), obj), {});
-
-            url = url.query(queryObject);
-
-            setAction({ ...action, url });
-            setDialogState(DialogState.LedgerDialogOpen);
-          } else {
-            setDialogState(DialogState.LedgerDialogParamsOpen);
-          }
+          setDialogState(DialogState.LedgerParamsDialogOpen);
         } else {
           setDialogState(DialogState.LedgerDialogOpen);
         }
@@ -211,7 +197,7 @@ function SwapRow(swap: Swap) {
           onClose={() => setDialogState(DialogState.Closed)}
         />
       )}
-      {dialogState === DialogState.LedgerDialogParamsOpen && (
+      {dialogState === DialogState.LedgerParamsDialogOpen && (
         <Dialog open={true}>
           <DialogTitle>Action parameters</DialogTitle>
           <DialogContent>
