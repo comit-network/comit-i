@@ -5,11 +5,9 @@ import {
   DialogTitle,
   Typography
 } from "@material-ui/core";
-import moment from "moment";
 import React from "react";
 import { LedgerAction } from "../../api/getAction";
 import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
-import { now } from "../../time";
 import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
@@ -102,7 +100,6 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Web3SendTransactionButton
-              actionReady={true}
               transaction={{
                 data: action.payload.data,
                 value: action.payload.amount,
@@ -118,8 +115,6 @@ function LedgerActionDialogBody({
     }
     case "ethereum-call-contract": {
       const expiry = action.payload.min_block_timestamp;
-      const whenReadyMessage =
-        !expiry || expiry <= now() ? "now" : moment.unix(expiry).fromNow();
 
       return (
         <React.Fragment>
@@ -128,7 +123,7 @@ function LedgerActionDialogBody({
             <Typography paragraph={true}>
               Invoke the contract at <b>{action.payload.contract_address}</b> on
               the Ethereum <b>{action.payload.network}</b> network with this
-              data {whenReadyMessage}:
+              data:
             </Typography>
             <Typography
               variant={"body1"}
@@ -141,7 +136,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Web3SendTransactionButton
-              actionReady={!expiry || expiry <= now()}
+              minTimestamp={expiry}
               transaction={{
                 to: action.payload.contract_address,
                 data: action.payload.data,
