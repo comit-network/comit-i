@@ -133,20 +133,17 @@ function SwapRow(swap: Swap) {
       );
     });
 
-  // TODO: Default values could come from config file or MetaMask
   const acceptFields = [];
   if (!alphaIsTransitive) {
     acceptFields.push({
       key: "alpha_ledger_redeem_identity",
-      label: "Alpha Redeem Identity",
-      default: "0x493A5A0EaFDEaE28f430F74Ac5031b3eE37B6a6D"
+      label: "Alpha Redeem Identity"
     });
   }
   if (!betaIsTransitive) {
     acceptFields.push({
       key: "beta_ledger_refund_identity",
-      label: "Beta Refund Identity",
-      default: "0x493A5A0EaFDEaE28f430F74Ac5031b3eE37B6a6D"
+      label: "Beta Refund Identity"
     });
   }
 

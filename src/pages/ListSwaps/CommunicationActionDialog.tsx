@@ -22,7 +22,6 @@ interface AcceptActionField {
 interface AcceptField {
   key: string;
   label: string;
-  default: string;
 }
 
 function acceptReducer(currentState: object, field: AcceptActionField) {
@@ -40,10 +39,7 @@ function CommunicationActionDialog({
   acceptFields,
   onClose
 }: CommunicationActionDialogProps) {
-  const initialAcceptRequest = acceptFields.reduce<{
-    [key: string]: any;
-  }>((obj, item) => ((obj[item.key] = item.default), obj), {});
-
+  const initialAcceptRequest = {};
   const [acceptBody, dispatchAccept] = useReducer(
     acceptReducer,
     initialAcceptRequest
