@@ -6,6 +6,9 @@
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
     "@material-ui/styles": "^3.0.0-alpha.10",
+    "@types/immutability-helper": "^2.6.3",
+    "@types/moment": "^2.13.0",
+    "@types/uuidjs": "^3.6.0",
     "axios": "^0.18.0",
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
@@ -22,6 +25,7 @@
     "react-scripts": "2.1.5",
     "satoshi-bitcoin-ts": "^0.2.4",
     "urijs": "^1.19.1",
+    "uuidjs": "^4.2.1",
     "web3": "^1.0.0-beta.48"
   },
   "devDependencies": {

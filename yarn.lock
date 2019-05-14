@@ -1759,6 +1759,13 @@
   dependencies:
     "@types/jquery" "*"
 
+"@types/uuidjs@^3.6.0":
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/@types/uuidjs/-/uuidjs-3.6.0.tgz#da7938d6dda1673669beebb6cf89535724714a08"
+  integrity sha512-kt8Y6a9olnHwOwxCvadgF6PD9+TM10ocoXLkuwBk90RsEUKMKfWqoYFYcn0WlxxOEsT6omqNffESVJYtkPkUGQ==
+  dependencies:
+    uuidjs "*"
+
 "@types/vfile-message@*":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/vfile-message/-/vfile-message-1.0.1.tgz#e1e9895cc6b36c462d4244e64e6d0b6eaf65355a"
@@ -13900,6 +13907,11 @@ uuid@3.3.2, uuid@^3.0.1, uuid@^3.1.0, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
+
+uuidjs@*, uuidjs@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/uuidjs/-/uuidjs-4.2.1.tgz#078e259320cc96a1c6bcd5fa9053f1656ef3c6e5"
+  integrity sha512-LNl5tqW081cMcn3+e1BqPDZIDNOooxrPHs7JN1j8pK7wFx0H/ziVUGVlALn+pNJ2jwT9RBHHQsKEnvgkOuYSDw==
 
 validate-npm-package-license@^3.0.1:
   version "3.0.4"

@@ -24,6 +24,7 @@ import ListSwaps from "./pages/ListSwaps/ListSwaps";
 import MakeLink from "./pages/MakeLink/MakeLink";
 import SendSwap from "./pages/SendSwapRequest/SendSwapRequest";
 import Settings from "./pages/Settings/Settings";
+import SwapPage from "./pages/SwapPage/SwapPage";
 
 const drawerWidth = 240;
 
@@ -111,6 +112,7 @@ function App({ classes, history }: AppProps) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Route exact={true} path="/" component={ListSwaps} />
+        <Route path="/swaps" component={SwapPage} />
         <Route path="/make_link" component={MakeLink} />
         <Route path="/send_swap" component={SendSwap} />
         <Route path="/from_link" component={LinkLandingPage} />
