@@ -112,7 +112,7 @@ function App({ classes, history }: AppProps) {
       <main className={classes.content}>
         <div className={classes.toolbar} />
         <Route exact={true} path="/" component={ListSwaps} />
-        <Route path="/swaps" component={SwapPage} />
+        <Route path="/swaps/:protocol/:swapId" component={SwapPage} />
         <Route path="/make_link" component={MakeLink} />
         <Route path="/send_swap" component={SendSwap} />
         <Route path="/from_link" component={LinkLandingPage} />

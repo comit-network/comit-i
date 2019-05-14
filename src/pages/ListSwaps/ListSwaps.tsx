@@ -59,7 +59,8 @@ function SwapList({ swaps }: SwapListProps) {
         </TableRow>
       </TableHead>
       <TableBody>
-        {hasSwaps && swaps.map(SwapRow)}
+        {hasSwaps &&
+          swaps.map((swap, index) => <SwapRow key={index} swap={swap} />)}
         {!hasSwaps && <EmptySwapListTableRow />}
       </TableBody>
     </Table>

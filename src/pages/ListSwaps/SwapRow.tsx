@@ -7,8 +7,9 @@ import {
   TableCell,
   TableRow
 } from "@material-ui/core";
-import React from "react";
 import { useReducer, useState } from "react";
+import React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
@@ -98,7 +99,13 @@ function actionLedger(swap: Swap, action: string) {
   }
 }
 
-function SwapRow(swap: Swap) {
+interface SwapRowProps extends RouteComponentProps {
+  swap: Swap;
+}
+
+function SwapRow({ swap, history }: SwapRowProps) {
+  const swapLink = swap._links.self.href;
+
   const [dialogState, setDialogState] = useState(DialogState.Closed);
   const [action, setAction] = useState({
     name: "",
@@ -124,9 +131,10 @@ function SwapRow(swap: Swap) {
           variant="outlined"
           color="primary"
           key={actionName}
-          onClick={() =>
-            handleClickAction(actionName, apiEndpoint().path(actionUrl.href))
-          }
+          onClick={event => {
+            event.stopPropagation();
+            handleClickAction(actionName, apiEndpoint().path(actionUrl.href));
+          }}
         >
           {actionName}
         </Button>
@@ -173,7 +181,11 @@ function SwapRow(swap: Swap) {
 
   return (
     <React.Fragment key={swap._links.self.href}>
-      <TableRow data-cy="swap-row">
+      <TableRow
+        hover={true}
+        onClick={() => history.push(swapLink)}
+        data-cy="swap-row"
+      >
         <TableCell>{swap.parameters.alpha_ledger.name}</TableCell>
         <TableCell>
           <AssetCell asset={swap.parameters.alpha_asset} />
@@ -244,4 +256,4 @@ function SwapRow(swap: Swap) {
   );
 }
 
-export default SwapRow;
+export default withRouter(SwapRow);
