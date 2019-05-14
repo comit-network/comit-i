@@ -24,8 +24,9 @@ function LedgerActionDialogBody({
   switch (action.type) {
     case "bitcoin-broadcast-signed-transaction": {
       const expiry = action.payload.min_median_block_time;
-      const whenReadyMessage =
-        !expiry || expiry <= now() ? "now" : moment.unix(expiry).fromNow();
+      const whenReadyMessage = !expiry
+        ? "now"
+        : "when the latest block's mediantime is past " + expiry;
 
       return (
         <React.Fragment>
