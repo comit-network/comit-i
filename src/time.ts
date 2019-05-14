@@ -1,5 +1,7 @@
+import moment from "moment";
+
 export function now() {
-  return Math.floor((Date.now ? Date.now() : new Date().getTime()) / 1000);
+  return moment().unix();
 }
 
 export function relativeMinutesToTimestamp(minutes: number) {
