@@ -2,12 +2,11 @@ import { Button, CircularProgress, Tooltip } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import ErrorIcon from "@material-ui/icons/Error";
 import TimerIcon from "@material-ui/icons/Timer";
-import moment from "moment";
 import React, { useState } from "react";
 import { Transaction } from "web3-core/types";
-import { now } from "../time";
 import MetamaskIcon from "./MetamaskIcon";
 import NoWeb3Tooltip from "./NoWeb3Tooltip";
+import TooEarlyTooltip from "./TooEarlyTooltip";
 import { useWeb3 } from "./Web3Context";
 
 interface Props {
@@ -26,15 +25,12 @@ enum TransactionState {
 function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
   const web3 = useWeb3();
   const [state, setState] = useState(TransactionState.Initial);
-
-  const whenReadyMessage =
-    !minTimestamp || minTimestamp <= now()
-      ? "now"
-      : moment.unix(minTimestamp).fromNow();
+  const [networkTime, setNetworkTime] = useState(0);
 
   const onClickHandler = web3
     ? async () => {
         const block = await web3.eth.getBlock("latest");
+        setNetworkTime(block.timestamp);
         const actionReady = !minTimestamp || block.timestamp >= minTimestamp;
 
         if (actionReady) {
@@ -88,10 +84,12 @@ function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
         </Button>
       )}
       {state === TransactionState.TooEarly && (
-        <Button color={"primary"} onClick={onClickHandler}>
-          <TimerIcon color={"error"} fontSize={"small"} />
-          &nbsp; Too early. Try again {whenReadyMessage}
-        </Button>
+        <TooEarlyTooltip whenValid={minTimestamp || 0} networkNow={networkTime}>
+          <Button color={"primary"} onClick={onClickHandler}>
+            <TimerIcon color={"error"} fontSize={"small"} />
+            &nbsp; Too early. Please try again later
+          </Button>
+        </TooEarlyTooltip>
       )}
     </NoWeb3Tooltip>
   );
