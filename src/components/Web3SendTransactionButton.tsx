@@ -34,15 +34,8 @@ function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
 
   const onClickHandler = web3
     ? async () => {
-        const actionReady =
-          !minTimestamp ||
-          (!!web3 &&
-            (await web3.eth.getBlockNumber().then(
-              async n =>
-                await web3.eth.getBlock(n).then(block => {
-                  return block.timestamp >= minTimestamp;
-                })
-            )));
+        const block = await web3.eth.getBlock("latest");
+        const actionReady = !minTimestamp || block.timestamp >= minTimestamp;
 
         if (actionReady) {
           setState(TransactionState.Signing);
