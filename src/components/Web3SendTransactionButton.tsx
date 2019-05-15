@@ -20,7 +20,7 @@ enum TransactionState {
   Signing,
   Sent,
   Error,
-  Unavailable
+  TooEarly
 }
 
 function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
@@ -59,7 +59,7 @@ function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
             setState(TransactionState.Error);
           }
         } else {
-          setState(TransactionState.Unavailable);
+          setState(TransactionState.TooEarly);
         }
       }
     : () => undefined;
@@ -94,7 +94,7 @@ function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
           &nbsp; Failed. Try again?
         </Button>
       )}
-      {state === TransactionState.Unavailable && (
+      {state === TransactionState.TooEarly && (
         <Button color={"primary"} onClick={onClickHandler}>
           <TimerIcon color={"error"} fontSize={"small"} />
           &nbsp; Too early. Try again {whenReadyMessage}
