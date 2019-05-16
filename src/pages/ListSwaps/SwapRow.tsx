@@ -88,14 +88,14 @@ function ledgerParamsReducer(currentState: object, field: LedgerParamsField) {
 function actionLedger(swap: Swap, action: string) {
   switch (action) {
     case "redeem":
-      return swap.role === "Alice"
-        ? swap.parameters.beta_ledger
-        : swap.parameters.alpha_ledger;
+      return swap.properties.role === "Alice"
+        ? swap.properties.parameters.beta_ledger
+        : swap.properties.parameters.alpha_ledger;
     case "refund":
     case "fund":
-      return swap.role === "Alice"
-        ? swap.parameters.alpha_ledger
-        : swap.parameters.beta_ledger;
+      return swap.properties.role === "Alice"
+        ? swap.properties.parameters.alpha_ledger
+        : swap.properties.parameters.beta_ledger;
   }
 }
 
@@ -104,7 +104,7 @@ interface SwapRowProps extends RouteComponentProps {
 }
 
 function SwapRow({ swap, history }: SwapRowProps) {
-  const swapLink = swap._links.self.href;
+  const swapLink = swap.links.filter(link => link.rel[0] === "self")[0].href;
 
   const [dialogState, setDialogState] = useState(DialogState.Closed);
   const [action, setAction] = useState({
@@ -120,12 +120,19 @@ function SwapRow({ swap, history }: SwapRowProps) {
     initialLedgerActionParams
   );
 
-  const alphaIsTransitive = swap.parameters.alpha_ledger.name === "bitcoin";
-  const betaIsTransitive = swap.parameters.beta_ledger.name === "bitcoin";
+  const alphaIsTransitive =
+    swap.properties.parameters.alpha_ledger.name === "bitcoin";
+  const betaIsTransitive =
+    swap.properties.parameters.beta_ledger.name === "bitcoin";
 
-  const actionButtons = Object.entries(swap._links)
-    .filter(([key, _]) => key !== "self")
-    .map(([actionName, actionUrl]) => {
+  const actionButtons = swap.links
+    .filter(
+      action =>
+        !(action.rel[0] === "self" || action.rel[0] === "human-protocol-spec")
+    )
+    .map(action => {
+      const actionName = action.rel[0];
+
       return (
         <Button
           variant="outlined"
@@ -133,7 +140,7 @@ function SwapRow({ swap, history }: SwapRowProps) {
           key={actionName}
           onClick={event => {
             event.stopPropagation();
-            handleClickAction(actionName, apiEndpoint().path(actionUrl.href));
+            handleClickAction(actionName, apiEndpoint().path(action.href));
           }}
         >
           {actionName}
@@ -180,23 +187,24 @@ function SwapRow({ swap, history }: SwapRowProps) {
   };
 
   return (
-    <React.Fragment key={swap._links.self.href}>
+    <React.Fragment key={swap.links[0].href}>
       <TableRow
         hover={true}
         onClick={() => history.push(swapLink)}
         data-cy="swap-row"
       >
-        <TableCell>{swap.parameters.alpha_ledger.name}</TableCell>
+        <TableCell>{swap.properties.parameters.alpha_ledger.name}</TableCell>
+
         <TableCell>
-          <AssetCell asset={swap.parameters.alpha_asset} />
+          <AssetCell asset={swap.properties.parameters.alpha_asset} />
         </TableCell>
-        <TableCell>{swap.parameters.beta_ledger.name}</TableCell>
+        <TableCell>{swap.properties.parameters.beta_ledger.name}</TableCell>
         <TableCell>
-          <AssetCell asset={swap.parameters.beta_asset} />
+          <AssetCell asset={swap.properties.parameters.beta_asset} />
         </TableCell>
-        <TableCell>{swap.protocol}</TableCell>
-        <TableCell>{swap.status}</TableCell>
-        <TableCell>{swap.role}</TableCell>
+        <TableCell>{swap.properties.protocol}</TableCell>
+        <TableCell>{swap.properties.status}</TableCell>
+        <TableCell>{swap.properties.role}</TableCell>
         <TableCell>{actionButtons}</TableCell>
       </TableRow>
       {dialogState === DialogState.CommunicationDialogOpen && (

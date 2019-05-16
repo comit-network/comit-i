@@ -1,12 +1,6 @@
 import axios from "axios";
 import apiEndpoint from "./apiEndpoint";
 
-export interface Links {
-  [rel: string]: {
-    href: string;
-  };
-}
-
 export interface Asset {
   name: string;
   quantity: string;
@@ -24,18 +18,41 @@ export interface Parameters {
   beta_ledger: Ledger;
 }
 
-export interface Swap {
-  _links: Links;
+export enum Protocol {
+  Rfc003 = "rfc003"
+}
+
+export enum Status {
+  InProgress = "IN_PROGRESS",
+  Sent = "SWAPPED",
+  NotSwapped = "NOT_SWAPPED",
+  InternalFailure = "INTERNAL_FAILURE"
+}
+
+export enum Role {
+  Alice = "Alice",
+  Bob = "Bob"
+}
+
+export interface Properties {
   parameters: Parameters;
-  protocol: string;
-  status: string;
-  role: string;
+  protocol: Protocol;
+  status: Status;
+  role: Role;
+}
+
+export interface Link {
+  rel: string[];
+  href: string;
+}
+
+export interface Swap {
+  properties: Properties;
+  links: Link[];
 }
 
 export interface GetSwapsResponse {
-  _embedded: {
-    swaps: Swap[];
-  };
+  entities: Swap[];
 }
 
 export default function getSwaps() {
@@ -49,5 +66,5 @@ export default function getSwaps() {
     })
     .then(response => response.data)
     .then(body => body as GetSwapsResponse)
-    .then(body => body._embedded.swaps);
+    .then(body => body.entities);
 }
