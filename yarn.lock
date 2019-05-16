@@ -1583,6 +1583,13 @@
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.2.tgz#0e670ea254d559241b6eeb3894f8754991e73220"
   integrity sha512-ui3WwXmjTaY73fOQ3/m3nnajU/Orhi6cEu5rzX+BrAAJxa3eITXZ5ch9suPqtM03OWhAHhPSyBGCN4UKoxO20Q==
 
+"@types/immutability-helper@^2.6.3":
+  version "2.6.3"
+  resolved "https://registry.yarnpkg.com/@types/immutability-helper/-/immutability-helper-2.6.3.tgz#9c864d84dabf45176904ececce439257cefdbc3c"
+  integrity sha512-WKddkNbFonQIwbplhRQuBFBVgMM7yqpfaYTlxeN6oubEU+q0TCQJx7LZvKaFXHQzP7KnPpzhCVjfYGLfBB2nzQ==
+  dependencies:
+    immutability-helper "*"
+
 "@types/jest-diff@*":
   version "20.0.1"
   resolved "https://registry.yarnpkg.com/@types/jest-diff/-/jest-diff-20.0.1.tgz#35cc15b9c4f30a18ef21852e255fdb02f6d59b89"
@@ -1629,6 +1636,13 @@
   version "2.2.44"
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-2.2.44.tgz#1d4a798e53f35212fd5ad4d04050620171cd5b5e"
   integrity sha512-k2tWTQU8G4+iSMvqKi0Q9IIsWAp/n8xzdZS4Q4YVIltApoMA00wFBFdlJnmoaK1/z7B0Cy0yPe6GgXteSmdUNw==
+
+"@types/moment@^2.13.0":
+  version "2.13.0"
+  resolved "https://registry.yarnpkg.com/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
+  integrity sha1-YE69GJvDvDShVIaJQE5hoqSqyJY=
+  dependencies:
+    moment "*"
 
 "@types/node@*":
   version "11.11.3"
@@ -7072,6 +7086,13 @@ immer@^1.12.0:
   resolved "https://registry.yarnpkg.com/immer/-/immer-1.12.1.tgz#40c6e5b292c00560836c2993bda3a24379d466f5"
   integrity sha512-3fmKM6ovaqDt0CdC9daXpNi5x/YCYS3i4cwLdTVkhJdk5jrDXoPs7lCm3IqM3yhfSnz4tjjxbRG2CziQ7m8ztg==
 
+immutability-helper@*, immutability-helper@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-3.0.0.tgz#a74e989c60e2ddab85a6abeed8078981b2d13271"
+  integrity sha512-Ww7oOSnBIRb9ihT9UH9eHz0uhie0rw9bpqGYCb7qD5VpsdOLv+fx/KCRgHqvX/13LgSM5sDfsLpeSIM6kodUxQ==
+  dependencies:
+    invariant "^2.2.4"
+
 import-cwd@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/import-cwd/-/import-cwd-2.1.0.tgz#aa6cf36e722761285cb371ec6519f53e2435b0a9"
@@ -9293,6 +9314,11 @@ mock-fs@^4.1.0:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/mock-fs/-/mock-fs-4.8.0.tgz#eb0784ceba4b34c91a924a5112eeb36e1b5a9e29"
   integrity sha512-Gwj4KnJOW15YeTJKO5frFd/WDO5Mc0zxXqL9oHx3+e9rBqW8EVARqQHSaIXznUdljrD6pvbNGW2ZGXKPEfYJfw==
+
+moment@*, moment@^2.24.0:
+  version "2.24.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.24.0.tgz#0d055d53f5052aa653c9f6eb68bb5d12bf5c2b5b"
+  integrity sha512-bV7f+6l2QigeBBZSM/6yTNq4P2fNpSWj/0e7jQcy87A8e7o2nAfP/34/2ky5Vw4B9S446EtIhodAzkFCcR4dQg==
 
 moment@2.22.2:
   version "2.22.2"

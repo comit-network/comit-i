@@ -1,41 +1,54 @@
 import { Button, CircularProgress, Tooltip } from "@material-ui/core";
 import DoneIcon from "@material-ui/icons/Done";
 import ErrorIcon from "@material-ui/icons/Error";
+import TimerIcon from "@material-ui/icons/Timer";
 import React, { useState } from "react";
 import { Transaction } from "web3-core/types";
 import MetamaskIcon from "./MetamaskIcon";
 import NoWeb3Tooltip from "./NoWeb3Tooltip";
+import TooEarlyTooltip from "./TooEarlyTooltip";
 import { useWeb3 } from "./Web3Context";
 
 interface Props {
   transaction: Transaction;
+  minTimestamp?: number;
 }
 
 enum TransactionState {
   Initial,
   Signing,
   Sent,
-  Error
+  Error,
+  TooEarly
 }
 
-function Web3SendTransactionButton({ transaction }: Props) {
+function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
   const web3 = useWeb3();
   const [state, setState] = useState(TransactionState.Initial);
+  const [networkTime, setNetworkTime] = useState(0);
 
   const onClickHandler = web3
     ? async () => {
-        setState(TransactionState.Signing);
-        try {
-          // Have to fetch default account ourselves until this works:
-          // https://github.com/MetaMask/metamask-extension/issues/6339
-          const accounts = await web3.eth.getAccounts();
-          await web3.eth.sendTransaction({
-            ...transaction,
-            from: accounts[0]
-          });
-          setState(TransactionState.Sent);
-        } catch (e) {
-          setState(TransactionState.Error);
+        const block = await web3.eth.getBlock("latest");
+        setNetworkTime(block.timestamp);
+        const actionReady = !minTimestamp || block.timestamp >= minTimestamp;
+
+        if (actionReady) {
+          setState(TransactionState.Signing);
+          try {
+            // Have to fetch default account ourselves until this works:
+            // https://github.com/MetaMask/metamask-extension/issues/6339
+            const accounts = await web3.eth.getAccounts();
+            await web3.eth.sendTransaction({
+              ...transaction,
+              from: accounts[0]
+            });
+            setState(TransactionState.Sent);
+          } catch (e) {
+            setState(TransactionState.Error);
+          }
+        } else {
+          setState(TransactionState.TooEarly);
         }
       }
     : () => undefined;
@@ -69,6 +82,14 @@ function Web3SendTransactionButton({ transaction }: Props) {
           <ErrorIcon color={"error"} fontSize={"small"} />
           &nbsp; Failed. Try again?
         </Button>
+      )}
+      {state === TransactionState.TooEarly && (
+        <TooEarlyTooltip whenValid={minTimestamp || 0} networkNow={networkTime}>
+          <Button color={"primary"} onClick={onClickHandler}>
+            <TimerIcon color={"error"} fontSize={"small"} />
+            &nbsp; Too early. Please try again later
+          </Button>
+        </TooEarlyTooltip>
       )}
     </NoWeb3Tooltip>
   );

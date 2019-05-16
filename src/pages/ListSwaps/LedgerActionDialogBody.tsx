@@ -21,13 +21,18 @@ function LedgerActionDialogBody({
 }: LedgerActionDialogBodyProps) {
   switch (action.type) {
     case "bitcoin-broadcast-signed-transaction": {
+      const expiry = action.payload.min_median_block_time;
+      const whenReadyMessage = !expiry
+        ? "now"
+        : "when the latest block's mediantime is past " + expiry;
+
       return (
         <React.Fragment>
           <DialogTitle>Broadcast Bitcoin transaction</DialogTitle>
           <DialogContent>
             <Typography paragraph={true}>
               Please broadcast the following signed transaction on the{" "}
-              <b>{action.payload.network}</b> network:
+              <b>{action.payload.network}</b> network {whenReadyMessage}:
             </Typography>
             <Typography
               variant={"body1"}
@@ -108,7 +113,9 @@ function LedgerActionDialogBody({
         </React.Fragment>
       );
     }
-    case "ethereum-invoke-contract": {
+    case "ethereum-call-contract": {
+      const expiry = action.payload.min_block_timestamp;
+
       return (
         <React.Fragment>
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
@@ -129,6 +136,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Web3SendTransactionButton
+              minTimestamp={expiry}
               transaction={{
                 to: action.payload.contract_address,
                 data: action.payload.data,

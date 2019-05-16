@@ -7,7 +7,7 @@ export type LedgerAction =
     }
   | {
       type: "bitcoin-broadcast-signed-transaction";
-      payload: { hex: string; network: string };
+      payload: { hex: string; network: string; min_median_block_time?: number };
     }
   | {
       type: "ethereum-deploy-contract";
@@ -19,13 +19,13 @@ export type LedgerAction =
       };
     }
   | {
-      type: "ethereum-invoke-contract";
+      type: "ethereum-call-contract";
       payload: {
         contract_address: string;
         data: string;
-        amount: string;
         gas_limit: string;
         network: string;
+        min_block_timestamp?: number;
       };
     };
 

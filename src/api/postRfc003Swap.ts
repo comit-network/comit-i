@@ -1,12 +1,9 @@
 import axios from "axios";
+import update from "immutability-helper";
 import { Rfc003Params } from "../forms/Rfc003ParamsForm";
 import { Swap } from "../forms/SwapForm";
+import { relativeMinutesToTimestamp } from "../time";
 import apiEndpoint from "./apiEndpoint";
-
-function relativeMinutesToTimestamp(minutes: number) {
-  const now = Math.floor((Date.now ? Date.now() : new Date().getTime()) / 1000);
-  return now + minutes * 60;
-}
 
 export default function postRfc003Swap(
   swap: Swap,
@@ -17,14 +14,16 @@ export default function postRfc003Swap(
     .path("swaps/rfc003")
     .toString();
 
-  params.alpha_expiry = relativeMinutesToTimestamp(params.alpha_expiry);
-  params.beta_expiry = relativeMinutesToTimestamp(params.beta_expiry);
+  const adjustedParams = update(params, {
+    alpha_expiry: { $apply: relativeMinutesToTimestamp },
+    beta_expiry: { $apply: relativeMinutesToTimestamp }
+  });
 
   return axios.post(
     uri,
     {
       ...swap,
-      ...params,
+      ...adjustedParams,
       peer
     },
     {

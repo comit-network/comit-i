@@ -43,13 +43,13 @@ function AssetCell({ asset }: AssetCellProps) {
 enum DialogState {
   Closed,
   CommunicationDialogOpen,
-  LedgerDialogParamsOpen,
+  LedgerParamsDialogOpen,
   LedgerDialogOpen
 }
 
 interface LedgerActionSpec {
-  field_name: string;
-  form_label: string;
+  key: string;
+  label: string;
 }
 
 function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
@@ -64,8 +64,11 @@ function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
     (actionName === "redeem" || actionName === "refund")
   ) {
     return [
-      { field_name: "address", form_label: "Bitcoin address" },
-      { field_name: "fee_per_byte", form_label: "Fee per byte" }
+      {
+        key: "address",
+        label: "Bitcoin address"
+      },
+      { key: "fee_per_byte", label: "Fee per byte" }
     ];
   } else {
     return [];
@@ -132,10 +135,16 @@ function SwapRow(swap: Swap) {
 
   const acceptFields = [];
   if (!alphaIsTransitive) {
-    acceptFields.push("alpha_ledger_redeem_identity");
+    acceptFields.push({
+      key: "alpha_ledger_redeem_identity",
+      label: "Alpha Redeem Identity"
+    });
   }
   if (!betaIsTransitive) {
-    acceptFields.push("beta_ledger_refund_identity");
+    acceptFields.push({
+      key: "beta_ledger_refund_identity",
+      label: "Beta Refund Identity"
+    });
   }
 
   const handleClickAction = (name: string, url: uri.URI) => {
@@ -154,7 +163,7 @@ function SwapRow(swap: Swap) {
 
         if (params.length > 0) {
           setLedgerActionParamSpec(params);
-          setDialogState(DialogState.LedgerDialogParamsOpen);
+          setDialogState(DialogState.LedgerParamsDialogOpen);
         } else {
           setDialogState(DialogState.LedgerDialogOpen);
         }
@@ -185,19 +194,19 @@ function SwapRow(swap: Swap) {
           onClose={() => setDialogState(DialogState.Closed)}
         />
       )}
-      {dialogState === DialogState.LedgerDialogParamsOpen && (
+      {dialogState === DialogState.LedgerParamsDialogOpen && (
         <Dialog open={true}>
           <DialogTitle>Action parameters</DialogTitle>
           <DialogContent>
             {ledgerActionParamSpec.map(spec => (
               <TextField
-                key={spec.field_name}
-                label={spec.form_label}
+                key={spec.key}
+                label={spec.label}
                 required={true}
-                value={ledgerActionParams[spec.field_name] || ""}
+                value={ledgerActionParams[spec.key] || ""}
                 onChange={event =>
                   dispatchLedgerActionParams({
-                    name: spec.field_name,
+                    name: spec.key,
                     value: event.target.value
                   })
                 }
