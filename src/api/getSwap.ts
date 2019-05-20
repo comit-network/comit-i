@@ -44,11 +44,11 @@ export enum HtlcState {
 
 export interface LedgerState {
   status: HtlcState;
-  htlcLocation: any;
-  deployTx: string;
-  fundTx: string;
-  redeemTx: string;
-  refundTx: string;
+  htlc_location: any;
+  deploy_tx: string;
+  fund_tx: string;
+  redeem_tx: string;
+  refund_tx: string;
 }
 
 export enum CommunicationStatus {
@@ -58,20 +58,20 @@ export enum CommunicationStatus {
 }
 
 export interface CommunicationState {
-  alphaExpiry: number;
-  alphaRedeemIdentity: string | null;
-  alphaRefundIdentity: string;
-  betaExpiry: number;
-  betaRedeemIdentity: string;
-  betaRefundIdentity: string | null;
-  secretHash: string;
+  alpha_expiry: number;
+  alpha_ledger_redeem_identity: string | null;
+  alpha_ledger_refund_identity: string;
+  beta_expiry: number;
+  beta_ledger_redeem_identity: string;
+  beta_ledger_refund_identity: string | null;
+  secret_hash: string;
   status: CommunicationStatus;
 }
 
 export interface State {
-  alphaLedgerState: LedgerState;
-  betaLedgerState: LedgerState;
-  communicationState: CommunicationState;
+  alpha_ledger_state: LedgerState;
+  beta_ledger_state: LedgerState;
+  communication: CommunicationState;
 }
 
 export interface Properties {

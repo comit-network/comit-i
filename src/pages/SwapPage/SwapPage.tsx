@@ -2,6 +2,8 @@ import React from "react";
 import { useAsync } from "react-async";
 import { RouteComponentProps } from "react-router-dom";
 import getSwap from "../../api/getSwap";
+import CenteredProgress from "../../components/CenteredProgress";
+import Swap from "./Swap";
 
 const getSwapFn = async ({ protocol, swapId }: any) => {
   return getSwap(protocol, swapId);
@@ -18,13 +20,21 @@ function SwapPage({ match }: SwapPageProps) {
   const protocol = match.params.protocol;
   const swapId = match.params.swapId;
 
-  const { data } = useAsync({ promiseFn: getSwapFn, protocol, swapId });
+  const { data, /* error, */ isLoading } = useAsync({
+    promiseFn: getSwapFn,
+    protocol,
+    swapId
+  });
 
-  return (
-    <React.Fragment>
-      <div>Look at that swap! {JSON.stringify(data)}</div>{" "}
-    </React.Fragment>
-  );
+  if (isLoading) {
+    return <CenteredProgress title="Fetching swap..." />;
+  } else if (data) {
+    // console.log(JSON.stringify(data, null, 2));
+    return <Swap swap={data} />;
+  } else {
+    // console.log(error);
+    return <div>404 Swap not found</div>;
+  }
 }
 
 export default SwapPage;

@@ -19,7 +19,7 @@ function FetchSwaps() {
   });
 
   if (isLoading) {
-    return <CenteredProgress />;
+    return <CenteredProgress title="Fetching swaps..." />;
   } else if (error) {
     return (
       <React.Fragment>
