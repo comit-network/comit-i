@@ -1,62 +1,102 @@
 {
-  "_embedded": {
-    "swaps": [
-      {
-        "_links": {
-          "self": {
-            "href": "/swaps/rfc003/ab02b94f-b66c-48a3-8ed3-1e300391170e"
-          }
-        },
+  "class": [],
+  "properties": null,
+  "entities": [
+    {
+      "class": [],
+      "properties": {
         "parameters": {
           "alpha_asset": {
-            "name": "Bitcoin",
+            "name": "bitcoin",
             "quantity": "100000000"
           },
           "alpha_ledger": {
-            "name": "Bitcoin",
+            "name": "bitcoin",
             "network": "regtest"
           },
           "beta_asset": {
-            "name": "Ether",
-            "quantity": "10000000000000000000"
+            "name": "ether",
+            "quantity": "1000000000000000000"
           },
           "beta_ledger": {
-            "name": "Ethereum",
+            "name": "ethereum",
             "network": "regtest"
           }
         },
-        "role": "Alice",
         "protocol": "rfc003",
+        "role": "Alice",
         "status": "IN_PROGRESS"
       },
-      {
-        "_links": {
-          "self": {
-            "href": "/swaps/rfc003/05739119-6340-4709-a308-79646b988507"
-          }
+      "entities": [],
+      "links": [
+        {
+          "rel": [
+            "self"
+          ],
+          "class": [],
+          "href": "/swaps/rfc003/e94132f9-4269-49b8-86e4-9fd0bcc48c4b"
         },
+        {
+          "rel": [
+            "human-protocol-spec"
+          ],
+          "class": [],
+          "href": "https://github.com/comit-network/RFCs/blob/master/RFC-003-SWAP-Basic.md"
+        }
+      ],
+      "actions": [],
+      "rel": [
+        "item"
+      ]
+    },
+    {
+      "class": [],
+      "properties": {
         "parameters": {
           "alpha_asset": {
-            "name": "Bitcoin",
-            "quantity": "100"
+            "name": "bitcoin",
+            "quantity": "100000000"
           },
           "alpha_ledger": {
-            "name": "Bitcoin",
+            "name": "bitcoin",
             "network": "regtest"
           },
           "beta_asset": {
-            "name": "Ether",
-            "quantity": "10000000000000000000"
+            "name": "ether",
+            "quantity": "1000000000000000000"
           },
           "beta_ledger": {
-            "name": "Ethereum",
+            "name": "ethereum",
             "network": "regtest"
           }
         },
-        "role": "Bob",
         "protocol": "rfc003",
+        "role": "Alice",
         "status": "IN_PROGRESS"
-      }
-    ]
-  }
+      },
+      "entities": [],
+      "links": [
+        {
+          "rel": [
+            "self"
+          ],
+          "class": [],
+          "href": "/swaps/rfc003/899edf98-e1d1-441b-bb06-1ed4cf474ba9"
+        },
+        {
+          "rel": [
+            "human-protocol-spec"
+          ],
+          "class": [],
+          "href": "https://github.com/comit-network/RFCs/blob/master/RFC-003-SWAP-Basic.md"
+        }
+      ],
+      "actions": [],
+      "rel": [
+        "item"
+      ]
+    }
+  ],
+  "links": [],
+  "actions": []
 }
