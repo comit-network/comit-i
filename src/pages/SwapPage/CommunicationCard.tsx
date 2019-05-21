@@ -14,6 +14,11 @@ function CommunicationCardHeader({
   status,
   role
 }: CommunicationCardHeaderProps) {
+  /* TODO: Display swap decline reason if available */
+  /* TODO: Add retry button */
+  /* TODO: Add delete button */
+  /* TODO: Display message times if possible */
+
   if (status === CommunicationStatus.Sent && role === Role.Alice) {
     return (
       <CardHeader
@@ -23,9 +28,6 @@ function CommunicationCardHeader({
       />
     );
   } else if (status === CommunicationStatus.Accepted && role === Role.Alice) {
-    /* TODO: Display swap decline reason if available */
-    /* TODO: Add retry button */
-    /* TODO: Add delete button */
     return (
       <CardHeader
         title="Swap request accepted!"

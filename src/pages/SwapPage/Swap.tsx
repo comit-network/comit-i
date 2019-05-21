@@ -1,12 +1,15 @@
 import { Card, CardActions, Grid } from "@material-ui/core";
 import React from "react";
 import {
+  CommunicationStatus,
   Role,
-  Swap as SwapResource /* Link, Ledger */
+  Swap as SwapResource
 } from "../../api/getSwap";
 import actionDialogs from "../../components/ActionDialogs";
 import Page from "../../components/Page";
+import { SubTitle } from "../../components/text";
 import AssetCard from "./AssetCard";
+import BlockchainLog from "./BlockchainLog";
 import CommunicationCardHeader from "./CommunicationCard";
 
 interface SwapProps {
@@ -39,10 +42,17 @@ function Swap({ swap }: SwapProps) {
     betaLedger
   );
 
+  const communicationActionsButtons = actions.buttons.filter(
+    elem => elem.action === "accept" || elem.action === "decline"
+  );
+  const ledgerActionsButtons = actions.buttons.filter(
+    elem => !(elem.action === "accept" || elem.action === "decline")
+  );
+
   return (
     <React.Fragment>
       <Page title="Swap">
-        <Grid container={true} spacing={32} justify="space-evenly">
+        <Grid container={true} spacing={16} justify="space-evenly">
           <Grid item={true} xs={6}>
             <AssetCard
               title="Alpha"
@@ -68,15 +78,24 @@ function Swap({ swap }: SwapProps) {
                 role={swap.properties.role}
               />
               <CardActions>
-                {actions.buttons
-                  .filter(
-                    elem =>
-                      elem.action === "accept" || elem.action === "decline"
-                  )
-                  .map(elem => elem.button)}
+                {communicationActionsButtons.map(elem => elem.button)}
               </CardActions>
             </Card>
           </Grid>
+          {swap.properties.state.communication.status ===
+            CommunicationStatus.Accepted && (
+            <React.Fragment>
+              <Grid item={true} xs={12}>
+                <SubTitle text={"Ledger events and actions"} />
+              </Grid>
+              <BlockchainLog
+                alphaState={swap.properties.state.alpha_ledger}
+                betaState={swap.properties.state.beta_ledger}
+                role={swap.properties.role}
+                actions={ledgerActionsButtons}
+              />
+            </React.Fragment>
+          )}
         </Grid>
       </Page>
       {actions.dialogs}

@@ -1,4 +1,5 @@
 import { TableCell, TableRow } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toBitcoin } from "satoshi-bitcoin-ts";
@@ -28,11 +29,18 @@ function AssetCell({ asset }: AssetCellProps) {
   }
 }
 
+const useStyles = makeStyles(() => ({
+  tableRow: {
+    cursor: "pointer"
+  }
+}));
+
 interface SwapRowProps extends RouteComponentProps {
   swap: Swap;
 }
 
 function SwapRow({ swap, history }: SwapRowProps) {
+  const classes = useStyles();
   const swapLink = swap.links.filter(link => link.rel[0] === "self")[0].href;
 
   const actions = actionDialogs(
@@ -47,6 +55,7 @@ function SwapRow({ swap, history }: SwapRowProps) {
       <TableRow
         hover={true}
         onClick={() => history.push(swapLink)}
+        className={classes.tableRow}
         data-cy="swap-row"
       >
         <TableCell>{swap.properties.parameters.alpha_ledger.name}</TableCell>

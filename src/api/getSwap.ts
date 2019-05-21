@@ -69,8 +69,8 @@ export interface CommunicationState {
 }
 
 export interface State {
-  alpha_ledger_state: LedgerState;
-  beta_ledger_state: LedgerState;
+  alpha_ledger: LedgerState;
+  beta_ledger: LedgerState;
   communication: CommunicationState;
 }
 

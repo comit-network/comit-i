@@ -1,3 +1,4 @@
+import Typography from "@material-ui/core/Typography";
 import React from "react";
 import { useAsync } from "react-async";
 import { RouteComponentProps } from "react-router-dom";
@@ -20,7 +21,7 @@ function SwapPage({ match }: SwapPageProps) {
   const protocol = match.params.protocol;
   const swapId = match.params.swapId;
 
-  const { data, /* error, */ isLoading } = useAsync({
+  const { data, isLoading } = useAsync({
     promiseFn: getSwapFn,
     protocol,
     swapId
@@ -29,11 +30,10 @@ function SwapPage({ match }: SwapPageProps) {
   if (isLoading) {
     return <CenteredProgress title="Fetching swap..." />;
   } else if (data) {
-    // console.log(JSON.stringify(data, null, 2));
     return <Swap swap={data} />;
   } else {
-    // console.log(error);
-    return <div>404 Swap not found</div>;
+    /* TODO: Handle the error */
+    return <Typography variant="display2">Swap not found</Typography>;
   }
 }
 
