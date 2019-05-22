@@ -78,6 +78,13 @@ function AssetCard({
       </CardActions>
       <Collapse in={expanded} timeout="auto" unmountOnExit={true}>
         <CardContent>
+          {asset.token_contract && (
+            <React.Fragment>
+              <Typography paragraph={true} noWrap={true}>
+                Token contract: {asset.token_contract}
+              </Typography>
+            </React.Fragment>
+          )}
           <Typography paragraph={true}>
             Smart contract refund branch active at{" "}
             {moment.unix(expiry).format("MMMM Do YYYY, h:mm a")} {ledger.name}{" "}
