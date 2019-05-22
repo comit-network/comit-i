@@ -4,7 +4,8 @@ import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import { fromWei } from "web3-utils";
-import { Asset, Swap } from "../../api/getSwaps";
+import { Swap } from "../../api/getSwaps";
+import { Asset } from "../../api/swapTypes";
 import actionDialogs from "../../components/ActionDialogs";
 
 interface AssetCellProps {

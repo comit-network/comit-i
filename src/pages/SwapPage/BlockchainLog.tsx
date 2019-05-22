@@ -7,7 +7,8 @@ import {
   Typography
 } from "@material-ui/core";
 import React from "react";
-import { HtlcState, LedgerState, Role } from "../../api/getSwap";
+import { HtlcState, LedgerState } from "../../api/getSwap";
+import { Role } from "../../api/swapTypes";
 
 interface LedgerCardProps {
   ledgerName: string;

@@ -3,7 +3,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { CardHeader } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import React from "react";
-import { CommunicationStatus, Role } from "../../api/getSwap";
+import { CommunicationStatus } from "../../api/getSwap";
+import { Role } from "../../api/swapTypes";
 
 interface CommunicationCardHeaderProps {
   status: CommunicationStatus;

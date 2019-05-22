@@ -14,7 +14,7 @@ import moment from "moment";
 import React, { useState } from "react";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import { fromWei } from "web3-utils";
-import { Asset, Ledger } from "../../api/getSwap";
+import { Asset, Ledger } from "../../api/swapTypes";
 
 function toMainUnit(asset: Asset) {
   switch (asset.name) {

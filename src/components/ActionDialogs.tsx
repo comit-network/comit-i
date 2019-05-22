@@ -10,7 +10,8 @@ import React from "react";
 import { useReducer, useState } from "react";
 import URI from "urijs";
 import apiEndpoint from "../api/apiEndpoint";
-import { Ledger, Link, Role } from "../api/getSwaps";
+import { Link } from "../api/getSwaps";
+import { Ledger, Role } from "../api/swapTypes";
 import CommunicationActionDialog from "../pages/ListSwaps/CommunicationActionDialog";
 import LedgerActionDialog from "../pages/ListSwaps/LedgerActionDialog";
 

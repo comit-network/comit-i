@@ -1,10 +1,7 @@
 import { Card, CardActions, Grid } from "@material-ui/core";
 import React from "react";
-import {
-  CommunicationStatus,
-  Role,
-  Swap as SwapResource
-} from "../../api/getSwap";
+import { CommunicationStatus, Swap as SwapResource } from "../../api/getSwap";
+import { Role } from "../../api/swapTypes";
 import actionDialogs from "../../components/ActionDialogs";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
