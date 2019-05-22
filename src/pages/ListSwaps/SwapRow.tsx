@@ -2,10 +2,8 @@ import { TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { toBitcoin } from "satoshi-bitcoin-ts";
-import { fromWei } from "web3-utils";
 import { Swap } from "../../api/getSwaps";
-import { Asset } from "../../api/swapTypes";
+import { Asset, toMainUnit } from "../../api/swapTypes";
 import actionDialogs from "../../components/ActionDialogs";
 
 interface AssetCellProps {
@@ -13,21 +11,7 @@ interface AssetCellProps {
 }
 
 function AssetCell({ asset }: AssetCellProps) {
-  switch (asset.name) {
-    case "ether": {
-      return <span>{fromWei(asset.quantity, "ether")} ETH</span>;
-    }
-    case "bitcoin": {
-      return <span>{toBitcoin(asset.quantity)} BTC</span>;
-    }
-    default: {
-      return (
-        <span>
-          {asset.quantity} {asset.name}
-        </span>
-      );
-    }
-  }
+  return <span>{toMainUnit(asset)}</span>;
 }
 
 const useStyles = makeStyles(() => ({

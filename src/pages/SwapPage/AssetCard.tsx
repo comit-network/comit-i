@@ -12,20 +12,7 @@ import { makeStyles } from "@material-ui/styles";
 import classnames from "classnames";
 import moment from "moment";
 import React, { useState } from "react";
-import { toBitcoin } from "satoshi-bitcoin-ts";
-import { fromWei } from "web3-utils";
-import { Asset, Ledger } from "../../api/swapTypes";
-
-function toMainUnit(asset: Asset) {
-  switch (asset.name) {
-    case "ether":
-      return fromWei(asset.quantity, "ether") + " ETH";
-    case "bitcoin":
-      return toBitcoin(asset.quantity) + " BTC";
-    default:
-      return asset.quantity + asset.name;
-  }
-}
+import { Asset, Ledger, toMainUnit } from "../../api/swapTypes";
 
 const useStyles = makeStyles(theme => ({
   actions: {
