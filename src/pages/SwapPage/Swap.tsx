@@ -1,6 +1,6 @@
 import { Card, CardActions, Grid } from "@material-ui/core";
 import React from "react";
-import { CommunicationStatus, Swap as SwapResource } from "../../api/getSwap";
+import { CommunicationStatus, GetSwapResponse } from "../../api/swapResource";
 import { Role } from "../../api/swapTypes";
 import actionDialogs from "../../components/ActionDialogs";
 import Page from "../../components/Page";
@@ -10,7 +10,7 @@ import BlockchainLog from "./BlockchainLog";
 import CommunicationCardHeader from "./CommunicationCard";
 
 interface SwapProps {
-  swap: SwapResource;
+  swap: GetSwapResponse;
 }
 
 function Swap({ swap }: SwapProps) {

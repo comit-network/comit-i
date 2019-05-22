@@ -1,5 +1,3 @@
-import axios from "axios";
-import apiEndpoint from "./apiEndpoint";
 import { Parameters, Protocol, Role, Status } from "./swapTypes";
 
 export interface Properties {
@@ -21,18 +19,5 @@ export interface Swap {
 
 export interface GetSwapsResponse {
   entities: Swap[];
-}
-
-export default function getSwaps() {
-  const uri = apiEndpoint()
-    .path("swaps")
-    .toString();
-
-  return axios
-    .get(uri, {
-      timeout: 2000
-    })
-    .then(response => response.data)
-    .then(body => body as GetSwapsResponse)
-    .then(body => body.entities);
+  class: string[];
 }

@@ -6,36 +6,9 @@ import {
   TableRow
 } from "@material-ui/core";
 import React from "react";
-import { useAsync } from "react-async";
-import getSwaps, { Swap } from "../../api/getSwaps";
-import CenteredProgress from "../../components/CenteredProgress";
-import ErrorSnackbar from "../../components/ErrorSnackbar";
+import { Swap } from "../../api/swapsResource";
 import EmptySwapListTableRow from "./EmptySwapListTableRow";
 import SwapRow from "./SwapRow";
-
-function FetchSwaps() {
-  const { isLoading, data, error } = useAsync({
-    promiseFn: getSwaps
-  });
-
-  if (isLoading) {
-    return <CenteredProgress title="Fetching swaps..." />;
-  } else if (error) {
-    return (
-      <React.Fragment>
-        <SwapList swaps={[]} />
-        {
-          <ErrorSnackbar
-            message={"Failed to fetch swaps. Is your COMIT node running?"}
-            open={true}
-          />
-        }
-      </React.Fragment>
-    );
-  } else {
-    return <SwapList swaps={data as Swap[]} />;
-  }
-}
 
 interface SwapListProps {
   swaps: Swap[];
@@ -67,4 +40,4 @@ function SwapList({ swaps }: SwapListProps) {
   );
 }
 
-export default FetchSwaps;
+export default SwapList;

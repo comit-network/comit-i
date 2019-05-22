@@ -17,14 +17,20 @@ import InboxIcon from "@material-ui/icons/Inbox";
 import SendIcon from "@material-ui/icons/Send";
 import SettingsIcon from "@material-ui/icons/Settings";
 import React from "react";
-import { Route, RouteComponentProps, withRouter } from "react-router-dom";
+import {
+  Redirect,
+  Route,
+  RouteComponentProps,
+  withRouter
+} from "react-router-dom";
 import LinkPlusIcon from "./components/LinkPlus";
 import LinkLandingPage from "./pages/LinkLandingPage/LinkLandingPage";
-import ListSwaps from "./pages/ListSwaps/ListSwaps";
+/* import ListSwaps from "./pages/ListSwaps/ListSwaps"; */
 import MakeLink from "./pages/MakeLink/MakeLink";
 import SendSwap from "./pages/SendSwapRequest/SendSwapRequest";
 import Settings from "./pages/Settings/Settings";
-import SwapPage from "./pages/SwapPage/SwapPage";
+import ShowResource from "./pages/ShowResource";
+/* import SwapPage from "./pages/SwapPage/SwapPage"; */
 
 const drawerWidth = 240;
 
@@ -111,8 +117,12 @@ function App({ classes, history }: AppProps) {
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        <Route exact={true} path="/" component={ListSwaps} />
-        <Route path="/swaps/:protocol/:swapId" component={SwapPage} />
+        <Route
+          exact={true}
+          path="/"
+          render={() => <Redirect to="/show_resource/swaps" />}
+        />
+        <Route exact={false} path="/show_resource" component={ShowResource} />
         <Route path="/make_link" component={MakeLink} />
         <Route path="/send_swap" component={SendSwap} />
         <Route path="/from_link" component={LinkLandingPage} />
