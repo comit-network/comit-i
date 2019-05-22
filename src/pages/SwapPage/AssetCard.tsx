@@ -28,11 +28,6 @@ function toMainUnit(asset: Asset) {
 }
 
 const useStyles = makeStyles(theme => ({
-  /* card: {
-   *   flexBasis: "100%",
-   *   maxWidth: "20vmax",
-   *   minWidth: "20vmin"
-   * }, */
   actions: {
     display: "flex"
   },
