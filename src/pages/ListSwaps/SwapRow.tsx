@@ -51,7 +51,7 @@ function SwapRow({ swap, history }: SwapRowProps) {
   );
 
   return (
-    <React.Fragment key={swap.links[0].href}>
+    <React.Fragment key={swapLink}>
       <TableRow
         hover={true}
         onClick={() => history.push(swapLink)}
