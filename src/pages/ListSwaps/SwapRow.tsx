@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
-import { Swap } from "../../api/swapsResource";
+import { Link, Swap } from "../../api/swapsResource";
 import { Asset, toMainUnit } from "../../api/swapTypes";
 import actionDialogs from "../../components/ActionDialogs";
 
@@ -27,9 +27,9 @@ interface SwapRowProps extends RouteComponentProps {
 function SwapRow({ swap, history }: SwapRowProps) {
   const classes = useStyles();
 
-  const swapLink = swap.links.filter(link => link.rel[0] === "self")[0].href;
+  const swapLink = swap.links.find(link => link.rel[0] === "self") as Link;
   function onRowClick() {
-    history.push("/show_resource" + swapLink);
+    history.push("/show_resource" + swapLink.href);
     /* FIXME: This is bad, but otherwise the Swap component doesn't mount */
     window.location.reload();
   }
@@ -42,7 +42,7 @@ function SwapRow({ swap, history }: SwapRowProps) {
   );
 
   return (
-    <React.Fragment key={swapLink}>
+    <React.Fragment key={swapLink.href}>
       <TableRow
         hover={true}
         onClick={onRowClick}
