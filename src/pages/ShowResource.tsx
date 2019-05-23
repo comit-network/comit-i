@@ -26,7 +26,7 @@ function ShowResource({ location }: RouteComponentProps) {
   } else if (data && data.class.includes("swaps")) {
     const resource = data as GetSwapsResponse;
     return <SwapList swaps={resource.entities} />;
-  } else if (data) {
+  } else if (data && data.class.includes("swap")) {
     return <Swap swap={data as GetSwapResponse} />;
   } else {
     return <Typography variant="display2">Resource not found</Typography>;
