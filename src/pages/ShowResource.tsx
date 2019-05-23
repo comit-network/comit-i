@@ -6,6 +6,7 @@ import getComitResource from "../api/getComitResource";
 import { GetSwapResponse } from "../api/swapResource";
 import { GetSwapsResponse } from "../api/swapsResource";
 import CenteredProgress from "../components/CenteredProgress";
+import ErrorSnackbar from "../components/ErrorSnackbar";
 import SwapList from "./ListSwaps/ListSwaps";
 import Swap from "./SwapPage/Swap";
 
@@ -16,7 +17,7 @@ const getComitResourceFn = async ({ resourcePath }: any) => {
 function ShowResource({ location }: RouteComponentProps) {
   const resourcePath = location.pathname.replace("/show_resource/", "");
 
-  const { data, isLoading } = useAsync({
+  const { data, isLoading, error } = useAsync({
     promiseFn: getComitResourceFn,
     resourcePath
   });
@@ -29,7 +30,18 @@ function ShowResource({ location }: RouteComponentProps) {
   } else if (data && data.class.includes("swap")) {
     return <Swap swap={data as GetSwapResponse} />;
   } else {
-    return <Typography variant="display2">Resource not found</Typography>;
+    const title = error ? "404 Resource Not Found" : "400 Bad JSON";
+    return (
+      <React.Fragment>
+        <Typography variant="display2">{title}</Typography>
+        {error && (
+          <ErrorSnackbar
+            message="Failed to fetch resource. Is your COMIT node running?"
+            open={true}
+          />
+        )}
+      </React.Fragment>
+    );
   }
 }
 
