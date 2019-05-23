@@ -19,7 +19,8 @@ function ShowResource({ location }: RouteComponentProps) {
 
   const { data, isLoading, error } = useAsync({
     promiseFn: getComitResourceFn,
-    resourcePath
+    resourcePath,
+    watch: location.pathname
   });
 
   if (isLoading) {

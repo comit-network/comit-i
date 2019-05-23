@@ -30,8 +30,6 @@ function SwapRow({ swap, history }: SwapRowProps) {
   const swapLink = swap.links.find(link => link.rel[0] === "self") as Link;
   function onRowClick() {
     history.push("/show_resource" + swapLink.href);
-    /* FIXME: This is bad, but otherwise the Swap component doesn't mount */
-    window.location.reload();
   }
 
   const actions = actionDialogs(

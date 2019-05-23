@@ -62,7 +62,7 @@ const styles = (theme: Theme) =>
 interface AppProps extends WithStyles<typeof styles>, RouteComponentProps {}
 
 function App({ classes, history }: AppProps) {
-  const goToRoot = () => history.push("/");
+  const goToSwaps = () => history.push("/show_resource/swaps");
   const goToMakeLink = () => history.push("/make_link");
   const goToSendSwap = () => history.push("/send_swap");
   const goToSettings = () => history.push("/settings");
@@ -87,7 +87,7 @@ function App({ classes, history }: AppProps) {
         <div className={classes.toolbar} />
         <Divider />
         <List>
-          <ListItem button={true} key={"swaps"} onClick={goToRoot}>
+          <ListItem button={true} key={"swaps"} onClick={goToSwaps}>
             <ListItemIcon>
               <InboxIcon />
             </ListItemIcon>
@@ -122,7 +122,7 @@ function App({ classes, history }: AppProps) {
           path="/"
           render={() => <Redirect to="/show_resource/swaps" />}
         />
-        <Route exact={false} path="/show_resource" component={ShowResource} />
+        <Route path="/show_resource" component={ShowResource} />
         <Route path="/make_link" component={MakeLink} />
         <Route path="/send_swap" component={SendSwap} />
         <Route path="/from_link" component={LinkLandingPage} />
