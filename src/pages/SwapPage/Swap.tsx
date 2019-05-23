@@ -6,7 +6,7 @@ import actionDialogs from "../../components/ActionDialogs";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
 import AssetCard from "./AssetCard";
-import BlockchainLog from "./BlockchainLog";
+import Rfc003BlockchainLog from "./BlockchainLog";
 import CommunicationCardHeader from "./CommunicationCard";
 
 interface SwapProps {
@@ -85,7 +85,7 @@ function Swap({ swap }: SwapProps) {
               <Grid item={true} xs={12}>
                 <SubTitle text={"Ledger events and actions"} />
               </Grid>
-              <BlockchainLog
+              <Rfc003BlockchainLog
                 alphaState={swap.properties.state.alpha_ledger}
                 betaState={swap.properties.state.beta_ledger}
                 role={swap.properties.role}

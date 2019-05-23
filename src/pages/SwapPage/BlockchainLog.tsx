@@ -55,19 +55,19 @@ function LedgerCard({ ledgerName, state, actions }: LedgerCardProps) {
   );
 }
 
-interface BlockchainLogProps {
+interface Rfc003BlockchainLogProps {
   alphaState: LedgerState;
   betaState: LedgerState;
   role: Role;
   actions: Array<{ action: string; button: React.ReactNode }>;
 }
 
-function BlockchainLog({
+function Rfc003BlockchainLog({
   alphaState,
   betaState,
   role,
   actions
-}: BlockchainLogProps) {
+}: Rfc003BlockchainLogProps) {
   const alphaActions =
     role === Role.Alice
       ? actions.filter(
@@ -103,4 +103,4 @@ function BlockchainLog({
   );
 }
 
-export default BlockchainLog;
+export default Rfc003BlockchainLog;
