@@ -1,9 +1,9 @@
 {
-  "class": [],
+  "class": ["swaps"],
   "properties": null,
   "entities": [
     {
-      "class": [],
+      "class": ["swap"],
       "properties": {
         "parameters": {
           "alpha_asset": {
@@ -50,7 +50,7 @@
       ]
     },
     {
-      "class": [],
+      "class": ["swap"],
       "properties": {
         "parameters": {
           "alpha_asset": {

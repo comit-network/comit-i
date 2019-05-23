@@ -82,7 +82,7 @@ describe("The page for sending a swap request", () => {
       cy.get("[data-cy=error-snackbar]").should("exist");
     });
 
-    it("should navigate to the homepage if a swap request has been created", () => {
+    it("should navigate to swaps page if a swap request has been created", () => {
       cy.server();
       cy.route(
         "POST",
@@ -92,8 +92,7 @@ describe("The page for sending a swap request", () => {
 
       cy.get("[data-cy=send-button]").click();
 
-      // navigate to the home page
-      cy.url().should("eq", "http://localhost:3000/");
+      cy.url().should("eq", "http://localhost:3000/show_resource/swaps");
     });
   });
 });
