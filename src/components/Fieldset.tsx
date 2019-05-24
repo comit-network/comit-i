@@ -1,4 +1,5 @@
 import { makeStyles } from "@material-ui/styles";
+import classNames from "classnames";
 import React, { ReactNode } from "react";
 
 const useStyles = makeStyles(theme => ({
@@ -10,18 +11,24 @@ interface FieldsetProps {
   disabled?: boolean;
   children: ReactNode;
   dataCy?: string;
+  className?: string;
 }
 
 const Fieldset = ({
   legend,
   children,
   dataCy,
-  disabled = false
+  disabled = false,
+  className
 }: FieldsetProps) => {
   const classes = useStyles();
 
   return (
-    <fieldset className={classes.root} data-cy={dataCy} disabled={disabled}>
+    <fieldset
+      className={classNames(classes.root, className)}
+      data-cy={dataCy}
+      disabled={disabled}
+    >
       <legend>{legend}</legend>
       {children}
     </fieldset>

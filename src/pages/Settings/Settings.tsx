@@ -1,13 +1,13 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button, Grid, Typography } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import { makeStyles } from "@material-ui/styles";
-import { useState } from "react";
-import React from "react";
+import React, { useState } from "react";
+import { DefaultComitNodeApiConfig } from "../../api/config";
 import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
 import SuccessSnackbar from "../../components/SuccessSnackbar";
 import TextField from "../../components/TextField";
-import storage from "../../storage";
+import { LocalStorageSettingsStore } from "../../settingsStore";
 
 const useSettingsStyles = makeStyles(theme => ({
   button: {
@@ -15,21 +15,29 @@ const useSettingsStyles = makeStyles(theme => ({
   },
   icon: {
     marginLeft: theme.spacing.unit
-  }
+  },
+  fieldset: ({ overrideActive }) => ({
+    opacity: overrideActive ? 0.3 : 1
+  })
 }));
 
 function Settings() {
-  const [host, setHost] = useState(storage.getHost());
-  const [port, setPort] = useState(storage.getPort());
+  const settingsStore = new LocalStorageSettingsStore(window.localStorage);
+  const config = new DefaultComitNodeApiConfig(window, settingsStore);
+
+  const [host, setHost] = useState(config.getEffectiveHost());
+  const [port, setPort] = useState(config.getEffectivePort());
   const [displaySaved, setDisplaySaved] = useState(false);
 
-  const classes = useSettingsStyles();
+  const classes = useSettingsStyles({
+    overrideActive: config.isOverrideActive()
+  });
 
   const handleSaveSettings = (event: any) => {
     event.preventDefault();
 
-    storage.setHost(host);
-    storage.setPort(port);
+    settingsStore.setHost(host);
+    settingsStore.setPort(port);
 
     setDisplaySaved(true);
     setTimeout(() => setDisplaySaved(false), 2500);
@@ -39,7 +47,18 @@ function Settings() {
     <React.Fragment>
       <Page title="Set your settings">
         <form onSubmit={handleSaveSettings}>
-          <Fieldset legend="COMIT node">
+          {config.isOverrideActive() && (
+            <Typography paragraph={true} color={"secondary"}>
+              This instance of comit-i is directly served from the comit-node.
+              The correct configuration for the API endpoint has been injected.
+            </Typography>
+          )}
+
+          <Fieldset
+            legend="COMIT node"
+            disabled={config.isOverrideActive()}
+            className={classes.fieldset}
+          >
             <Grid container={true} spacing={40}>
               <Grid item={true} xs={12} md={6}>
                 <TextField
@@ -62,6 +81,7 @@ function Settings() {
             type="submit"
             color="primary"
             className={classes.button}
+            disabled={config.isOverrideActive()}
           >
             Save
             <SaveIcon className={classes.icon} />

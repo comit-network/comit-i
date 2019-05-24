@@ -1,22 +1,16 @@
 import URI from "urijs";
-import storage from "../storage";
+import { LocalStorageSettingsStore } from "../settingsStore";
+import { DefaultComitNodeApiConfig } from "./config";
+
+const config = new DefaultComitNodeApiConfig(
+  window,
+  new LocalStorageSettingsStore(window.localStorage)
+);
 
 export default function apiEndpoint() {
-  if (window.getComitNodeApiEndpoint) {
-    const { host, port } = window.getComitNodeApiEndpoint();
-
-    if (host && port) {
-      return new URI({
-        protocol: "http",
-        hostname: host,
-        port: port.toString()
-      });
-    }
-  }
-
   return new URI({
     protocol: "http",
-    hostname: storage.getHost(),
-    port: storage.getPort().toString()
+    hostname: config.getEffectiveHost(),
+    port: config.getEffectivePort().toString()
   });
 }
