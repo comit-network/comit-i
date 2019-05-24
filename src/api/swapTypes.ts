@@ -39,7 +39,7 @@ export enum Protocol {
 
 export enum Status {
   InProgress = "IN_PROGRESS",
-  Sent = "SWAPPED",
+  Swapped = "SWAPPED",
   NotSwapped = "NOT_SWAPPED",
   InternalFailure = "INTERNAL_FAILURE"
 }

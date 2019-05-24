@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Link, Swap } from "../../api/swapsResource";
 import { Asset, toMainUnit } from "../../api/swapTypes";
 import actionDialogs from "../../components/ActionDialogs";
+import SwapStatusIcon from "./SwapStatusIcon";
 
 interface AssetCellProps {
   asset: Asset;
@@ -51,8 +52,10 @@ function SwapRow({ swap, history }: SwapRowProps) {
         className={classes.tableRow}
         data-cy="swap-row"
       >
+        <TableCell align="center">
+          <SwapStatusIcon status={swap.properties.status} />
+        </TableCell>
         <TableCell>{swap.properties.parameters.alpha_ledger.name}</TableCell>
-
         <TableCell>
           <AssetCell asset={swap.properties.parameters.alpha_asset} />
         </TableCell>
@@ -75,7 +78,7 @@ function SwapRow({ swap, history }: SwapRowProps) {
             swap.properties.protocol
           )}
         </TableCell>
-        <TableCell>{swap.properties.status}</TableCell>
+
         <TableCell>{swap.properties.role}</TableCell>
         <TableCell>{actions.buttons.map(elem => elem.button)}</TableCell>
       </TableRow>
