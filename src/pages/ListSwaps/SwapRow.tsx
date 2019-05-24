@@ -1,4 +1,4 @@
-import { TableCell, TableRow } from "@material-ui/core";
+import { Button, TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -32,6 +32,10 @@ function SwapRow({ swap, history }: SwapRowProps) {
     history.push("/show_resource" + swapLink.href);
   }
 
+  const protocolSpecLink = swap.links.find(link =>
+    link.rel.includes("human-protocol-spec")
+  );
+
   const actions = actionDialogs(
     swap.links,
     swap.properties.role,
@@ -56,7 +60,21 @@ function SwapRow({ swap, history }: SwapRowProps) {
         <TableCell>
           <AssetCell asset={swap.properties.parameters.beta_asset} />
         </TableCell>
-        <TableCell>{swap.properties.protocol}</TableCell>
+        <TableCell>
+          {protocolSpecLink ? (
+            <Button
+              onClick={event => {
+                event.stopPropagation();
+              }}
+              variant="outlined"
+              href={protocolSpecLink.href}
+            >
+              {swap.properties.protocol}
+            </Button>
+          ) : (
+            swap.properties.protocol
+          )}
+        </TableCell>
         <TableCell>{swap.properties.status}</TableCell>
         <TableCell>{swap.properties.role}</TableCell>
         <TableCell>{actions.buttons.map(elem => elem.button)}</TableCell>
