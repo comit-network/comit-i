@@ -20,6 +20,8 @@ function ShowResource({ location }: RouteComponentProps) {
   const { data, isLoading, error } = useAsync({
     promiseFn: getComitResourceFn,
     resourcePath,
+    /* FIXME: If connection lost whilst looking at a swap page and then
+       try to navigate back to swap list, nothing happens */
     watch: location.pathname
   });
 
