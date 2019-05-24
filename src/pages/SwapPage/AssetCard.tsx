@@ -88,7 +88,7 @@ function AssetCard({
           <Typography paragraph={true}>
             Smart contract refund branch active at{" "}
             {moment.unix(expiry).format("MMMM Do YYYY, h:mm a")} {ledger.name}{" "}
-            time.
+            {ledger.network} time.
           </Typography>
         </CardContent>
       </Collapse>
