@@ -27,7 +27,7 @@ interface SwapRowProps extends RouteComponentProps {
 function SwapRow({ swap, history }: SwapRowProps) {
   const classes = useStyles();
 
-  const swapLink = swap.links.find(link => link.rel[0] === "self") as Link;
+  const swapLink = swap.links.find(link => link.rel.includes("self")) as Link;
   function onRowClick() {
     history.push("/show_resource" + swapLink.href);
   }
