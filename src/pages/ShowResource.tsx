@@ -20,17 +20,15 @@ function ShowResource({ location }: RouteComponentProps) {
   const { data, isLoading, error } = useAsync({
     promiseFn: getComitResourceFn,
     resourcePath,
-    /* FIXME: If connection lost whilst looking at a swap page and then
-       try to navigate back to swap list, nothing happens */
     watch: location.pathname
   });
 
   if (isLoading) {
     return <CenteredProgress title="Fetching..." />;
-  } else if (data && data.class.includes("swaps")) {
+  } else if (!error && data && data.class.includes("swaps")) {
     const resource = data as GetSwapsResponse;
     return <SwapList swaps={resource.entities} />;
-  } else if (data && data.class.includes("swap")) {
+  } else if (!error && data && data.class.includes("swap")) {
     return <Swap swap={data as GetSwapResponse} />;
   } else {
     const title = error ? "404 Resource Not Found" : "400 Bad JSON";
