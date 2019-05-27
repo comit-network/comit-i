@@ -31,16 +31,17 @@ function ExplorerLink({ ledger, hash, resourceType }: ExplorerLinkProps) {
       </Typography>
     );
   } else if (
-    /* Ethereum testnet links not yet supported because the comit
-       node doesn't specify whether it's Ropsten, Rinkeby... */
     ledger.name === "ethereum" &&
-    ledger.network === "mainnet" &&
+    (ledger.network === "mainnet" || ledger.network === "ropsten") &&
     resourceType
   ) {
-    const url =
-      resourceType === ResourceType.Address
-        ? "https://etherscan.io/address/"
-        : "https://etherscan.io/tx/";
+    let url =
+      ledger.network === "mainnet"
+        ? "https://etherscan.io/"
+        : "https://ropsten.etherscan.io/";
+
+    url =
+      resourceType === ResourceType.Address ? url + "address/" : url + "tx/";
 
     return (
       <Typography noWrap={true}>
