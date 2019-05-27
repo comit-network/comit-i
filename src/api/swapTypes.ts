@@ -48,3 +48,8 @@ export enum Role {
   Alice = "Alice",
   Bob = "Bob"
 }
+
+export enum LedgerKind {
+  Alpha = "Alpha",
+  Beta = "Beta"
+}

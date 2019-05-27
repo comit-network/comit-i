@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import React from "react";
 import { LedgerState } from "../../api/swapResource";
-import { Ledger, Role } from "../../api/swapTypes";
+import { Ledger, LedgerKind, Role } from "../../api/swapTypes";
 import LedgerCard from "./LedgerCard";
 
 interface Rfc003BlockchainLogProps {
@@ -44,17 +44,21 @@ function Rfc003BlockchainLog({
     <React.Fragment>
       <Grid item={true} xs={6}>
         <LedgerCard
-          ledgerKind="Alpha"
+          ledgerKind={LedgerKind.Alpha}
           ledger={alphaLedger}
-          state={alphaState}
+          ledgerState={alphaState}
+          otherLedgerState={betaState}
+          role={role}
           actions={alphaActions}
         />
       </Grid>
       <Grid item={true} xs={6}>
         <LedgerCard
-          ledgerKind="Beta"
+          ledgerKind={LedgerKind.Beta}
           ledger={betaLedger}
-          state={betaState}
+          ledgerState={betaState}
+          otherLedgerState={alphaState}
+          role={role}
           actions={betaActions}
         />
       </Grid>

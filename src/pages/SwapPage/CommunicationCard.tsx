@@ -31,7 +31,7 @@ function CommunicationCardHeader({
   } else if (status === CommunicationStatus.Accepted && role === Role.Alice) {
     return (
       <CardHeader
-        title="Swap request accepted!"
+        title="Your swap request was accepted!"
         avatar={<FontAwesomeIcon icon={faHandshake} />}
       />
     );
