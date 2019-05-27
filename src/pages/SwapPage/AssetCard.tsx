@@ -13,6 +13,7 @@ import classnames from "classnames";
 import moment from "moment";
 import React, { useState } from "react";
 import { Asset, Ledger, toMainUnit } from "../../api/swapTypes";
+import ExplorerLink, { ResourceType } from "./ExplorerLink";
 
 const useStyles = makeStyles(theme => ({
   actions: {
@@ -38,8 +39,6 @@ interface AssetCardProps {
   expiry: number;
 }
 
-/* TODO: Handle the fact that this code is specific to RFC003 due
-   to the inclusion of expiry */
 function AssetCard({
   title,
   ledger,
@@ -80,9 +79,12 @@ function AssetCard({
         <CardContent>
           {asset.token_contract && (
             <React.Fragment>
-              <Typography paragraph={true} noWrap={true}>
-                Token contract: {asset.token_contract}
-              </Typography>
+              <Typography paragraph={true}>Token contract:</Typography>
+              <ExplorerLink
+                ledger={ledger}
+                hash={asset.token_contract}
+                resourceType={ResourceType.Address}
+              />
             </React.Fragment>
           )}
           <Typography paragraph={true}>

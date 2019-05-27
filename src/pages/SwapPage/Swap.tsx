@@ -87,7 +87,9 @@ function Swap({ swap }: SwapProps) {
               </Grid>
               <Rfc003BlockchainLog
                 alphaState={swap.properties.state.alpha_ledger}
+                alphaLedger={swap.properties.parameters.alpha_ledger}
                 betaState={swap.properties.state.beta_ledger}
+                betaLedger={swap.properties.parameters.beta_ledger}
                 role={swap.properties.role}
                 actions={ledgerActionsButtons}
               />
