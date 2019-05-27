@@ -12,7 +12,7 @@ export function toMainUnit(asset: Asset) {
     case "ether":
       return fromWei(asset.quantity, "ether") + " ETH";
     case "bitcoin":
-      return toBitcoin(asset.quantity) + " BTC";
+      return toBitcoin(asset.quantity, true) + " BTC";
     case "erc20":
       // TODO: Find and use token symbol if possible
       return asset.quantity + " ERC20";
