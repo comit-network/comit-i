@@ -48,7 +48,7 @@ function SwapStatusIcon({ status }: SwapStatusIconProps) {
       );
     case Status.NotSwapped:
       return (
-        <Tooltip title="Swap finished without success" placement="bottom-start">
+        <Tooltip title="Swap finished unsuccessfully" placement="bottom-start">
           <FontAwesomeIcon
             icon={faTimes}
             className={classes.notSwappedIcon}
