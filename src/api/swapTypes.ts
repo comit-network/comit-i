@@ -14,7 +14,6 @@ export function toMainUnit(asset: Asset) {
     case "bitcoin":
       return toBitcoin(asset.quantity, true) + " BTC";
     case "erc20":
-      // TODO: Find and use token symbol if possible
       return asset.quantity + " ERC20";
     default:
       return asset.quantity + " " + asset.name;

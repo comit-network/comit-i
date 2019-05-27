@@ -45,7 +45,6 @@ function LedgerCard({
   const [alphaLedgerState, betaLedgerState] =
     ledgerKind === LedgerKind.Alpha ? ledgerStates : ledgerStates.reverse();
 
-  /* TODO: Display transaction times when possible */
   return (
     <Card>
       <CardHeader title={ledgerKind} />
