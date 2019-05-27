@@ -10,11 +10,11 @@ export enum HtlcState {
 
 export interface LedgerState {
   status: HtlcState;
-  htlc_location: any;
-  deploy_tx: string;
-  fund_tx: string;
-  redeem_tx: string;
-  refund_tx: string;
+  htlc_location?: any;
+  deploy_tx?: string;
+  fund_tx?: string;
+  redeem_tx?: string;
+  refund_tx?: string;
 }
 
 export enum CommunicationStatus {
@@ -25,11 +25,11 @@ export enum CommunicationStatus {
 
 export interface CommunicationState {
   alpha_expiry: number;
-  alpha_ledger_redeem_identity: string | null;
-  alpha_ledger_refund_identity: string;
+  alpha_redeem_identity: string | null;
+  alpha_refund_identity: string;
   beta_expiry: number;
-  beta_ledger_redeem_identity: string;
-  beta_ledger_refund_identity: string | null;
+  beta_redeem_identity: string;
+  beta_refund_identity: string | null;
   secret_hash: string;
   status: CommunicationStatus;
 }

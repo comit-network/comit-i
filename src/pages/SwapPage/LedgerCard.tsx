@@ -67,7 +67,7 @@ function LedgerCard({
                     </Typography>
                     <ExplorerLink
                       ledger={ledger}
-                      hash={tx.hash}
+                      hash={tx.hash as string}
                       resourceType={ResourceType.Transaction}
                     />
                   </React.Fragment>
