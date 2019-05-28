@@ -106,13 +106,15 @@ function actionDialogs(
   if (!alphaIsTransitive) {
     acceptFields.push({
       key: "alpha_ledger_redeem_identity",
-      label: "Alpha Redeem Identity"
+      label: "Alpha Redeem Identity",
+      ledger: alphaLedger.name
     });
   }
   if (!betaIsTransitive) {
     acceptFields.push({
       key: "beta_ledger_refund_identity",
-      label: "Beta Refund Identity"
+      label: "Beta Refund Identity",
+      ledger: betaLedger.name
     });
   }
 
