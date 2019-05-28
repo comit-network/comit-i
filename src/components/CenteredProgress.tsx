@@ -14,14 +14,16 @@ const styles = (theme: Theme) =>
     }
   });
 
-interface CenteredProgressProps extends WithStyles<typeof styles> {}
+interface CenteredProgressProps extends WithStyles<typeof styles> {
+  title: string;
+}
 
-function CenteredProgress({ classes }: CenteredProgressProps) {
+function CenteredProgress({ title, classes }: CenteredProgressProps) {
   return (
     <div className={classes.root}>
       <CircularProgress className={classes.progress} disableShrink={true} />
       <div>
-        <Typography variant="caption">Fetching swaps...</Typography>
+        <Typography variant="caption">{title}</Typography>
       </div>
     </div>
   );

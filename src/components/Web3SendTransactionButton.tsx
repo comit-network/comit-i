@@ -12,6 +12,7 @@ import { useWeb3 } from "./Web3Context";
 interface Props {
   transaction: Transaction;
   minTimestamp?: number;
+  onSuccess: () => void;
 }
 
 enum TransactionState {
@@ -22,7 +23,11 @@ enum TransactionState {
   TooEarly
 }
 
-function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
+function Web3SendTransactionButton({
+  transaction,
+  minTimestamp,
+  onSuccess
+}: Props) {
   const web3 = useWeb3();
   const [state, setState] = useState(TransactionState.Initial);
   const [networkTime, setNetworkTime] = useState(0);
@@ -44,6 +49,7 @@ function Web3SendTransactionButton({ transaction, minTimestamp }: Props) {
               from: accounts[0]
             });
             setState(TransactionState.Sent);
+            onSuccess();
           } catch (e) {
             setState(TransactionState.Error);
           }

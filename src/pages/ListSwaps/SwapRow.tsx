@@ -1,247 +1,88 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  TableCell,
-  TableRow
-} from "@material-ui/core";
+import { TableCell, TableRow } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
 import React from "react";
-import { useReducer, useState } from "react";
-import { toBitcoin } from "satoshi-bitcoin-ts";
-import URI from "urijs";
-import { fromWei } from "web3-utils";
-import apiEndpoint from "../../api/apiEndpoint";
-import { Asset, Swap } from "../../api/getSwaps";
-import TextField from "../../components/TextField";
-import CommunicationActionDialog from "./CommunicationActionDialog";
-import LedgerActionDialog from "./LedgerActionDialog";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Link, Swap } from "../../api/swapsResource";
+import { Asset, toMainUnit } from "../../api/swapTypes";
+import actionDialogs from "../../components/ActionDialogs";
+import SwapStatusIcon from "./SwapStatusIcon";
 
 interface AssetCellProps {
   asset: Asset;
 }
 
 function AssetCell({ asset }: AssetCellProps) {
-  switch (asset.name) {
-    case "ether": {
-      return <span>{fromWei(asset.quantity, "ether")} ETH</span>;
-    }
-    case "bitcoin": {
-      return <span>{toBitcoin(asset.quantity)} BTC</span>;
-    }
-    default: {
-      return (
-        <span>
-          {asset.quantity} {asset.name}
-        </span>
-      );
-    }
+  return <span>{toMainUnit(asset)}</span>;
+}
+
+const useStyles = makeStyles(() => ({
+  tableRow: {
+    cursor: "pointer"
   }
+}));
+
+interface SwapRowProps extends RouteComponentProps {
+  swap: Swap;
 }
 
-enum DialogState {
-  Closed,
-  CommunicationDialogOpen,
-  LedgerParamsDialogOpen,
-  LedgerDialogOpen
-}
+function SwapRow({ swap, history }: SwapRowProps) {
+  const classes = useStyles();
 
-interface LedgerActionSpec {
-  key: string;
-  label: string;
-}
-
-function actionQueryParams(swap: Swap, actionName: string): LedgerActionSpec[] {
-  const ledger = actionLedger(swap, actionName);
-
-  if (!ledger) {
-    return [];
+  const swapLink = swap.links.find(link => link.rel.includes("self")) as Link;
+  function onRowClick() {
+    history.push("/show_resource" + swapLink.href);
   }
 
-  if (
-    ledger.name === "bitcoin" &&
-    (actionName === "redeem" || actionName === "refund")
-  ) {
-    return [
-      {
-        key: "address",
-        label: "Bitcoin address"
-      },
-      { key: "fee_per_byte", label: "Fee per byte" }
-    ];
-  } else {
-    return [];
-  }
-}
-
-interface LedgerParamsField {
-  name: string;
-  value: string;
-}
-
-function ledgerParamsReducer(currentState: object, field: LedgerParamsField) {
-  return { ...currentState, [field.name]: field.value };
-}
-
-function actionLedger(swap: Swap, action: string) {
-  switch (action) {
-    case "redeem":
-      return swap.role === "Alice"
-        ? swap.parameters.beta_ledger
-        : swap.parameters.alpha_ledger;
-    case "refund":
-    case "fund":
-      return swap.role === "Alice"
-        ? swap.parameters.alpha_ledger
-        : swap.parameters.beta_ledger;
-  }
-}
-
-function SwapRow(swap: Swap) {
-  const [dialogState, setDialogState] = useState(DialogState.Closed);
-  const [action, setAction] = useState({
-    name: "",
-    url: URI("")
-  });
-  const [ledgerActionParamSpec, setLedgerActionParamSpec] = useState<
-    LedgerActionSpec[]
-  >([]);
-  const initialLedgerActionParams = {} as { [key: string]: string };
-  const [ledgerActionParams, dispatchLedgerActionParams] = useReducer(
-    ledgerParamsReducer,
-    initialLedgerActionParams
+  const protocolSpecLink = swap.links.find(link =>
+    link.rel.includes("human-protocol-spec")
   );
 
-  const alphaIsTransitive = swap.parameters.alpha_ledger.name === "bitcoin";
-  const betaIsTransitive = swap.parameters.beta_ledger.name === "bitcoin";
-
-  const actionButtons = Object.entries(swap._links)
-    .filter(([key, _]) => key !== "self")
-    .map(([actionName, actionUrl]) => {
-      return (
-        <Button
-          variant="outlined"
-          color="primary"
-          key={actionName}
-          onClick={() =>
-            handleClickAction(actionName, apiEndpoint().path(actionUrl.href))
-          }
-        >
-          {actionName}
-        </Button>
-      );
-    });
-
-  const acceptFields = [];
-  if (!alphaIsTransitive) {
-    acceptFields.push({
-      key: "alpha_ledger_redeem_identity",
-      label: "Alpha Redeem Identity"
-    });
-  }
-  if (!betaIsTransitive) {
-    acceptFields.push({
-      key: "beta_ledger_refund_identity",
-      label: "Beta Refund Identity"
-    });
-  }
-
-  const handleClickAction = (name: string, url: uri.URI) => {
-    setAction({ name, url });
-
-    switch (name) {
-      case "accept":
-      case "decline":
-        setDialogState(DialogState.CommunicationDialogOpen);
-        break;
-      case "fund":
-      case "deploy":
-      case "redeem":
-      case "refund":
-        const params = actionQueryParams(swap, name);
-
-        if (params.length > 0) {
-          setLedgerActionParamSpec(params);
-          setDialogState(DialogState.LedgerParamsDialogOpen);
-        } else {
-          setDialogState(DialogState.LedgerDialogOpen);
-        }
-        break;
-    }
-  };
+  const actions = actionDialogs(
+    swap.links,
+    swap.properties.role,
+    swap.properties.parameters.alpha_ledger,
+    swap.properties.parameters.beta_ledger
+  );
 
   return (
-    <React.Fragment key={swap._links.self.href}>
-      <TableRow data-cy="swap-row">
-        <TableCell>{swap.parameters.alpha_ledger.name}</TableCell>
-        <TableCell>
-          <AssetCell asset={swap.parameters.alpha_asset} />
+    <React.Fragment key={swapLink.href}>
+      <TableRow
+        hover={true}
+        onClick={onRowClick}
+        className={classes.tableRow}
+        data-cy="swap-row"
+      >
+        <TableCell align="center">
+          <SwapStatusIcon status={swap.properties.status} />
         </TableCell>
-        <TableCell>{swap.parameters.beta_ledger.name}</TableCell>
+        <TableCell>{swap.properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>
-          <AssetCell asset={swap.parameters.beta_asset} />
+          <AssetCell asset={swap.properties.parameters.alpha_asset} />
         </TableCell>
-        <TableCell>{swap.protocol}</TableCell>
-        <TableCell>{swap.status}</TableCell>
-        <TableCell>{swap.role}</TableCell>
-        <TableCell>{actionButtons}</TableCell>
-      </TableRow>
-      {dialogState === DialogState.CommunicationDialogOpen && (
-        <CommunicationActionDialog
-          action={action}
-          acceptFields={acceptFields}
-          onClose={() => setDialogState(DialogState.Closed)}
-        />
-      )}
-      {dialogState === DialogState.LedgerParamsDialogOpen && (
-        <Dialog open={true}>
-          <DialogTitle>Action parameters</DialogTitle>
-          <DialogContent>
-            {ledgerActionParamSpec.map(spec => (
-              <TextField
-                key={spec.key}
-                label={spec.label}
-                required={true}
-                value={ledgerActionParams[spec.key] || ""}
-                onChange={event =>
-                  dispatchLedgerActionParams({
-                    name: spec.key,
-                    value: event.target.value
-                  })
-                }
-              />
-            ))}
-          </DialogContent>
-          <DialogActions>
-            <Button
-              onClick={() => {
-                const url = action.url.query(ledgerActionParams);
+        <TableCell>{swap.properties.parameters.beta_ledger.name}</TableCell>
+        <TableCell>
+          <AssetCell asset={swap.properties.parameters.beta_asset} />
+        </TableCell>
+        <TableCell>
+          {protocolSpecLink ? (
+            <a
+              onClick={e => e.stopPropagation()}
+              target={"_blank"}
+              href={protocolSpecLink.href}
+            >
+              {swap.properties.protocol}
+            </a>
+          ) : (
+            swap.properties.protocol
+          )}
+        </TableCell>
 
-                setAction({ ...action, url });
-                setDialogState(DialogState.LedgerDialogOpen);
-              }}
-              color="primary"
-            >
-              {"Submit"}
-            </Button>
-            <Button
-              onClick={() => setDialogState(DialogState.Closed)}
-              color="secondary"
-            >
-              Close
-            </Button>
-          </DialogActions>
-        </Dialog>
-      )}
-      {dialogState === DialogState.LedgerDialogOpen && (
-        <LedgerActionDialog
-          path={action.url}
-          onClose={() => setDialogState(DialogState.Closed)}
-        />
-      )}
+        <TableCell>{swap.properties.role}</TableCell>
+        <TableCell>{actions.buttons.map(elem => elem.button)}</TableCell>
+      </TableRow>
+      {actions.dialogs}
     </React.Fragment>
   );
 }
 
-export default SwapRow;
+export default withRouter(SwapRow);

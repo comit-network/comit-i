@@ -5,16 +5,15 @@ describe("The page for listing swaps", () => {
     cy.server();
     cy.route("http://localhost:8000/swaps", "fixture:listOfTwoSwaps.json");
 
-    cy.visit("/");
+    cy.visit("/show_resource/swaps");
 
     cy.get("[data-cy=swap-row]").should("have.length", 2);
   });
 
   it("should display an error if request fails", () => {
-    cy.visit("/");
+    cy.visit("/show_resource/swaps");
 
     cy.get("[data-cy=swap-row]").should("not.exist");
-    cy.get("[data-cy=empty-swap-list-placeholder]").should("exist");
     cy.get("[data-cy=error-snackbar]").should("exist");
   });
 });

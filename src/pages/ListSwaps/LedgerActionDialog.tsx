@@ -49,7 +49,7 @@ function LedgerActionDialog({ path, onClose }: LedgerActionDialogProps) {
       />
     );
   } else {
-    /* TODO: setting open to true means that backDropClick and escapeKeyDown
+    /* FIXME: Setting open to true means that backDropClick and escapeKeyDown
        don't close the dialog  */
     return (
       <Dialog open={true}>

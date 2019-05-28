@@ -11,7 +11,7 @@ import Web3SendTransactionButton from "../../components/Web3SendTransactionButto
 import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
-  onClose: (event: React.MouseEvent) => void;
+  onClose: () => void;
   action: LedgerAction;
 }
 
@@ -19,6 +19,11 @@ function LedgerActionDialogBody({
   onClose,
   action
 }: LedgerActionDialogBodyProps) {
+  function onSuccess() {
+    onClose();
+    location.reload();
+  }
+
   switch (action.type) {
     case "bitcoin-broadcast-signed-transaction": {
       const expiry = action.payload.min_median_block_time;
@@ -105,6 +110,7 @@ function LedgerActionDialogBody({
                 value: action.payload.amount,
                 gas: action.payload.gas_limit
               }}
+              onSuccess={onSuccess}
             />
             <Button onClick={onClose} color="secondary">
               Close
@@ -142,6 +148,7 @@ function LedgerActionDialogBody({
                 data: action.payload.data,
                 gas: action.payload.gas_limit
               }}
+              onSuccess={onSuccess}
             />
             <Button onClick={onClose} color="secondary">
               Close
