@@ -86,7 +86,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                   value={peer}
                   onChange={event => setPeer(event.target.value)}
                   label={"Peer"}
-                  helperText={"Peer id"}
+                  helperText={"Peer ID"}
                   data-cy="peer-input"
                 />
               </Fieldset>
