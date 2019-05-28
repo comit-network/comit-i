@@ -29,7 +29,7 @@
     "satoshi-bitcoin-ts": "^0.2.4",
     "urijs": "^1.19.1",
     "uuidjs": "^4.2.1",
-    "web3": "^1.0.0-beta.48"
+    "web3": "^1.0.0-beta.55"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",

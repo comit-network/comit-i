@@ -7,13 +7,22 @@ interface Web3ProviderProps {
   children: ReactNode;
 }
 
+function newWeb3() {
+  if (window.web3) {
+    const web3 = new Web3(window.web3.currentProvider);
+
+    // Why? Because: https://github.com/ethereum/web3.js/issues/2822
+    web3.eth.transactionConfirmationBlocks = 1;
+
+    return web3;
+  } else {
+    return undefined;
+  }
+}
+
 export function Web3Provider({ children }: Web3ProviderProps) {
   return (
-    <Web3Context.Provider
-      value={window.web3 ? new Web3(window.web3.currentProvider) : undefined}
-    >
-      {children}
-    </Web3Context.Provider>
+    <Web3Context.Provider value={newWeb3()}>{children}</Web3Context.Provider>
   );
 }
 
