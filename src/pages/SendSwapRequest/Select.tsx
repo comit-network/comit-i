@@ -123,7 +123,7 @@ function Select({
                 </Grid>
               );
             }
-            case ParameterKind.Address: {
+            default: {
               return (
                 <Grid key={param.name} item={true} xs={12} md={12}>
                   <TextField
