@@ -20,7 +20,7 @@ interface SelectProps {
   disabledOptions?: string[];
   label: string;
   parameters: Parameter[];
-  onSelectionChange: (selection: string) => void;
+  onSelectionChange: (selection: string, callback?: () => void) => void;
   onParameterChange: (name: string, value: string) => void;
   dataCy?: string;
   disabled?: boolean;

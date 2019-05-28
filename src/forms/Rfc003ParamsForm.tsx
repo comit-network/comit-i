@@ -32,11 +32,17 @@ export const defaultRfc003Params: Rfc003Params = {
   beta_ledger_redeem_identity: undefined
 };
 
-export function resetParams(currentParams: Rfc003Params) {
+export function resetAlphaIdentity(currentParams: Rfc003Params) {
   return {
     ...currentParams,
     alpha_ledger_refund_identity:
-      defaultRfc003Params.alpha_ledger_refund_identity,
+      defaultRfc003Params.alpha_ledger_refund_identity
+  };
+}
+
+export function resetBetaIdentity(currentParams: Rfc003Params) {
+  return {
+    ...currentParams,
     beta_ledger_redeem_identity: defaultRfc003Params.beta_ledger_redeem_identity
   };
 }
