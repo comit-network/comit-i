@@ -1,4 +1,4 @@
-import { Button, TableCell, TableRow } from "@material-ui/core";
+import { TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
@@ -65,15 +65,13 @@ function SwapRow({ swap, history }: SwapRowProps) {
         </TableCell>
         <TableCell>
           {protocolSpecLink ? (
-            <Button
-              onClick={event => {
-                event.stopPropagation();
-              }}
-              variant="outlined"
+            <a
+              onClick={e => e.stopPropagation()}
+              target={"_blank"}
               href={protocolSpecLink.href}
             >
               {swap.properties.protocol}
-            </Button>
+            </a>
           ) : (
             swap.properties.protocol
           )}
