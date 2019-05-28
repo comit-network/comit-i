@@ -1,15 +1,7 @@
 import { Grid, InputAdornment } from "@material-ui/core";
-import { makeStyles } from "@material-ui/styles";
 import React from "react";
+import EthereumAddressTextField from "../components/EthereumAddressTextField";
 import TextField from "../components/TextField";
-
-const useRfc003ParamsStyles = makeStyles({
-  grid: {
-    /* FIXME: border-bottom does not respect the margin completely with
-     * this style */
-    overflow: "hidden"
-  }
-});
 
 interface Rfc003ParamsProps {
   alphaLedger: string;
@@ -76,7 +68,6 @@ function Rfc003ParamsForm({
   params,
   setParams
 }: Rfc003ParamsProps) {
-  const classes = useRfc003ParamsStyles();
   const {
     alpha_expiry,
     beta_expiry,
@@ -105,15 +96,21 @@ function Rfc003ParamsForm({
           />
         </Grid>
         {alphaLedger === "ethereum" && (
-          <Grid className={classes.grid} item={true} md={6} xs={12}>
-            <TextField
+          <Grid item={true} md={6} xs={12}>
+            <EthereumAddressTextField
               required={true}
+              label="Alpha Refund Identity"
               value={alpha_ledger_refund_identity || ""}
-              label={"Alpha Refund Identity"}
               onChange={event =>
                 setParams({
                   ...params,
                   alpha_ledger_refund_identity: event.target.value
+                })
+              }
+              onAddress={address =>
+                setParams({
+                  ...params,
+                  alpha_ledger_refund_identity: address
                 })
               }
               data-cy="alpha-refund-identity-input"
@@ -136,15 +133,21 @@ function Rfc003ParamsForm({
           />
         </Grid>
         {betaLedger === "ethereum" && (
-          <Grid className={classes.grid} item={true} md={6} xs={12}>
-            <TextField
+          <Grid item={true} md={6} xs={12}>
+            <EthereumAddressTextField
               required={true}
+              label="Beta Redeem Identity"
               value={beta_ledger_redeem_identity || ""}
-              label={"Beta Refund Identity"}
               onChange={event =>
                 setParams({
                   ...params,
                   beta_ledger_redeem_identity: event.target.value
+                })
+              }
+              onAddress={address =>
+                setParams({
+                  ...params,
+                  beta_ledger_redeem_identity: address
                 })
               }
               data-cy="beta-redeem-identity-input"
