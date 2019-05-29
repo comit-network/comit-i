@@ -105,10 +105,10 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Web3SendTransactionButton
-              transaction={{
+              transactionConfig={{
                 data: action.payload.data,
                 value: action.payload.amount,
-                gas: action.payload.gas_limit
+                gas: +action.payload.gas_limit
               }}
               onSuccess={onSuccess}
             />
@@ -143,7 +143,7 @@ function LedgerActionDialogBody({
           <DialogActions>
             <Web3SendTransactionButton
               minTimestamp={expiry}
-              transaction={{
+              transactionConfig={{
                 to: action.payload.contract_address,
                 data: action.payload.data,
                 gas: action.payload.gas_limit

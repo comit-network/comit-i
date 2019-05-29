@@ -3,14 +3,14 @@ import DoneIcon from "@material-ui/icons/Done";
 import ErrorIcon from "@material-ui/icons/Error";
 import TimerIcon from "@material-ui/icons/Timer";
 import React, { useState } from "react";
-import { Transaction } from "web3-core/types";
+import { TransactionConfig } from "web3-core/types";
 import MetamaskIcon from "./MetamaskIcon";
 import NoWeb3Tooltip from "./NoWeb3Tooltip";
 import TooEarlyTooltip from "./TooEarlyTooltip";
 import { useWeb3 } from "./Web3Context";
 
 interface Props {
-  transaction: Transaction;
+  transactionConfig: TransactionConfig;
   minTimestamp?: number;
   onSuccess: () => void;
 }
@@ -24,7 +24,7 @@ enum TransactionState {
 }
 
 function Web3SendTransactionButton({
-  transaction,
+  transactionConfig,
   minTimestamp,
   onSuccess
 }: Props) {
@@ -35,7 +35,7 @@ function Web3SendTransactionButton({
   const onClickHandler = web3
     ? async () => {
         const block = await web3.eth.getBlock("latest");
-        setNetworkTime(block.timestamp);
+        setNetworkTime(+block.timestamp);
         const actionReady = !minTimestamp || block.timestamp >= minTimestamp;
 
         if (actionReady) {
@@ -45,7 +45,7 @@ function Web3SendTransactionButton({
             // https://github.com/MetaMask/metamask-extension/issues/6339
             const accounts = await web3.eth.getAccounts();
             await web3.eth.sendTransaction({
-              ...transaction,
+              ...transactionConfig,
               from: accounts[0]
             });
             setState(TransactionState.Sent);

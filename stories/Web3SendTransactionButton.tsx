@@ -8,7 +8,7 @@ storiesOf("Web3SendTransactionButton", module).add(
   () => (
     <Web3Provider>
       <Web3SendTransactionButton
-        transaction={{
+        transactionConfig={{
           to: "0x00a329c0648769a73afac7f9381e08fb43dbea72",
           value: "10000000000000"
         }}
