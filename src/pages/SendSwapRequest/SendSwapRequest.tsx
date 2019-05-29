@@ -11,6 +11,8 @@ import SendButton from "../../components/SendButton";
 import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
+  resetAlphaIdentity,
+  resetBetaIdentity,
   Rfc003Params
 } from "../../forms/Rfc003ParamsForm";
 import SwapForm, {
@@ -50,7 +52,13 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
       <Page title={"Send a swap request"}>
         <form onSubmit={handleFormSubmit}>
           <Grid container={true} spacing={16}>
-            <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
+            <SwapForm
+              swap={swap}
+              ledgers={ledgers}
+              dispatch={dispatch}
+              onAlphaLedgerChange={() => setParams(resetAlphaIdentity(params))}
+              onBetaLedgerChange={() => setParams(resetBetaIdentity(params))}
+            />
             <Grid item={true} xs={12}>
               <Fieldset legend="Protocol Parameters">
                 <Grid item={true} xs={12} md={6}>
