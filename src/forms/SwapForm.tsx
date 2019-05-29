@@ -124,8 +124,8 @@ function SwapForm({
   swap,
   ledgers,
   dispatch,
-  onAlphaLedgerChange,
-  onBetaLedgerChange,
+  onAlphaLedgerChange = () => undefined,
+  onBetaLedgerChange = () => undefined,
   disabled = false
 }: Props) {
   const alphaLedger = swap.alpha_ledger;
@@ -155,7 +155,7 @@ function SwapForm({
     label: asset.label
   }));
 
-  const onSelectionChange = (of: keyof Swap, callback?: () => void) => (
+  const onSelectionChange = (of: keyof Swap, callback: () => void) => (
     selection: string
   ) => {
     dispatch({
@@ -163,9 +163,7 @@ function SwapForm({
       of,
       payload: { newSelection: selection }
     });
-    if (callback) {
-      callback();
-    }
+    callback();
   };
   const onParameterChange = (of: keyof Swap) => (name: string, value: string) =>
     dispatch({
@@ -183,11 +181,9 @@ function SwapForm({
             selection={alphaLedger}
             options={ledgerOptions}
             disabledOptions={[betaLedger.name]}
-            onSelectionChange={
-              onAlphaLedgerChange
-                ? onSelectionChange("alpha_ledger", () => onAlphaLedgerChange())
-                : onSelectionChange("alpha_ledger")
-            }
+            onSelectionChange={onSelectionChange("alpha_ledger", () =>
+              onAlphaLedgerChange()
+            )}
             onParameterChange={onParameterChange("alpha_ledger")}
             parameters={alphaLedgerSpec.parameters}
             dataCy="ledger-select"
@@ -199,7 +195,9 @@ function SwapForm({
               selection={alphaAsset}
               options={alphaAssetOptions}
               disabledOptions={[]}
-              onSelectionChange={onSelectionChange("alpha_asset")}
+              onSelectionChange={onSelectionChange("alpha_asset", () =>
+                onAlphaLedgerChange()
+              )}
               onParameterChange={onParameterChange("alpha_asset")}
               parameters={alphaAssetSpec.parameters}
               dataCy="asset-select"
@@ -215,11 +213,9 @@ function SwapForm({
             selection={betaLedger}
             options={ledgerOptions}
             disabledOptions={[alphaLedger.name]}
-            onSelectionChange={
-              onBetaLedgerChange
-                ? onSelectionChange("beta_ledger", () => onBetaLedgerChange())
-                : onSelectionChange("beta_ledger")
-            }
+            onSelectionChange={onSelectionChange("beta_ledger", () =>
+              onBetaLedgerChange()
+            )}
             onParameterChange={onParameterChange("beta_ledger")}
             parameters={betaLedgerSpec.parameters}
             dataCy="ledger-select"
@@ -231,7 +227,9 @@ function SwapForm({
               selection={betaAsset}
               options={betaAssetOptions}
               disabledOptions={[]}
-              onSelectionChange={onSelectionChange("beta_asset")}
+              onSelectionChange={onSelectionChange("beta_asset", () =>
+                onBetaLedgerChange()
+              )}
               onParameterChange={onParameterChange("beta_asset")}
               parameters={betaAssetSpec.parameters}
               dataCy="asset-select"
