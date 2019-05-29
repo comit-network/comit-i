@@ -1,17 +1,14 @@
-import { InputAdornment, TextField, Tooltip } from "@material-ui/core";
+import { InputAdornment, Tooltip } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
 import React, { useState } from "react";
+import TextField from "../components/TextField";
 import MetamaskIcon from "./MetamaskIcon";
 import { Web3Loader } from "./Web3Context";
 
 interface Props extends StandardTextFieldProps {
   onAddress: (address: string) => void;
 }
-
-const styles = {
-  minWidth: "28rem"
-};
 
 function EthereumAddressTextField({
   className,
@@ -24,8 +21,6 @@ function EthereumAddressTextField({
   return (
     <TextField
       {...remainingProps}
-      style={styles}
-      label="Ethereum Address"
       InputProps={{
         ...InputProps,
         endAdornment: (

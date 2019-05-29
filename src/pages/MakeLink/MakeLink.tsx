@@ -104,7 +104,7 @@ const MakeLink = () => {
             value={peer}
             onChange={event => setPeer(event.target.value)}
             label={"Peer"}
-            helperText={"IPv4 Socket Address"}
+            helperText={"Peer ID"}
           />
         </Grid>
         <Grid item={true} xs={12}>

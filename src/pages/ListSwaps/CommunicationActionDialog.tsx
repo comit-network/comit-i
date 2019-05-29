@@ -8,6 +8,7 @@ import {
 } from "@material-ui/core";
 import React, { useReducer } from "react";
 import postAction from "../../api/postAction";
+import EthereumAddressTextField from "../../components/EthereumAddressTextField";
 
 interface Action {
   name: string;
@@ -22,6 +23,7 @@ interface AcceptActionField {
 interface AcceptField {
   key: string;
   label: string;
+  ledger: string;
 }
 
 function acceptReducer(currentState: object, field: AcceptActionField) {
@@ -78,20 +80,41 @@ function CommunicationActionDialog({
         <Dialog open={true} onClose={handleCloseDialog}>
           <DialogTitle>Accept</DialogTitle>
           <DialogContent>
-            {acceptFields.map(field => (
-              <TextField
-                key={field.key}
-                required={true}
-                label={field.label}
-                value={acceptBody[field.key] || ""}
-                onChange={event =>
-                  dispatchAccept({
-                    key: field.key,
-                    value: event.target.value
-                  })
-                }
-              />
-            ))}
+            {acceptFields.map(field =>
+              field.ledger === "ethereum" ? (
+                <EthereumAddressTextField
+                  key={field.key}
+                  required={true}
+                  label={field.label}
+                  value={acceptBody[field.key] || ""}
+                  onChange={event =>
+                    dispatchAccept({
+                      key: field.key,
+                      value: event.target.value
+                    })
+                  }
+                  onAddress={address =>
+                    dispatchAccept({
+                      key: field.key,
+                      value: address
+                    })
+                  }
+                />
+              ) : (
+                <TextField
+                  key={field.key}
+                  required={true}
+                  label={field.label}
+                  value={acceptBody[field.key] || ""}
+                  onChange={event =>
+                    dispatchAccept({
+                      key: field.key,
+                      value: event.target.value
+                    })
+                  }
+                />
+              )
+            )}
           </DialogContent>
           <DialogActions>
             <Button
