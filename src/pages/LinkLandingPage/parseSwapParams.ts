@@ -8,7 +8,6 @@ export interface SwapParams {
   betaAsset: SwapValue;
   protocol: string;
   peer: string;
-  id: string;
 }
 
 export default function parseSwapParams(queryParams: QueryParams): SwapParams {
@@ -20,7 +19,6 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
 
   const protocol = parseProtocol(queryParams.protocol);
   const peer = parsePeer(queryParams.peer);
-  const id = "42";
 
   return {
     alphaLedger,
@@ -28,8 +26,7 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
     betaLedger,
     betaAsset,
     protocol,
-    peer,
-    id
+    peer
   };
 }
 
