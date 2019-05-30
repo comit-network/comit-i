@@ -4,10 +4,11 @@ import Web3 from "web3";
 const Web3Context = React.createContext<Web3 | undefined>(undefined);
 
 interface Web3ProviderProps {
+  window?: Window;
   children: ReactNode;
 }
 
-function newWeb3() {
+function newWeb3(window: Window) {
   if (window.web3) {
     const web3 = new Web3(window.web3.currentProvider);
 
@@ -20,9 +21,16 @@ function newWeb3() {
   }
 }
 
-export function Web3Provider({ children }: Web3ProviderProps) {
+const globalWindow = window;
+
+export function Web3Provider({
+  children,
+  window = globalWindow
+}: Web3ProviderProps) {
   return (
-    <Web3Context.Provider value={newWeb3()}>{children}</Web3Context.Provider>
+    <Web3Context.Provider value={newWeb3(window)}>
+      {children}
+    </Web3Context.Provider>
   );
 }
 
