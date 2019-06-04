@@ -5,15 +5,11 @@ import { Swap } from "../forms/SwapForm";
 import { relativeMinutesToTimestamp } from "../time";
 import apiEndpoint from "./apiEndpoint";
 
-export interface DialInfo {
-  peer_id: string;
-  address_hint: string;
-}
-
 export default function postRfc003Swap(
   swap: Swap,
   params: Rfc003Params,
-  peer: string | DialInfo
+  peerId: string,
+  addressHint: string
 ) {
   const uri = apiEndpoint()
     .path("swaps/rfc003")
@@ -24,12 +20,17 @@ export default function postRfc003Swap(
     beta_expiry: { $apply: relativeMinutesToTimestamp }
   });
 
+  let peer = {};
+  if (addressHint) {
+    peer = { peer_id: peerId, address_hint: addressHint };
+  }
+
   return axios.post(
     uri,
     {
       ...swap,
       ...adjustedParams,
-      peer
+      peer: peer ? peer : peerId
     },
     {
       timeout: 2000

@@ -9,7 +9,7 @@ export interface SwapParams {
   betaLedger: SwapValue;
   betaAsset: SwapValue;
   protocol: string;
-  peer: string;
+  peerId: string;
   addressHint: string;
 }
 
@@ -21,7 +21,7 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
   const betaAsset = parseAsset(queryParams.beta_asset, "beta");
 
   const protocol = parseProtocol(queryParams.protocol);
-  const { peer, addressHint } = parsePeer(queryParams.peer);
+  const { peerId, addressHint } = parsePeer(queryParams.peer);
 
   return {
     alphaLedger,
@@ -29,7 +29,7 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
     betaLedger,
     betaAsset,
     protocol,
-    peer,
+    peerId,
     addressHint
   };
 }
@@ -112,18 +112,18 @@ function parseAsset(input: string | undefined, asset: string): SwapValue {
 
 function parsePeer(peer: string | QueryDialInfo | string[] | undefined | null) {
   if (!peer) {
-    return { peer: "", addressHint: "" };
+    return { peerId: "", addressHint: "" };
   }
   if (peer instanceof Array) {
-    return { peer: peer[0], addressHint: "" };
+    return { peerId: peer[0], addressHint: "" };
   }
   if (typeof peer === "string") {
-    return { peer, addressHint: "" };
+    return { peerId: peer, addressHint: "" };
   }
   if (peer.hasOwnProperty("peer_id") && peer.hasOwnProperty("address_hint")) {
-    return { peer: peer.peer_id, addressHint: peer.address_hint };
+    return { peerId: peer.peer_id, addressHint: peer.address_hint };
   }
-  return { peer: "", addressHint: "" };
+  return { peerId: "", addressHint: "" };
 }
 
 function parseProtocol(protocol: string | undefined) {

@@ -29,7 +29,7 @@ function parseSwapParameters(location: Location) {
       betaLedger,
       alphaAsset,
       betaAsset,
-      peer,
+      peerId,
       addressHint,
       protocol
     } = parsedQuery;
@@ -51,7 +51,7 @@ function parseSwapParameters(location: Location) {
 
     return {
       swap,
-      peer,
+      peerId,
       addressHint,
       protocol,
       error: false
@@ -59,7 +59,7 @@ function parseSwapParameters(location: Location) {
   } catch (error) {
     return {
       swap: emptySwap,
-      peer: "",
+      peerId: "",
       addressHint: "",
       protocol: "",
       error: true
@@ -69,7 +69,7 @@ function parseSwapParameters(location: Location) {
 
 const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const { swap, peer, addressHint, protocol, error } = parseSwapParameters(
+  const { swap, peerId, addressHint, protocol, error } = parseSwapParameters(
     location
   );
   const [displayError, setDisplayError] = useState(false);
@@ -77,7 +77,7 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    postRfc003Swap(swap, params, peer)
+    postRfc003Swap(swap, params, peerId, addressHint)
       .then(() => history.push("/"))
       .catch(() => setDisplayError(true));
   };
@@ -115,7 +115,7 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
               <Fieldset legend={"To"}>
                 <Grid item={true} xs={12} md={6}>
                   <TextField
-                    value={peer}
+                    value={peerId}
                     label={"Peer"}
                     helperText={"Peer Id"}
                     data-cy="peer-input"
@@ -130,7 +130,7 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
                     helperText={"Address in multiaddress format"}
                     data-cy="peer-input"
                     disabled={true}
-                    required={true}
+                    required={false}
                   />
                 </Grid>
               </Fieldset>

@@ -25,9 +25,10 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
 
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const [peer, setPeer] = useState(
+  const [peerId, setPeerId] = useState(
     "QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd"
   );
+  const [addressHint, setAddressHint] = useState();
   const [displayError, setDisplayError] = useState(false);
 
   const queryParams = URI.parseQuery(location.search) as {
@@ -38,7 +39,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
 
-    postRfc003Swap(swap, params, peer)
+    postRfc003Swap(swap, params, peerId, addressHint)
       .then(() => history.push("/"))
       .catch(() => setDisplayError(true));
   };
@@ -80,16 +81,25 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                 )}
               </Fieldset>
             </Grid>
-            <Grid item={true} xs={12}>
+            <Grid item={true} xs={12} md={6}>
               <Fieldset legend={"To"}>
                 <TextField
-                  value={peer}
-                  onChange={event => setPeer(event.target.value)}
+                  value={peerId}
+                  onChange={event => setPeerId(event.target.value)}
                   label={"Peer"}
                   helperText={"Peer ID"}
                   data-cy="peer-input"
                 />
               </Fieldset>
+            </Grid>
+            <Grid item={true} xs={12} md={6}>
+              <TextField
+                value={addressHint}
+                onChange={event => setAddressHint(event.target.value)}
+                label={"Peer Address Hint"}
+                helperText={"Address in multiaddress format"}
+                data-cy="peer-input"
+              />
             </Grid>
             <Grid item={true} xs={12}>
               <SendButton />
