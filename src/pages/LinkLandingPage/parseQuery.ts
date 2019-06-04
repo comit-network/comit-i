@@ -18,6 +18,19 @@ function firstOrValue(value: string | string[]) {
   }
 }
 
+function parsePeer(value: string) {
+  const parts = value.split("@");
+
+  if (parts.length === 2) {
+    return {
+      peer_id: parts[0],
+      address_hint: parts[1]
+    };
+  }
+
+  return parts[0];
+}
+
 export default function parseQuery(query: string): QueryParams {
   const queryString = query.charAt(0) === "?" ? query.substr(1) : query;
 
@@ -29,6 +42,12 @@ export default function parseQuery(query: string): QueryParams {
     .map(key => {
       // @ts-ignore
       const value = linkQuery[key];
+
+      if (key === "peer") {
+        return {
+          [key]: parsePeer(value)
+        };
+      }
 
       return {
         [key]: firstOrValue(value)
