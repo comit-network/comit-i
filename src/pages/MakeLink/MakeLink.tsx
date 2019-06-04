@@ -178,6 +178,9 @@ function assetToQueryValue(value: SwapValue) {
       case "ether": {
         return `${fromWei(value.quantity)}ETH`;
       }
+      case "erc20": {
+        return `${value.quantity}ERC20:${value.token_contract}`;
+      }
     }
   }
 }
