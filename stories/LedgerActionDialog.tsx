@@ -1,8 +1,8 @@
-import { storiesOf } from "@storybook/react";
-import { Button, Dialog } from "@material-ui/core";
-import LedgerActionDialogBody from "../src/pages/ListSwaps/LedgerActionDialogBody";
-import { Store, withState } from "@dump247/storybook-state";
+import {Store, withState} from "@dump247/storybook-state";
+import {Button, Dialog} from "@material-ui/core";
+import {storiesOf} from "@storybook/react";
 import React from "react";
+import LedgerActionDialogBody from "../src/pages/ListSwaps/LedgerActionDialogBody";
 
 interface DialogStoryState {
   open: boolean;
@@ -24,7 +24,7 @@ storiesOf("LedgerActionDialog", module)
     withState({ open: false })(({ store }) => (
       <div>
         <Button onClick={openDialog(store)}>Open dialog</Button>
-        <Dialog open={store.state.open}>
+        <Dialog open={store.state.open} onEscapeKeyDown={closeDialog(store)} onBackdropClick={closeDialog(store)}>
           <LedgerActionDialogBody
             onClose={closeDialog(store)}
             action={{
@@ -45,7 +45,7 @@ storiesOf("LedgerActionDialog", module)
     withState({ open: false })(({ store }) => (
       <div>
         <Button onClick={openDialog(store)}>Open dialog</Button>
-        <Dialog open={store.state.open}>
+        <Dialog open={store.state.open} onEscapeKeyDown={closeDialog(store)} onBackdropClick={closeDialog(store)}>
           <LedgerActionDialogBody
             onClose={closeDialog(store)}
             action={{

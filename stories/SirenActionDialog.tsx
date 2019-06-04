@@ -30,7 +30,7 @@ storiesOf("SirenActionParametersDialogBody", module)
                 <ThemeProvider theme={appTheme}>
                     <Button onClick={openDialog(store)}>Trigger action</Button>
 
-                    <Dialog open={store.state.open} maxWidth={"sm"} fullWidth={true}>
+                    <Dialog open={store.state.open} maxWidth={"sm"} fullWidth={true} onEscapeKeyDown={closeDialog(store)} onBackdropClick={closeDialog(store)}>
                         <SirenActionParametersDialogBody
                             action={{
                                 title: "Accept",
@@ -64,7 +64,7 @@ storiesOf("SirenActionParametersDialogBody", module)
                 <ThemeProvider theme={appTheme}>
                     <Button onClick={openDialog(store)}>Trigger action</Button>
 
-                    <Dialog open={store.state.open} maxWidth={"sm"} fullWidth={true}>
+                    <Dialog open={store.state.open} maxWidth={"sm"} fullWidth={true} onEscapeKeyDown={closeDialog(store)} onBackdropClick={closeDialog(store)}>
                         <SirenActionParametersDialogBody
                             action={{
                                 title: "Redeem",

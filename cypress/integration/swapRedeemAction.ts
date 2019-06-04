@@ -60,7 +60,7 @@ describe("The Redeem action", () => {
       cy.get("[data-cy=dialog]")
         .find("[data-cy=action-text-field]:nth(1)")
         .find("input")
-        .type(20);
+        .type("20");
 
       cy.get("[data-cy=dialog]")
         .find("[data-cy=ok-button]")

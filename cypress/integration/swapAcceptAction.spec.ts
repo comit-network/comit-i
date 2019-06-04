@@ -35,6 +35,17 @@ describe("The Accept action", () => {
     cy.get("[data-cy=dialog]").should("not.exist");
   });
 
+  it("should close the dialog when typing escape", () => {
+    cy.get("[data-cy=accept-button]").click();
+    cy.get("[data-cy=dialog]").should("exist");
+
+    cy.get("[data-cy=action-text-field]")
+      .find("input")
+      .type("{esc}");
+
+    cy.get("[data-cy=dialog]").should("not.exist");
+  });
+
   it("should send the request and close dialog and show progress circular when accepting", () => {
     cy.server();
     cy.route({

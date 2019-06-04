@@ -151,27 +151,43 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
           )}
         </TableCell>
       </TableRow>
-      {activeSirenParameterDialog && (
-        <Dialog open={true}>
-          <SirenActionParametersDialogBody
-            action={activeSirenParameterDialog}
-            onClose={() => dispatch(closeSirenParametersDialog())}
-            onSubmit={data =>
-              dispatch(
-                sirenParameterDialogSubmitted(activeSirenParameterDialog, data)
-              )
-            }
-          />
+      {
+        <Dialog
+          open={Boolean(activeSirenParameterDialog)}
+          onEscapeKeyDown={() => dispatch(closeSirenParametersDialog())}
+          onBackdropClick={() => dispatch(closeSirenParametersDialog())}
+        >
+          {activeSirenParameterDialog && (
+            <SirenActionParametersDialogBody
+              action={activeSirenParameterDialog}
+              onClose={() => dispatch(closeSirenParametersDialog())}
+              onSubmit={data =>
+                dispatch(
+                  // @ts-ignore
+                  sirenParameterDialogSubmitted(
+                    activeSirenParameterDialog,
+                    data
+                  )
+                )
+              }
+            />
+          )}
         </Dialog>
-      )}
-      {activeLedgerActionDialog && (
-        <Dialog open={true}>
-          <LedgerActionDialogBody
-            action={activeLedgerActionDialog}
-            onClose={() => dispatch(closeLedgerActionDialog())}
-          />
+      }
+      {
+        <Dialog
+          open={Boolean(activeLedgerActionDialog)}
+          onEscapeKeyDown={() => dispatch(closeLedgerActionDialog())}
+          onBackdropClick={() => dispatch(closeLedgerActionDialog())}
+        >
+          {activeLedgerActionDialog && (
+            <LedgerActionDialogBody
+              action={activeLedgerActionDialog}
+              onClose={() => dispatch(closeLedgerActionDialog())}
+            />
+          )}
         </Dialog>
-      )}
+      }
     </React.Fragment>
   );
 }
