@@ -15,44 +15,51 @@ import SwapForm, {
   reducer as swapReducer,
   SwapValue
 } from "../../forms/SwapForm";
+import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const MakeLink = () => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
   const [protocol, setProtocol] = useState("");
-  const [peer, setPeer] = useState("");
+  const [peerId, setPeerId] = useState("");
+  const [addressHint, setAddressHint] = useState("");
 
-  let uri = new URI({
+  let comitLink = new URI({
     protocol: "web+comit",
     hostname: "swap"
   });
 
   const alphaLedgerQueryValue = ledgerToQueryValue(swap.alpha_ledger);
   if (alphaLedgerQueryValue) {
-    uri = uri.addQuery("alpha_ledger", alphaLedgerQueryValue);
+    comitLink = comitLink.addQuery("alpha_ledger", alphaLedgerQueryValue);
   }
 
   const betaLedgerQueryValue = ledgerToQueryValue(swap.beta_ledger);
   if (betaLedgerQueryValue) {
-    uri = uri.addQuery("beta_ledger", betaLedgerQueryValue);
+    comitLink = comitLink.addQuery("beta_ledger", betaLedgerQueryValue);
   }
 
   const alphaAssetQueryValue = assetToQueryValue(swap.alpha_asset);
   if (alphaAssetQueryValue) {
-    uri = uri.addQuery("alpha_asset", alphaAssetQueryValue);
+    comitLink = comitLink.addQuery("alpha_asset", alphaAssetQueryValue);
   }
 
   const betaAssetQueryValue = assetToQueryValue(swap.beta_asset);
   if (betaAssetQueryValue) {
-    uri = uri.addQuery("beta_asset", betaAssetQueryValue);
+    comitLink = comitLink.addQuery("beta_asset", betaAssetQueryValue);
   }
 
   if (protocol) {
-    uri = uri.addQuery("protocol", protocol);
+    comitLink = comitLink.addQuery("protocol", protocol);
   }
 
-  if (peer) {
-    uri = uri.addQuery("peer", peer);
+  if (peerId) {
+    if (addressHint) {
+      const peerWithAddress = `${peerId}@${addressHint}`;
+      comitLink = comitLink.addQuery("peer", peerWithAddress);
+    } else {
+      comitLink = comitLink.addQuery("peer", peerId);
+    }
   }
 
   const linkIsValid =
@@ -61,7 +68,7 @@ const MakeLink = () => {
     alphaAssetQueryValue &&
     betaAssetQueryValue &&
     protocol &&
-    peer;
+    peerId;
 
   const icon = linkIsValid ? (
     <CheckCircleOutlined color={"primary"} />
@@ -73,7 +80,7 @@ const MakeLink = () => {
       size={"small"}
       disabled={!linkIsValid}
       onClick={() => {
-        copy(uri.toString());
+        copy(comitLink.toString());
       }}
     >
       Copy <FileCopy />
@@ -84,7 +91,7 @@ const MakeLink = () => {
     <Page title={"Create a new swap link"}>
       <Grid container={true} spacing={5}>
         <SwapForm swap={swap} ledgers={ledgers} dispatch={dispatch} />
-        <Grid item={true} xs={12} md={6}>
+        <Grid item={true} xs={12}>
           <TextField
             label={"Protocol"}
             required={true}
@@ -101,12 +108,16 @@ const MakeLink = () => {
             <option value={"rfc003"}>RFC003</option>
           </TextField>
         </Grid>
-        <Grid item={true} xs={12} md={6}>
-          <TextField
-            value={peer}
-            onChange={event => setPeer(event.target.value)}
-            label={"Peer"}
-            helperText={"Peer ID"}
+        <Grid item={true} xs={12}>
+          <ToForm
+            peerId={peerId}
+            addressHint={addressHint}
+            onPeerChange={event => {
+              setPeerId(event.target.value);
+            }}
+            onAddressHintChange={event => {
+              setAddressHint(event.target.value);
+            }}
           />
         </Grid>
         <Grid item={true} xs={12}>
@@ -118,7 +129,7 @@ const MakeLink = () => {
               </Grid>
               <Grid item={true} xs={8}>
                 <Typography noWrap={true} variant={"body2"} align={"center"}>
-                  {uri.toString()}
+                  {comitLink.toString()}
                 </Typography>
               </Grid>
               <Grid item={true} container={true} xs={2} justify={"center"}>

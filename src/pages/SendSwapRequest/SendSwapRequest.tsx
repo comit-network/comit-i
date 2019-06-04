@@ -8,7 +8,6 @@ import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
 import ProtocolTextField from "../../components/ProtocolTextField";
 import SendButton from "../../components/SendButton";
-import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   resetAlphaIdentity,
@@ -19,15 +18,17 @@ import SwapForm, {
   emptySwap,
   reducer as swapReducer
 } from "../../forms/SwapForm";
+import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
 
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const [peer, setPeer] = useState(
+  const [peerId, setPeerId] = useState(
     "QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd"
   );
+  const [addressHint, setAddressHint] = useState();
   const [displayError, setDisplayError] = useState(false);
 
   const queryParams = URI.parseQuery(location.search) as {
@@ -38,7 +39,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
 
-    postRfc003Swap(swap, params, peer)
+    postRfc003Swap(swap, params, peerId, addressHint)
       .then(() => history.push("/"))
       .catch(() => setDisplayError(true));
   };
@@ -81,15 +82,16 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <Fieldset legend={"To"}>
-                <TextField
-                  value={peer}
-                  onChange={event => setPeer(event.target.value)}
-                  label={"Peer"}
-                  helperText={"Peer ID"}
-                  data-cy="peer-input"
-                />
-              </Fieldset>
+              <ToForm
+                peerId={peerId}
+                addressHint={addressHint}
+                onPeerChange={event => {
+                  setPeerId(event.target.value);
+                }}
+                onAddressHintChange={event => {
+                  setAddressHint(event.target.value);
+                }}
+              />
             </Grid>
             <Grid item={true} xs={12}>
               <SendButton />

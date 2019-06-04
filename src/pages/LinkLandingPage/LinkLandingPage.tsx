@@ -8,12 +8,12 @@ import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
 import ProtocolTextField from "../../components/ProtocolTextField";
 import SendButton from "../../components/SendButton";
-import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
 } from "../../forms/Rfc003ParamsForm";
 import SwapForm, { emptySwap } from "../../forms/SwapForm";
+import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 import ErrorMessage from "./ErrorMessage";
 import InfoMessage from "./InfoMessage";
@@ -29,7 +29,8 @@ function parseSwapParameters(location: Location) {
       betaLedger,
       alphaAsset,
       betaAsset,
-      peer,
+      peerId,
+      addressHint,
       protocol
     } = parsedQuery;
 
@@ -50,14 +51,16 @@ function parseSwapParameters(location: Location) {
 
     return {
       swap,
-      peer,
+      peerId,
+      addressHint,
       protocol,
       error: false
     };
   } catch (error) {
     return {
       swap: emptySwap,
-      peer: "",
+      peerId: "",
+      addressHint: "",
       protocol: "",
       error: true
     };
@@ -66,13 +69,15 @@ function parseSwapParameters(location: Location) {
 
 const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const { swap, peer, protocol, error } = parseSwapParameters(location);
+  const { swap, peerId, addressHint, protocol, error } = parseSwapParameters(
+    location
+  );
   const [displayError, setDisplayError] = useState(false);
 
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    postRfc003Swap(swap, params, peer)
+    postRfc003Swap(swap, params, peerId, addressHint)
       .then(() => history.push("/"))
       .catch(() => setDisplayError(true));
   };
@@ -107,16 +112,11 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <Fieldset legend={"To"}>
-                <TextField
-                  value={peer}
-                  label={"Peer"}
-                  helperText={"IPv4 Socket Address"}
-                  data-cy="peer-input"
-                  disabled={true}
-                  required={true}
-                />
-              </Fieldset>
+              <ToForm
+                peerId={peerId}
+                addressHint={addressHint}
+                disabled={true}
+              />
             </Grid>
             <Grid item={true} xs={12}>
               <SendButton />

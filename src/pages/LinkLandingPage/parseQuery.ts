@@ -1,13 +1,18 @@
 import merge from "deepmerge";
 import URI from "urijs";
 
+export interface QueryDialInfo {
+  peer_id: string;
+  address_hint: string;
+}
+
 export interface QueryParams {
   alpha_ledger?: string;
   beta_ledger?: string;
   alpha_asset?: string;
   beta_asset?: string;
   protocol?: string;
-  peer?: string;
+  peer?: string | QueryDialInfo;
 }
 
 function firstOrValue(value: string | string[]) {
@@ -16,6 +21,19 @@ function firstOrValue(value: string | string[]) {
   } else {
     return value;
   }
+}
+
+function parsePeer(value: string) {
+  const parts = value.split("@");
+
+  if (parts.length === 2) {
+    return {
+      peer_id: parts[0],
+      address_hint: parts[1]
+    };
+  }
+
+  return parts[0];
 }
 
 export default function parseQuery(query: string): QueryParams {
@@ -29,6 +47,12 @@ export default function parseQuery(query: string): QueryParams {
     .map(key => {
       // @ts-ignore
       const value = linkQuery[key];
+
+      if (key === "peer") {
+        return {
+          [key]: parsePeer(value)
+        };
+      }
 
       return {
         [key]: firstOrValue(value)
