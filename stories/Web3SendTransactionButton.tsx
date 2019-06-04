@@ -13,7 +13,9 @@ storiesOf("Web3SendTransactionButton", module).add(
           value: "10000000000000"
         }}
         minTimestamp={1557915959}
-        onSuccess={() => {return;}}
+        onSuccess={() => {
+          return;
+        }}
       />
     </Web3Provider>
   )
