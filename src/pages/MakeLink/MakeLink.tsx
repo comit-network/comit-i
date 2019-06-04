@@ -4,7 +4,9 @@ import ErrorOutlined from "@material-ui/icons/ErrorOutlined";
 import FileCopy from "@material-ui/icons/FileCopy";
 import copy from "copy-to-clipboard";
 import React, { useReducer, useState } from "react";
+import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
+import { fromWei } from "web3-utils";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
 import TextField from "../../components/TextField";
@@ -111,27 +113,15 @@ const MakeLink = () => {
           <SubTitle text={"The generated link"} />
           <Paper elevation={2}>
             <Grid container={true} spacing={16} alignItems={"center"}>
-              <Grid
-                item={true}
-                container={true}
-                xs={2}
-                md={1}
-                justify={"center"}
-              >
+              <Grid item={true} container={true} xs={2} justify={"center"}>
                 {icon}
               </Grid>
-              <Grid item={true} xs={8} md={10}>
-                <Typography variant={"body2"} align={"center"}>
+              <Grid item={true} xs={8}>
+                <Typography noWrap={true} variant={"body2"} align={"center"}>
                   {uri.toString()}
                 </Typography>
               </Grid>
-              <Grid
-                item={true}
-                container={true}
-                xs={2}
-                md={1}
-                justify={"center"}
-              >
+              <Grid item={true} container={true} xs={2} justify={"center"}>
                 {!linkIsValid ? (
                   <Tooltip
                     title={"Please complete the form before copying the link."}
@@ -172,10 +162,10 @@ function assetToQueryValue(value: SwapValue) {
   if (value.quantity) {
     switch (value.name) {
       case "bitcoin": {
-        return `${value.quantity}BTC`;
+        return `${toBitcoin(value.quantity, true)}BTC`;
       }
       case "ether": {
-        return `${value.quantity}ETH`;
+        return `${fromWei(value.quantity)}ETH`;
       }
     }
   }

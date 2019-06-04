@@ -45,7 +45,8 @@ const ledgers: LedgerSpec[] = [
             name: "quantity",
             label: "Quantity",
             type: ParameterKind.Quantity,
-            unit: "BTC"
+            unit: "BTC",
+            smallestUnit: "sat"
           }
         ]
       }
@@ -70,7 +71,9 @@ const ledgers: LedgerSpec[] = [
           {
             name: "quantity",
             label: "Quantity",
-            type: ParameterKind.Quantity
+            type: ParameterKind.Quantity,
+            unit: "ETH",
+            smallestUnit: "wei"
           }
         ]
       },
@@ -81,8 +84,7 @@ const ledgers: LedgerSpec[] = [
           {
             name: "quantity",
             label: "Quantity",
-            type: ParameterKind.Quantity,
-            unit: "ETH"
+            type: ParameterKind.Quantity
           },
           {
             name: "token_contract",

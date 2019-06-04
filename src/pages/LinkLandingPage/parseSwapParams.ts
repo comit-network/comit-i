@@ -1,3 +1,5 @@
+import { toSatoshi } from "satoshi-bitcoin-ts";
+import { toWei } from "web3-utils";
 import { SwapValue } from "../../forms/SwapForm";
 import { QueryParams } from "./parseQuery";
 
@@ -8,7 +10,6 @@ export interface SwapParams {
   betaAsset: SwapValue;
   protocol: string;
   peer: string;
-  id: string;
 }
 
 export default function parseSwapParams(queryParams: QueryParams): SwapParams {
@@ -20,7 +21,6 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
 
   const protocol = parseProtocol(queryParams.protocol);
   const peer = parsePeer(queryParams.peer);
-  const id = "42";
 
   return {
     alphaLedger,
@@ -28,8 +28,7 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
     betaLedger,
     betaAsset,
     protocol,
-    peer,
-    id
+    peer
   };
 }
 
@@ -74,6 +73,20 @@ function tokenIdToAssetParameter(asset: string, tokenId: string) {
   }
 }
 
+function toDisplayUnit(symbol: string, quantity: string) {
+  switch (symbol) {
+    case "BTC": {
+      return toSatoshi(quantity).toString();
+    }
+    case "ETH": {
+      return toWei(quantity);
+    }
+    case "ERC20":
+    default:
+      return quantity;
+  }
+}
+
 function parseAsset(input: string | undefined, asset: string): SwapValue {
   if (!input) {
     throw new Error(asset + " undefined");
@@ -84,12 +97,13 @@ function parseAsset(input: string | undefined, asset: string): SwapValue {
   if (!match.length || !match[1] || !match[2]) {
     throw new Error(asset + " asset could not be parsed. Was: " + input);
   }
-  const quantity = match[1];
+  let quantity = match[1];
   const symbol = match[2];
   const tokenId = match[4];
 
   const name = symbolToAssetName(symbol);
   const tokenIdParameters = tokenIdToAssetParameter(name, tokenId);
+  quantity = toDisplayUnit(symbol, quantity);
 
   return { name, quantity, ...tokenIdParameters };
 }

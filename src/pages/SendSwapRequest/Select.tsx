@@ -1,4 +1,4 @@
-import { Grid } from "@material-ui/core";
+import { Grid, InputAdornment } from "@material-ui/core";
 import pascalCase from "pascal-case";
 import React from "react";
 import TextField from "../../components/TextField";
@@ -110,6 +110,15 @@ function Select({
                     }}
                     data-cy="quantity-input"
                     disabled={disabled}
+                    InputProps={
+                      param.smallestUnit && {
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            {param.smallestUnit}
+                          </InputAdornment>
+                        )
+                      }
+                    }
                   />
                 </Grid>
               );
