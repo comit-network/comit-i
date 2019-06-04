@@ -8,12 +8,12 @@ import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
 import ProtocolTextField from "../../components/ProtocolTextField";
 import SendButton from "../../components/SendButton";
-import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   Rfc003Params
 } from "../../forms/Rfc003ParamsForm";
 import SwapForm, { emptySwap } from "../../forms/SwapForm";
+import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 import ErrorMessage from "./ErrorMessage";
 import InfoMessage from "./InfoMessage";
@@ -112,28 +112,11 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <Fieldset legend={"To"}>
-                <Grid item={true} xs={12} md={6}>
-                  <TextField
-                    value={peerId}
-                    label={"Peer"}
-                    helperText={"Peer Id"}
-                    data-cy="peer-input"
-                    disabled={true}
-                    required={true}
-                  />
-                </Grid>
-                <Grid item={true} xs={12} md={6}>
-                  <TextField
-                    value={addressHint}
-                    label={"Peer Address Hint"}
-                    helperText={"Address in multiaddress format"}
-                    data-cy="peer-input"
-                    disabled={true}
-                    required={false}
-                  />
-                </Grid>
-              </Fieldset>
+              <ToForm
+                peerId={peerId}
+                addressHint={addressHint}
+                disabled={true}
+              />
             </Grid>
             <Grid item={true} xs={12}>
               <SendButton />

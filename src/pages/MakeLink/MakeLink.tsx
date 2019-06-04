@@ -15,12 +15,13 @@ import SwapForm, {
   reducer as swapReducer,
   SwapValue
 } from "../../forms/SwapForm";
+import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const MakeLink = () => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
   const [protocol, setProtocol] = useState("");
-  const [peer, setPeer] = useState("");
+  const [peerId, setPeerId] = useState("");
   const [addressHint, setAddressHint] = useState("");
 
   let comitLink = new URI({
@@ -52,12 +53,12 @@ const MakeLink = () => {
     comitLink = comitLink.addQuery("protocol", protocol);
   }
 
-  if (peer) {
+  if (peerId) {
     if (addressHint) {
-      const peerWithAddress = `${peer}@${addressHint}`;
+      const peerWithAddress = `${peerId}@${addressHint}`;
       comitLink = comitLink.addQuery("peer", peerWithAddress);
     } else {
-      comitLink = comitLink.addQuery("peer", peer);
+      comitLink = comitLink.addQuery("peer", peerId);
     }
   }
 
@@ -67,7 +68,7 @@ const MakeLink = () => {
     alphaAssetQueryValue &&
     betaAssetQueryValue &&
     protocol &&
-    peer;
+    peerId;
 
   const icon = linkIsValid ? (
     <CheckCircleOutlined color={"primary"} />
@@ -107,20 +108,16 @@ const MakeLink = () => {
             <option value={"rfc003"}>RFC003</option>
           </TextField>
         </Grid>
-        <Grid item={true} xs={12} md={6}>
-          <TextField
-            value={peer}
-            onChange={event => setPeer(event.target.value)}
-            label={"Peer"}
-            helperText={"Peer ID"}
-          />
-        </Grid>
-        <Grid item={true} xs={12} md={6}>
-          <TextField
-            value={addressHint}
-            onChange={event => setAddressHint(event.target.value)}
-            label={"Peer Address Hint"}
-            helperText={"Hint for the peer address in multiaddress format"}
+        <Grid item={true} xs={12}>
+          <ToForm
+            peerId={peerId}
+            addressHint={addressHint}
+            onPeerChange={event => {
+              setPeerId(event.target.value);
+            }}
+            onAddressHintChange={event => {
+              setAddressHint(event.target.value);
+            }}
           />
         </Grid>
         <Grid item={true} xs={12}>

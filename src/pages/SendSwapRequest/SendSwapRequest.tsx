@@ -8,7 +8,6 @@ import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
 import ProtocolTextField from "../../components/ProtocolTextField";
 import SendButton from "../../components/SendButton";
-import TextField from "../../components/TextField";
 import Rfc003ParamsForm, {
   defaultRfc003Params,
   resetAlphaIdentity,
@@ -19,6 +18,7 @@ import SwapForm, {
   emptySwap,
   reducer as swapReducer
 } from "../../forms/SwapForm";
+import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const SendSwap = ({ location, history }: RouteComponentProps) => {
@@ -81,24 +81,16 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
                 )}
               </Fieldset>
             </Grid>
-            <Grid item={true} xs={12} md={6}>
-              <Fieldset legend={"To"}>
-                <TextField
-                  value={peerId}
-                  onChange={event => setPeerId(event.target.value)}
-                  label={"Peer"}
-                  helperText={"Peer ID"}
-                  data-cy="peer-input"
-                />
-              </Fieldset>
-            </Grid>
-            <Grid item={true} xs={12} md={6}>
-              <TextField
-                value={addressHint}
-                onChange={event => setAddressHint(event.target.value)}
-                label={"Peer Address Hint"}
-                helperText={"Address in multiaddress format"}
-                data-cy="peer-input"
+            <Grid item={true} xs={12}>
+              <ToForm
+                peerId={peerId}
+                addressHint={addressHint}
+                onPeerChange={event => {
+                  setPeerId(event.target.value);
+                }}
+                onAddressHintChange={event => {
+                  setAddressHint(event.target.value);
+                }}
               />
             </Grid>
             <Grid item={true} xs={12}>
