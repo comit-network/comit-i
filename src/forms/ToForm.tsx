@@ -25,7 +25,7 @@ function ToForm({
           <TextField
             value={peerId}
             label={"Peer"}
-            helperText={"Peer Id"}
+            helperText={"Peer ID"}
             data-cy="peer-input"
             onChange={onPeerChange}
             required={true}
@@ -37,7 +37,7 @@ function ToForm({
             value={addressHint}
             label={"Peer Address Hint"}
             helperText={
-              "Multiaddress format, to be dialed to help with resolution of the peer id"
+              "Multiaddress format, to be dialed to help with resolution of the peer ID"
             }
             data-cy="address-hint-input"
             onChange={onAddressHintChange}
