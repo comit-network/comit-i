@@ -63,6 +63,7 @@ function AssetCard({
           " " +
           ledger.network
         }
+        data-cy={title.toLowerCase() + "-asset-card-header"}
       />
       <CardActions className={classes.actions}>
         <IconButton

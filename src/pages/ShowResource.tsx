@@ -42,17 +42,30 @@ function ShowResource({ location }: RouteComponentProps) {
     entity.class.includes("swap")
   ) {
     return <Swap swap={entity} />;
-  } else {
-    const title = error ? "404 Resource Not Found" : "400 Bad JSON";
+  } else if (error) {
     return (
       <React.Fragment>
-        <Typography variant="h3">{title}</Typography>
-        {error && (
+        <Typography variant="h3" align="center" data-cy="404-typography">
+          404 Resource Not Found
+        </Typography>
+        {error && error.message === "Network Error" && (
           <ErrorSnackbar
             message="Failed to fetch resource. Is your COMIT node running?"
             open={true}
           />
         )}
+      </React.Fragment>
+    );
+  } else {
+    return (
+      <React.Fragment>
+        <Typography variant="h3" align="center" data-cy="bad-json-typography">
+          Bad JSON
+        </Typography>
+        <ErrorSnackbar
+          message="Could not handle comit node's response. Are your comit-i and comit node versions compatible?"
+          open={true}
+        />
       </React.Fragment>
     );
   }
