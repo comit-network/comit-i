@@ -5,10 +5,15 @@ import { Swap } from "../forms/SwapForm";
 import { relativeMinutesToTimestamp } from "../time";
 import apiEndpoint from "./apiEndpoint";
 
+export interface DialInfo {
+  peer_id: string;
+  address_hint: string;
+}
+
 export default function postRfc003Swap(
   swap: Swap,
   params: Rfc003Params,
-  peer: string
+  peer: string | DialInfo
 ) {
   const uri = apiEndpoint()
     .path("swaps/rfc003")

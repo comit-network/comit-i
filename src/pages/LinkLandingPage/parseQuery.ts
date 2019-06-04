@@ -1,13 +1,18 @@
 import merge from "deepmerge";
 import URI from "urijs";
 
+export interface QueryDialInfo {
+  peer_id: string;
+  address_hint: string;
+}
+
 export interface QueryParams {
   alpha_ledger?: string;
   beta_ledger?: string;
   alpha_asset?: string;
   beta_asset?: string;
   protocol?: string;
-  peer?: string;
+  peer?: string | QueryDialInfo;
 }
 
 function firstOrValue(value: string | string[]) {

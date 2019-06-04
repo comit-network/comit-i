@@ -1,7 +1,7 @@
 import { toSatoshi } from "satoshi-bitcoin-ts";
 import { toWei } from "web3-utils";
 import { SwapValue } from "../../forms/SwapForm";
-import { QueryParams } from "./parseQuery";
+import { QueryDialInfo, QueryParams } from "./parseQuery";
 
 export interface SwapParams {
   alphaLedger: SwapValue;
@@ -10,6 +10,7 @@ export interface SwapParams {
   betaAsset: SwapValue;
   protocol: string;
   peer: string;
+  addressHint: string;
 }
 
 export default function parseSwapParams(queryParams: QueryParams): SwapParams {
@@ -20,7 +21,7 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
   const betaAsset = parseAsset(queryParams.beta_asset, "beta");
 
   const protocol = parseProtocol(queryParams.protocol);
-  const peer = parsePeer(queryParams.peer);
+  const { peer, addressHint } = parsePeer(queryParams.peer);
 
   return {
     alphaLedger,
@@ -28,7 +29,8 @@ export default function parseSwapParams(queryParams: QueryParams): SwapParams {
     betaLedger,
     betaAsset,
     protocol,
-    peer
+    peer,
+    addressHint
   };
 }
 
@@ -108,11 +110,20 @@ function parseAsset(input: string | undefined, asset: string): SwapValue {
   return { name, quantity, ...tokenIdParameters };
 }
 
-function parsePeer(peer: string | string[] | undefined | null) {
-  if (peer instanceof Array) {
-    return peer[0];
+function parsePeer(peer: string | QueryDialInfo | string[] | undefined | null) {
+  if (!peer) {
+    return { peer: "", addressHint: "" };
   }
-  return peer || "";
+  if (peer instanceof Array) {
+    return { peer: peer[0], addressHint: "" };
+  }
+  if (typeof peer === "string") {
+    return { peer, addressHint: "" };
+  }
+  if (peer.hasOwnProperty("peer_id") && peer.hasOwnProperty("address_hint")) {
+    return { peer: peer.peer_id, addressHint: peer.address_hint };
+  }
+  return { peer: "", addressHint: "" };
 }
 
 function parseProtocol(protocol: string | undefined) {

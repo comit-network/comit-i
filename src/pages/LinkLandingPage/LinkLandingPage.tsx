@@ -30,6 +30,7 @@ function parseSwapParameters(location: Location) {
       alphaAsset,
       betaAsset,
       peer,
+      addressHint,
       protocol
     } = parsedQuery;
 
@@ -51,6 +52,7 @@ function parseSwapParameters(location: Location) {
     return {
       swap,
       peer,
+      addressHint,
       protocol,
       error: false
     };
@@ -58,6 +60,7 @@ function parseSwapParameters(location: Location) {
     return {
       swap: emptySwap,
       peer: "",
+      addressHint: "",
       protocol: "",
       error: true
     };
@@ -66,7 +69,9 @@ function parseSwapParameters(location: Location) {
 
 const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const { swap, peer, protocol, error } = parseSwapParameters(location);
+  const { swap, peer, addressHint, protocol, error } = parseSwapParameters(
+    location
+  );
   const [displayError, setDisplayError] = useState(false);
 
   const onSubmit = (e: any) => {
@@ -108,14 +113,26 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
             </Grid>
             <Grid item={true} xs={12}>
               <Fieldset legend={"To"}>
-                <TextField
-                  value={peer}
-                  label={"Peer"}
-                  helperText={"IPv4 Socket Address"}
-                  data-cy="peer-input"
-                  disabled={true}
-                  required={true}
-                />
+                <Grid item={true} xs={12} md={6}>
+                  <TextField
+                    value={peer}
+                    label={"Peer"}
+                    helperText={"Peer Id"}
+                    data-cy="peer-input"
+                    disabled={true}
+                    required={true}
+                  />
+                </Grid>
+                <Grid item={true} xs={12} md={6}>
+                  <TextField
+                    value={addressHint}
+                    label={"Peer Address Hint"}
+                    helperText={"Address in multiaddress format"}
+                    data-cy="peer-input"
+                    disabled={true}
+                    required={true}
+                  />
+                </Grid>
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
