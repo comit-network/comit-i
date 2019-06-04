@@ -1,0 +1,10 @@
+{
+  "type": "ethereum-call-contract",
+  "payload": {
+    "contract_address": "ethereum_address",
+    "data": "some_bytes",
+    "gas_limit": "10000000000",
+    "network": "regtest",
+    "min_block_timestamp": null
+  }
+}

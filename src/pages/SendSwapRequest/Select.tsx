@@ -139,6 +139,21 @@ function Select({
                 </Grid>
               );
             }
+            default: {
+              return (
+                <Grid key={param.name} item={true} xs={12} md={12}>
+                  <TextField
+                    label={param.label}
+                    required={true}
+                    value={selection[param.name] || ""}
+                    onChange={event => {
+                      onParameterChange(param.name, event.target.value);
+                    }}
+                    disabled={disabled}
+                  />
+                </Grid>
+              );
+            }
           }
         })}
     </Grid>

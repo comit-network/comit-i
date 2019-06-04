@@ -6,15 +6,16 @@ import {
   TableRow
 } from "@material-ui/core";
 import React from "react";
-import { Swap } from "../../api/swapsResource";
+import { EmbeddedRepresentationSubEntity } from "../../../gen/siren";
 import EmptySwapListTableRow from "./EmptySwapListTableRow";
-import SwapRow from "./SwapRow";
+import SwapRow from "./SwapRow/SwapRow";
 
 interface SwapListProps {
-  swaps: Swap[];
+  swaps: EmbeddedRepresentationSubEntity[];
+  reload: () => void;
 }
 
-function SwapList({ swaps }: SwapListProps) {
+function SwapList({ swaps, reload }: SwapListProps) {
   const hasSwaps = swaps.length !== 0;
 
   return (
@@ -33,7 +34,9 @@ function SwapList({ swaps }: SwapListProps) {
       </TableHead>
       <TableBody>
         {hasSwaps &&
-          swaps.map((swap, index) => <SwapRow key={index} swap={swap} />)}
+          swaps.map((swap, index) => (
+            <SwapRow key={index} swap={swap} reload={reload} />
+          ))}
         {!hasSwaps && <EmptySwapListTableRow />}
       </TableBody>
     </Table>
