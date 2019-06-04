@@ -20,7 +20,7 @@ export default function postRfc003Swap(
     beta_expiry: { $apply: relativeMinutesToTimestamp }
   });
 
-  let peer = {};
+  let peer;
   if (addressHint) {
     peer = { peer_id: peerId, address_hint: addressHint };
   }
