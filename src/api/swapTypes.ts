@@ -98,6 +98,7 @@ export interface Properties {
   protocol: Protocol;
   status: Status;
   role: Role;
+  counterparty: string;
 }
 
 export interface AdditionalProperties {
