@@ -25,9 +25,7 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
 
   const [params, setParams] = useState<Rfc003Params>(defaultRfc003Params);
-  const [peerId, setPeerId] = useState(
-    "QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd"
-  );
+  const [peerId, setPeerId] = useState();
   const [addressHint, setAddressHint] = useState();
   const [displayError, setDisplayError] = useState(false);
 
