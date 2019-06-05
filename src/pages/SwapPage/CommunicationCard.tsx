@@ -20,6 +20,7 @@ function CommunicationCardHeader({
         title="Swap request sent"
         subheader="Waiting for the other party to respond"
         avatar={<SendIcon />}
+        data-cy="swap-sent-card-header"
       />
     );
   } else if (status === CommunicationStatus.Accepted && role === Role.Alice) {

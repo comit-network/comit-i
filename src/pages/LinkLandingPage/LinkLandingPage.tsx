@@ -77,9 +77,10 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
   const onSubmit = (e: any) => {
     e.preventDefault();
 
-    postRfc003Swap(swap, params, peerId, addressHint)
-      .then(() => history.push("/"))
-      .catch(() => setDisplayError(true));
+    postRfc003Swap(swap, params, peerId, addressHint).then(
+      () => history.push("/"),
+      () => setDisplayError(true)
+    );
   };
 
   return (
