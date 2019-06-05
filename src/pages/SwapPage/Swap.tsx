@@ -12,6 +12,7 @@ import { SubTitle } from "../../components/text";
 import AssetCard from "./AssetCard";
 import Rfc003BlockchainLog from "./BlockchainLog";
 import CommunicationCardHeader from "./CommunicationCard";
+import SwapMetaDataCard from "./SwapMetaDataCard";
 
 interface SwapProps {
   swap: Entity;
@@ -41,6 +42,9 @@ function Swap({ swap }: SwapProps) {
     <React.Fragment>
       <Page title="Swap">
         <Grid container={true} spacing={2} justify="space-evenly">
+          <Grid item={true} xs={12}>
+            <SwapMetaDataCard counterparty={properties.counterparty} />
+          </Grid>
           <Grid item={true} xs={6}>
             <AssetCard
               title="Alpha"
