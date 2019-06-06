@@ -116,7 +116,13 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
             <Grid item={true} xs={12}>
               <Fieldset legend={"To"}>
                 <Grid item={true} xs={12}>
-                  <PeerIDTextField peerID={peerId} disabled={true} />
+                  <PeerIDTextField
+                    peerID={peerId}
+                    disabled={true}
+                    helperText={
+                      "The PeerID of the COMIT node this SWAP request will be sent to."
+                    }
+                  />
                 </Grid>
                 <Grid item={true} xs={12}>
                   <PeerAddressHintTextField

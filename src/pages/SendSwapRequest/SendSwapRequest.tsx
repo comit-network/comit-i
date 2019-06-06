@@ -84,7 +84,13 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
             <Grid item={true} xs={12}>
               <Fieldset legend={"To"}>
                 <Grid item={true} xs={12}>
-                  <PeerIDTextField peerID={peerId} onPeerIDChange={setPeerId} />
+                  <PeerIDTextField
+                    peerID={peerId}
+                    onPeerIDChange={setPeerId}
+                    helperText={
+                      "The PeerID of the COMIT node you want to send the SWAP request to."
+                    }
+                  />
                 </Grid>
                 <Grid item={true} xs={12}>
                   <PeerAddressHintTextField

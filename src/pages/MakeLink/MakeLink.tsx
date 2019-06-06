@@ -26,11 +26,15 @@ const MakeLink = () => {
   const [protocol, setProtocol] = useState("");
   const [peerId, setPeerId] = useState("");
   const [addressHint, setAddressHint] = useState("");
+  const [dialInformationPrefilled, setDialInformationPrefilled] = useState(
+    false
+  );
 
   useEffect(() => {
     getComitInfo().then(
       info => {
         setPeerId(info.id);
+        setDialInformationPrefilled(true);
       },
       () => undefined
     );
@@ -99,6 +103,34 @@ const MakeLink = () => {
     </Button>
   );
 
+  const peerIDTextFieldProps = {
+    peerID: peerId,
+    onPeerIDChange: setPeerId,
+    helperText:
+      "The PeerID to include in the link. Usually, this will be the PeerID of your COMIT node."
+  };
+
+  const peerIDTextField = dialInformationPrefilled ? (
+    <Tooltip
+      PopperProps={{
+        "data-cy": "peer-autofill-tooltip"
+      }}
+      title={"We prefilled your COMIT-node's PeerID for you."}
+    >
+      {React.createElement(
+        React.forwardRef((props, ref) => (
+          <PeerIDTextField
+            {...props}
+            inputRef={ref}
+            {...peerIDTextFieldProps}
+          />
+        ))
+      )}
+    </Tooltip>
+  ) : (
+    <PeerIDTextField {...peerIDTextFieldProps} />
+  );
+
   return (
     <Page title={"Create a new swap link"}>
       <Grid container={true} spacing={5}>
@@ -123,7 +155,7 @@ const MakeLink = () => {
         <Grid item={true} xs={12}>
           <Fieldset legend={"To"}>
             <Grid item={true} xs={12}>
-              <PeerIDTextField peerID={peerId} onPeerIDChange={setPeerId} />
+              {peerIDTextField}
             </Grid>
             <Grid item={true} xs={12}>
               <PeerAddressHintTextField
