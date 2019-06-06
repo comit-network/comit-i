@@ -1,4 +1,5 @@
 import { Tooltip } from "@material-ui/core";
+import { InputBaseComponentProps } from "@material-ui/core/InputBase";
 import Paper from "@material-ui/core/Paper";
 import {
   createStyles,
@@ -6,10 +7,7 @@ import {
   Theme,
   useTheme
 } from "@material-ui/core/styles";
-import {
-  BaseTextFieldProps,
-  TextFieldProps
-} from "@material-ui/core/TextField";
+import { TextFieldProps } from "@material-ui/core/TextField";
 import React, { CSSProperties, HTMLAttributes } from "react";
 import Select from "react-select";
 import {
@@ -92,13 +90,24 @@ function InnerTextField({
   );
 }
 
-type InputComponentProps = Pick<BaseTextFieldProps, "inputRef"> &
-  HTMLAttributes<HTMLDivElement>;
-
-function inputComponent({ inputRef, ...props }: InputComponentProps) {
+function FakeInput({
+  inputRef,
+  ...props
+}: InputBaseComponentProps & HTMLAttributes<HTMLDivElement>) {
   return <div ref={inputRef} {...props} />;
 }
 
+/*
+ * Custom `Control` element for a `react-select` `Select` component.
+ *
+ * If we want to use a Material-UI textfield for this `Control` component,
+ * we need to pass something else than an `input` as the `inputComponent`
+ * because we receive `children` that we are supposed to render.
+ *
+ * Hence, we create this `FakeInput` element which is effectively just a
+ * div.
+ * `react-select` will then take care of rendering an `input` for us.
+ */
 function Control(props: ControlProps<OptionType>) {
   const {
     children,
@@ -108,11 +117,10 @@ function Control(props: ControlProps<OptionType>) {
   } = props;
 
   const { "data-cy": dataCy, ...other } = InnerTextFieldProps;
-
   return (
     <InnerTextField
       InputProps={{
-        inputComponent,
+        inputComponent: FakeInput,
         inputProps: {
           className: classes.input,
           ref: innerRef,
