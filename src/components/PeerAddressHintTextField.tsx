@@ -10,18 +10,14 @@ import {
   BaseTextFieldProps,
   TextFieldProps
 } from "@material-ui/core/TextField";
-import React, { CSSProperties, HTMLAttributes, ReactElement } from "react";
+import React, { CSSProperties, HTMLAttributes } from "react";
 import Select from "react-select";
 import {
   ValueContainer as RSValueContainer,
   ValueContainerProps
 } from "react-select/lib/components/containers";
 import { ControlProps } from "react-select/lib/components/Control";
-import {
-  MenuList,
-  MenuListComponentProps,
-  MenuProps
-} from "react-select/lib/components/Menu";
+import { MenuProps } from "react-select/lib/components/Menu";
 import { ValueType } from "react-select/lib/types";
 import TextField from "./TextField";
 
@@ -142,27 +138,6 @@ function Menu(props: MenuProps<OptionType>) {
   );
 }
 
-/// Why are you making my life so hard, react-select?
-function RenderNothingGivenEmptyOptionsMenuList({
-  children,
-  ...props
-}: MenuListComponentProps<OptionType>) {
-  const childrenArray = React.Children.toArray(children);
-
-  if (childrenArray.length === 1) {
-    const reactElement = childrenArray[0] as ReactElement;
-    const props = reactElement.props;
-
-    if (props) {
-      if (props.children === "No options") {
-        return <div />;
-      }
-    }
-  }
-
-  return <MenuList {...props}>{children}</MenuList>;
-}
-
 function ValueContainer({
   children,
   ...props
@@ -223,10 +198,10 @@ export default function PeerAddressHintTextField({
         styles={selectStyles}
         options={options}
         InnerTextFieldProps={innerTextFieldProps}
+        noOptionsMessage={() => null}
         components={{
           Control,
           Menu,
-          MenuList: RenderNothingGivenEmptyOptionsMenuList,
           ValueContainer
         }}
         value={{
