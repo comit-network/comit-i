@@ -3,7 +3,8 @@ import CheckCircleOutlined from "@material-ui/icons/CheckCircleOutlined";
 import ErrorOutlined from "@material-ui/icons/ErrorOutlined";
 import FileCopy from "@material-ui/icons/FileCopy";
 import copy from "copy-to-clipboard";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
+import { useAsync } from "react-async";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
@@ -26,23 +27,10 @@ const MakeLink = () => {
   const [protocol, setProtocol] = useState("");
   const [peerId, setPeerId] = useState("");
   const [addressHint, setAddressHint] = useState("");
-  const [dialInformationPrefilled, setDialInformationPrefilled] = useState(
-    false
-  );
-  const [addressHintSuggestions, setAddressHintSuggestions] = useState<
-    string[]
-  >([]);
 
-  useEffect(() => {
-    getComitInfo().then(
-      info => {
-        setPeerId(info.id);
-        setDialInformationPrefilled(true);
-        setAddressHintSuggestions(info.listen_addresses);
-      },
-      () => undefined
-    );
-  }, []);
+  const { data } = useAsync(getComitInfo, {
+    onResolve: data => setPeerId(data.id)
+  });
 
   let comitLink = new URI({
     protocol: "web+comit",
@@ -114,26 +102,27 @@ const MakeLink = () => {
       "The PeerID to include in the link. Usually, this will be the PeerID of your COMIT node."
   };
 
-  const peerIDTextField = dialInformationPrefilled ? (
-    <Tooltip
-      PopperProps={{
-        "data-cy": "peer-autofill-tooltip"
-      }}
-      title={"We prefilled your COMIT-node's PeerID for you."}
-    >
-      {React.createElement(
-        React.forwardRef((props, ref) => (
-          <PeerIDTextField
-            {...props}
-            inputRef={ref}
-            {...peerIDTextFieldProps}
-          />
-        ))
-      )}
-    </Tooltip>
-  ) : (
-    <PeerIDTextField {...peerIDTextFieldProps} />
-  );
+  const peerIDTextField =
+    data && peerId === data.id ? (
+      <Tooltip
+        PopperProps={{
+          "data-cy": "peer-autofill-tooltip"
+        }}
+        title={"We prefilled your COMIT-node's PeerID for you."}
+      >
+        {React.createElement(
+          React.forwardRef((props, ref) => (
+            <PeerIDTextField
+              {...props}
+              inputRef={ref}
+              {...peerIDTextFieldProps}
+            />
+          ))
+        )}
+      </Tooltip>
+    ) : (
+      <PeerIDTextField {...peerIDTextFieldProps} />
+    );
 
   return (
     <Page title={"Create a new swap link"}>
@@ -165,7 +154,7 @@ const MakeLink = () => {
               <PeerAddressHintTextField
                 addressHint={addressHint}
                 onAddressHintChange={setAddressHint}
-                suggestions={addressHintSuggestions}
+                suggestions={(data && data.listen_addresses) || []}
               />
             </Grid>
           </Fieldset>

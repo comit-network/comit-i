@@ -32,6 +32,18 @@ describe("The page for creating a link", () => {
     cy.get("[data-cy=peer-autofill-tooltip]").should("exist");
   });
 
+  it("should hide the tooltip if the user decides to overwrite the value", () => {
+    cy.get("[data-cy=peer-input]")
+      .find("input")
+      .clear();
+
+    cy.get("[data-cy=peer-input]")
+      .find("input")
+      .type("I know better!!");
+
+    cy.get("[data-cy=peer-autofill-tooltip]").should("not.exist");
+  });
+
   it("should autosuggest the list of multi-addresses returned from the comit_node", () => {
     cy.get("[data-cy=address-hint-input]")
       .find("input")
