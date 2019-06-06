@@ -11,13 +11,17 @@ import {
 } from "@material-ui/core/TextField";
 import React, { CSSProperties, HTMLAttributes, ReactElement } from "react";
 import Select from "react-select";
-import { ValueContainer } from "react-select/lib/components/containers";
+import {
+  ValueContainer as RSValueContainer,
+  ValueContainerProps
+} from "react-select/lib/components/containers";
 import { ControlProps } from "react-select/lib/components/Control";
 import {
   MenuList,
   MenuListComponentProps,
   MenuProps
 } from "react-select/lib/components/Menu";
+import { ValueType } from "react-select/lib/types";
 import TextField from "./TextField";
 
 interface PeerAddressHintTextFieldProps {
@@ -146,12 +150,25 @@ function RenderNothingGivenEmptyOptionsMenuList({
 
     if (props) {
       if (props.children === "No options") {
-        return null;
+        return <div />;
       }
     }
   }
 
   return <MenuList {...props}>{children}</MenuList>;
+}
+
+function ValueContainer({
+  children,
+  ...props
+}: ValueContainerProps<OptionType>) {
+  const classes = useStyles();
+
+  return (
+    <RSValueContainer className={classes.valueContainer} {...props}>
+      {children}
+    </RSValueContainer>
+  );
 }
 
 export default function PeerAddressHintTextField({
@@ -180,29 +197,33 @@ export default function PeerAddressHintTextField({
     "data-cy": "address-hint-input"
   };
 
+  function onChange(event: ValueType<OptionType>) {
+    if (event && !(event instanceof Array)) {
+      onAddressHintChange(event.value);
+    }
+  }
+
   if (suggestions.length === 0) {
     return <InnerTextField {...innerTextFieldProps} />;
   } else {
+    const options = suggestions.map(suggestion => ({
+      label: suggestion,
+      value: suggestion
+    }));
+
     return (
       <div className={classes.root}>
         <Select
           openMenuOnFocus={true}
           classes={classes}
           styles={selectStyles}
-          options={suggestions.map(suggestion => ({
-            label: suggestion,
-            value: suggestion
-          }))}
+          options={options}
           InnerTextFieldProps={innerTextFieldProps}
           components={{
             Control,
             Menu,
             MenuList: RenderNothingGivenEmptyOptionsMenuList,
-            ValueContainer: ({ children, ...props }) => (
-              <ValueContainer className={classes.valueContainer} {...props}>
-                {children}
-              </ValueContainer>
-            )
+            ValueContainer
           }}
           value={{
             label: addressHint,
@@ -210,11 +231,7 @@ export default function PeerAddressHintTextField({
           }}
           required={false}
           disabled={disabled}
-          onChange={event => {
-            if (event && !(event instanceof Array)) {
-              onAddressHintChange(event.value);
-            }
-          }}
+          onChange={onChange}
         />
       </div>
     );
