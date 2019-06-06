@@ -1,0 +1,9 @@
+{
+  "id": "QmaGpit2yYH44a1EKPrAR9YCo2MvjGRH4bZzzpT8tEQNEa",
+  "listen_addresses": [
+    "/ip4/127.0.0.1/tcp/8011",
+    "/ip4/172.19.133.232/tcp/8011",
+    "/ip4/172.17.0.1/tcp/8011",
+    "/ip6/::1/tcp/8011"
+  ]
+}
