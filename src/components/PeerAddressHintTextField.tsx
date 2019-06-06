@@ -9,10 +9,15 @@ import {
   BaseTextFieldProps,
   TextFieldProps
 } from "@material-ui/core/TextField";
-import React, { CSSProperties, HTMLAttributes } from "react";
+import React, { CSSProperties, HTMLAttributes, ReactElement } from "react";
 import Select from "react-select";
+import { ValueContainer } from "react-select/lib/components/containers";
 import { ControlProps } from "react-select/lib/components/Control";
-import { MenuProps } from "react-select/lib/components/Menu";
+import {
+  MenuList,
+  MenuListComponentProps,
+  MenuProps
+} from "react-select/lib/components/Menu";
 import TextField from "./TextField";
 
 interface PeerAddressHintTextFieldProps {
@@ -36,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
       display: "flex",
       padding: 0,
       height: "auto"
+    },
+    valueContainer: {
+      // The `emotion` styles of react-select are injected _after_ our styling, hence we need to workaround with !important.
+      // If we can find out, how to change the injection position of `emotion`'s <style> tags, we can fix this.
+      padding: "0 !important"
     },
     paper: {
       position: "absolute",
@@ -123,6 +133,27 @@ function Menu(props: MenuProps<OptionType>) {
   );
 }
 
+/// Why are you making my life so hard, react-select?
+function RenderNothingGivenEmptyOptionsMenuList({
+  children,
+  ...props
+}: MenuListComponentProps<OptionType>) {
+  const childrenArray = React.Children.toArray(children);
+
+  if (childrenArray.length === 1) {
+    const reactElement = childrenArray[0] as ReactElement;
+    const props = reactElement.props;
+
+    if (props) {
+      if (props.children === "No options") {
+        return null;
+      }
+    }
+  }
+
+  return <MenuList {...props}>{children}</MenuList>;
+}
+
 export default function PeerAddressHintTextField({
   addressHint,
   onAddressHintChange = () => undefined,
@@ -166,7 +197,12 @@ export default function PeerAddressHintTextField({
           components={{
             Control,
             Menu,
-            NoOptionsMessage: () => null
+            MenuList: RenderNothingGivenEmptyOptionsMenuList,
+            ValueContainer: ({ children, ...props }) => (
+              <ValueContainer className={classes.valueContainer} {...props}>
+                {children}
+              </ValueContainer>
+            )
           }}
           value={{
             label: addressHint,
@@ -180,7 +216,6 @@ export default function PeerAddressHintTextField({
             }
           }}
         />
-        <div className={classes.divider} />
       </div>
     );
   }
