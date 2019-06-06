@@ -29,16 +29,20 @@ const MakeLink = () => {
   const [dialInformationPrefilled, setDialInformationPrefilled] = useState(
     false
   );
+  const [addressHintSuggestions, setAddressHintSuggestions] = useState<
+    string[]
+  >([]);
 
   useEffect(() => {
     getComitInfo().then(
       info => {
         setPeerId(info.id);
         setDialInformationPrefilled(true);
+        setAddressHintSuggestions(info.listen_addresses);
       },
       () => undefined
     );
-  });
+  }, []);
 
   let comitLink = new URI({
     protocol: "web+comit",
@@ -161,6 +165,7 @@ const MakeLink = () => {
               <PeerAddressHintTextField
                 addressHint={addressHint}
                 onAddressHintChange={setAddressHint}
+                suggestions={addressHintSuggestions}
               />
             </Grid>
           </Fieldset>

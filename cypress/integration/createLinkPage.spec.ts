@@ -24,11 +24,12 @@ describe("The page for creating a link", () => {
   it("should autosuggest the list of multi-addresses returned from the comit_node", () => {
     cy.get("[data-cy=address-hint-input]")
       .find("input")
-      .focus();
+      .click();
 
-    cy.get("[data-cy=address-hint-suggestion]")
-      .should("exist")
-      .should("have.have.length", 4);
+    cy.contains("/ip4/127.0.0.1/tcp/8011").should("exist");
+    cy.contains("/ip4/172.19.133.232/tcp/8011").should("exist");
+    cy.contains("/ip4/172.17.0.1/tcp/8011").should("exist");
+    cy.contains("/ip6/::1/tcp/8011").should("exist");
   });
 
   it("should still render the page even if the comit_node is not reachable", () => {
