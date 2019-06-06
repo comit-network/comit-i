@@ -64,7 +64,6 @@ function InnerTextField({
 }: InnerTextFieldProps & TextFieldProps) {
   return (
     <TextField
-      fullWidth={true}
       value={addressHint}
       label={"Peer Address Hint"}
       helperText={
@@ -82,7 +81,7 @@ type InputComponentProps = Pick<BaseTextFieldProps, "inputRef"> &
   HTMLAttributes<HTMLDivElement>;
 
 function inputComponent({ inputRef, ...props }: InputComponentProps) {
-  return <div ref={inputRef} {...props} data-cy="address-hint-input" />;
+  return <div ref={inputRef} {...props} />;
 }
 
 function Control(props: ControlProps<OptionType>) {
