@@ -1,14 +1,37 @@
-import { Card, Grid } from "@material-ui/core";
-import React from "react";
+import {
+  Button,
+  Card,
+  CardActions,
+  CircularProgress,
+  Grid
+} from "@material-ui/core";
+import React, { useEffect, useReducer } from "react";
 import { Entity } from "../../../gen/siren";
+import executeAction from "../../api/executeAction";
 import {
   AdditionalProperties,
   CommunicationStatus,
   Properties,
   Role
 } from "../../api/swapTypes";
+import Dialog from "../../components/Dialog";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
+import LedgerActionDialogBody from "../ListSwaps/LedgerActionDialogBody";
+import SirenActionParametersDialogBody from "../ListSwaps/SirenActionParametersDialogBody";
+import {
+  actionButtonClicked,
+  actionFailed,
+  actionSuccessful,
+  closeLedgerActionDialog,
+  closeSirenParametersDialog,
+  sirenParameterDialogSubmitted
+} from "../ListSwaps/SwapRow/events";
+import {
+  ActionExecutionStatus,
+  initialState,
+  reducer
+} from "../ListSwaps/SwapRow/reducer";
 import AssetCard from "./AssetCard";
 import Rfc003BlockchainLog from "./BlockchainLog";
 import CommunicationCardHeader from "./CommunicationCard";
@@ -16,9 +39,10 @@ import SwapMetaDataCard from "./SwapMetaDataCard";
 
 interface SwapProps {
   swap: Entity;
+  reload: () => void;
 }
 
-function Swap({ swap }: SwapProps) {
+function Swap({ swap, reload }: SwapProps) {
   const properties = swap.properties as Properties & AdditionalProperties;
   const [alphaLedger, betaLedger] = [
     properties.parameters.alpha_ledger,
@@ -37,6 +61,61 @@ function Swap({ swap }: SwapProps) {
   const tradeActions = ["Selling", "Buying"];
   const [alphaTradeAction, betaTradeAction] =
     properties.role === Role.Alice ? tradeActions : tradeActions.reverse();
+
+  const actions = (swap.actions || []).map(action => ({
+    name: action.name,
+    button: (
+      <Button
+        data-cy={`${action.name}-button`}
+        type={"button"}
+        key={action.name}
+        variant={"contained"}
+        onClick={() => {
+          dispatch(actionButtonClicked(action));
+        }}
+      >
+        {action.title || action.name}
+      </Button>
+    )
+  }));
+  const communicationActions = actions.filter(
+    action => action.name === "accept" || action.name === "decline"
+  );
+  const ledgerActions = actions.filter(
+    action => action.name !== "accept" && action.name !== "decline"
+  );
+
+  const [
+    {
+      state: {
+        actionExecutionStatus,
+        activeLedgerActionDialog,
+        activeSirenParameterDialog
+      },
+      sideEffect
+    },
+    dispatch
+  ] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (!sideEffect) {
+      return;
+    }
+
+    switch (sideEffect.type) {
+      case "reloadData": {
+        reload();
+        return;
+      }
+      case "executeAction": {
+        executeAction(sideEffect.payload.action, sideEffect.payload.data).then(
+          response => dispatch(actionSuccessful(response)),
+          error => dispatch(actionFailed(error))
+        );
+        return;
+      }
+    }
+  }, [sideEffect, reload]);
 
   return (
     <React.Fragment>
@@ -72,6 +151,16 @@ function Swap({ swap }: SwapProps) {
                 status={properties.state.communication.status}
                 role={properties.role}
               />
+              <CardActions>
+                {actionExecutionStatus === ActionExecutionStatus.InProgress ? (
+                  <CircularProgress
+                    size={30}
+                    data-cy={"action-request-circular-progress"}
+                  />
+                ) : (
+                  communicationActions.map(action => action.button)
+                )}
+              </CardActions>
             </Card>
           </Grid>
           {properties.state.communication.status ===
@@ -86,11 +175,36 @@ function Swap({ swap }: SwapProps) {
                 betaState={properties.state.beta_ledger}
                 betaLedger={properties.parameters.beta_ledger}
                 role={properties.role}
+                actions={ledgerActions}
+                actionInProgress={
+                  actionExecutionStatus === ActionExecutionStatus.InProgress
+                }
               />
             </React.Fragment>
           )}
         </Grid>
       </Page>
+      {activeSirenParameterDialog && (
+        <Dialog open={true}>
+          <SirenActionParametersDialogBody
+            action={activeSirenParameterDialog}
+            onClose={() => dispatch(closeSirenParametersDialog())}
+            onSubmit={data =>
+              dispatch(
+                sirenParameterDialogSubmitted(activeSirenParameterDialog, data)
+              )
+            }
+          />
+        </Dialog>
+      )}
+      {activeLedgerActionDialog && (
+        <Dialog open={true}>
+          <LedgerActionDialogBody
+            action={activeLedgerActionDialog}
+            onClose={() => dispatch(closeLedgerActionDialog())}
+          />
+        </Dialog>
+      )}
     </React.Fragment>
   );
 }

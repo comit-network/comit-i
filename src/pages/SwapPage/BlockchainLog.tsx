@@ -9,6 +9,8 @@ interface Rfc003BlockchainLogProps {
   betaState: LedgerState;
   betaLedger: Ledger;
   role: Role;
+  actions: Array<{ name: string; button: React.ReactNode }>;
+  actionInProgress: boolean;
 }
 
 function Rfc003BlockchainLog({
@@ -16,8 +18,29 @@ function Rfc003BlockchainLog({
   alphaLedger,
   betaState,
   betaLedger,
-  role
+  role,
+  actions,
+  actionInProgress
 }: Rfc003BlockchainLogProps) {
+  const alphaActions =
+    role === Role.Alice
+      ? actions.filter(
+          elem =>
+            elem.name === "deploy" ||
+            elem.name === "fund" ||
+            elem.name === "refund"
+        )
+      : actions.filter(elem => elem.name === "redeem");
+  const betaActions =
+    role === Role.Alice
+      ? actions.filter(elem => elem.name === "redeem")
+      : actions.filter(
+          elem =>
+            elem.name === "deploy" ||
+            elem.name === "fund" ||
+            elem.name === "refund"
+        );
+
   return (
     <React.Fragment>
       <Grid item={true} xs={6}>
@@ -27,6 +50,8 @@ function Rfc003BlockchainLog({
           ledgerState={alphaState}
           otherLedgerState={betaState}
           role={role}
+          actions={alphaActions}
+          actionInProgress={actionInProgress}
         />
       </Grid>
       <Grid item={true} xs={6}>
@@ -36,6 +61,8 @@ function Rfc003BlockchainLog({
           ledgerState={betaState}
           otherLedgerState={alphaState}
           role={role}
+          actions={betaActions}
+          actionInProgress={actionInProgress}
         />
       </Grid>
     </React.Fragment>

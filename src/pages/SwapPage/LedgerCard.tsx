@@ -1,7 +1,9 @@
 import {
   Card,
+  CardActions,
   CardContent,
   CardHeader,
+  CircularProgress,
   List,
   Typography
 } from "@material-ui/core";
@@ -23,6 +25,8 @@ interface LedgerCardProps {
   ledgerState: LedgerState;
   otherLedgerState: LedgerState;
   role: Role;
+  actions: Array<{ name: string; button: React.ReactNode }>;
+  actionInProgress: boolean;
 }
 
 function LedgerCard({
@@ -30,7 +34,9 @@ function LedgerCard({
   ledger,
   ledgerState,
   otherLedgerState,
-  role
+  role,
+  actions,
+  actionInProgress
 }: LedgerCardProps) {
   let transactions = [
     { verb: "deployed", hash: ledgerState.deploy_tx },
@@ -86,6 +92,16 @@ function LedgerCard({
           betaHtlcState={betaLedgerState.status}
         />
       </CardContent>
+      <CardActions>
+        {actionInProgress ? (
+          <CircularProgress
+            size={30}
+            data-cy={"action-request-circular-progress"}
+          />
+        ) : (
+          actions.map(elem => elem.button)
+        )}
+      </CardActions>
     </Card>
   );
 }
