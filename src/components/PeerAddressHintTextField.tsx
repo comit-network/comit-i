@@ -1,8 +1,6 @@
-import { TextField as MUITextField } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import {
   createStyles,
-  emphasize,
   makeStyles,
   Theme,
   useTheme
@@ -15,6 +13,7 @@ import React, { CSSProperties, HTMLAttributes } from "react";
 import Select from "react-select";
 import { ControlProps } from "react-select/lib/components/Control";
 import { MenuProps } from "react-select/lib/components/Menu";
+import TextField from "./TextField";
 
 interface PeerAddressHintTextFieldProps {
   addressHint: string;
@@ -31,43 +30,12 @@ interface OptionType {
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
-      flexGrow: 1,
-      height: 250
+      flexGrow: 1
     },
     input: {
       display: "flex",
       padding: 0,
       height: "auto"
-    },
-    valueContainer: {
-      display: "flex",
-      flexWrap: "wrap",
-      flex: 1,
-      alignItems: "center",
-      overflow: "hidden"
-    },
-    chip: {
-      margin: theme.spacing(0.5, 0.25)
-    },
-    chipFocused: {
-      backgroundColor: emphasize(
-        theme.palette.type === "light"
-          ? theme.palette.grey[300]
-          : theme.palette.grey[700],
-        0.08
-      )
-    },
-    noOptionsMessage: {
-      padding: theme.spacing(1, 2)
-    },
-    singleValue: {
-      fontSize: 16
-    },
-    placeholder: {
-      position: "absolute",
-      left: 2,
-      bottom: 6,
-      fontSize: 16
     },
     paper: {
       position: "absolute",
@@ -82,13 +50,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type InputComponentProps = Pick<BaseTextFieldProps, "inputRef"> &
-  HTMLAttributes<HTMLDivElement>;
-
-function inputComponent({ inputRef, ...props }: InputComponentProps) {
-  return <div ref={inputRef} {...props} />;
-}
-
 interface InnerTextFieldProps {
   addressHint: string;
   onAddressHintChange: (newAddressHint: string) => void;
@@ -102,20 +63,26 @@ function InnerTextField({
   ...baseTextFieldProps
 }: InnerTextFieldProps & TextFieldProps) {
   return (
-    <MUITextField
+    <TextField
       fullWidth={true}
       value={addressHint}
       label={"Peer Address Hint"}
       helperText={
         "Multiaddress format, to be dialed to help with resolution of the peer ID"
       }
-      data-cy="address-hint-input"
       onChange={event => onAddressHintChange(event.target.value)}
       required={false}
       disabled={disabled}
       {...baseTextFieldProps}
     />
   );
+}
+
+type InputComponentProps = Pick<BaseTextFieldProps, "inputRef"> &
+  HTMLAttributes<HTMLDivElement>;
+
+function inputComponent({ inputRef, ...props }: InputComponentProps) {
+  return <div ref={inputRef} {...props} data-cy="address-hint-input" />;
 }
 
 function Control(props: ControlProps<OptionType>) {
@@ -126,6 +93,8 @@ function Control(props: ControlProps<OptionType>) {
     selectProps: { classes, InnerTextFieldProps }
   } = props;
 
+  const { "data-cy": dataCy, ...other } = InnerTextFieldProps;
+
   return (
     <InnerTextField
       InputProps={{
@@ -134,10 +103,11 @@ function Control(props: ControlProps<OptionType>) {
           className: classes.input,
           ref: innerRef,
           children,
-          ...innerProps
+          ...innerProps,
+          "data-cy": dataCy
         }
       }}
-      {...InnerTextFieldProps}
+      {...other}
     />
   );
 }
@@ -176,7 +146,8 @@ export default function PeerAddressHintTextField({
   const innerTextFieldProps = {
     addressHint,
     onAddressHintChange,
-    disabled
+    disabled,
+    "data-cy": "address-hint-input"
   };
 
   if (suggestions.length === 0) {
@@ -185,6 +156,7 @@ export default function PeerAddressHintTextField({
     return (
       <div className={classes.root}>
         <Select
+          openMenuOnFocus={true}
           classes={classes}
           styles={selectStyles}
           options={suggestions.map(suggestion => ({
@@ -194,7 +166,8 @@ export default function PeerAddressHintTextField({
           InnerTextFieldProps={innerTextFieldProps}
           components={{
             Control,
-            Menu
+            Menu,
+            NoOptionsMessage: () => null
           }}
           value={{
             label: addressHint,

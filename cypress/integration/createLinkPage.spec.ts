@@ -1,4 +1,15 @@
 describe("The page for creating a link", () => {
+  it("should still render the page even if the comit_node is not reachable", () => {
+    // Given we don't mock the API call
+
+    // When we visit the page
+    cy.visit("/make_link");
+
+    // The form still renders
+    cy.get("[data-cy=peer-input]").should("exist");
+    cy.get("[data-cy=address-hint-input]").should("exist");
+  });
+
   it("should prefill the PeerID field with the value returned from the comit_node", () => {
     cy.server();
     cy.route("http://localhost:8000/", "fixture:comitNodeInfo.json").as(
@@ -24,7 +35,7 @@ describe("The page for creating a link", () => {
   it("should autosuggest the list of multi-addresses returned from the comit_node", () => {
     cy.get("[data-cy=address-hint-input]")
       .find("input")
-      .click();
+      .focus();
 
     cy.contains("/ip4/127.0.0.1/tcp/8011").should("exist");
     cy.contains("/ip4/172.19.133.232/tcp/8011").should("exist");
@@ -32,14 +43,23 @@ describe("The page for creating a link", () => {
     cy.contains("/ip6/::1/tcp/8011").should("exist");
   });
 
-  it("should still render the page even if the comit_node is not reachable", () => {
-    // Given we don't mock the API call
+  it("should allow to select value from dropdown", () => {
+    cy.get("#react-select-2-option-0").click({ force: true });
 
-    // When we visit the page
-    cy.visit("/make_link");
+    cy.get("[data-cy=address-hint-input]").should(
+      "have.attr",
+      "value",
+      "/ip4/127.0.0.1/tcp/8011"
+    );
+  });
 
-    // The form still renders
-    cy.get("[data-cy=peer-input]").should("exist");
-    cy.get("[data-cy=address-hint-input]").should("exist");
+  it("should allow to delete autofilled value and type address hint manually", () => {
+    cy.get("[data-cy=address-hint-input]")
+      .find("input")
+      .type("/ip4/42.42.42.42/tcp/9999");
+  });
+
+  it("should not render the 'no options' element from react-select", () => {
+    cy.contains("No options").should("not.exist");
   });
 });
