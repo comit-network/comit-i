@@ -99,7 +99,7 @@ const MakeLink = () => {
     peerID: peerId,
     onPeerIDChange: setPeerId,
     helperText:
-      "The PeerID to include in the link. Usually, this will be the PeerID of your COMIT node."
+      "The PeerID to include in the link. Very likely, this will be the PeerID of your COMIT node."
   };
 
   const peerIDTextField =
@@ -108,7 +108,7 @@ const MakeLink = () => {
         PopperProps={{
           "data-cy": "peer-autofill-tooltip"
         }}
-        title={"We prefilled your COMIT-node's PeerID for you."}
+        title={"This is your COMIT node's PeerID!"}
       >
         {React.createElement(
           React.forwardRef((props, ref) => (

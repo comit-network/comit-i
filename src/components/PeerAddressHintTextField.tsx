@@ -1,3 +1,4 @@
+import { Tooltip } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import {
   createStyles,
@@ -38,9 +39,6 @@ interface OptionType {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      flexGrow: 1
-    },
     input: {
       display: "flex",
       padding: 0,
@@ -57,9 +55,6 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1),
       left: 0,
       right: 0
-    },
-    divider: {
-      height: theme.spacing(2)
     }
   })
 );
@@ -81,7 +76,17 @@ function InnerTextField({
       value={addressHint}
       label={"Peer Address Hint"}
       helperText={
-        "Multiaddress format, to be dialed to help with resolution of the peer ID"
+        <Tooltip
+          title={
+            // Could make this sentence less awkward if we pass in, whether or not the PeerID belongs to our COMIT node...
+            "Supply a publicly reachable address here if the COMIT node with the above PeerID is not discoverable."
+          }
+        >
+          <span>
+            A multiaddress that will be dialed in addition to the PeerID.
+            Optional.
+          </span>
+        </Tooltip>
       }
       onChange={event => onAddressHintChange(event.target.value)}
       required={false}
@@ -212,28 +217,26 @@ export default function PeerAddressHintTextField({
     }));
 
     return (
-      <div className={classes.root}>
-        <Select
-          openMenuOnFocus={true}
-          classes={classes}
-          styles={selectStyles}
-          options={options}
-          InnerTextFieldProps={innerTextFieldProps}
-          components={{
-            Control,
-            Menu,
-            MenuList: RenderNothingGivenEmptyOptionsMenuList,
-            ValueContainer
-          }}
-          value={{
-            label: addressHint,
-            value: addressHint
-          }}
-          required={false}
-          disabled={disabled}
-          onChange={onChange}
-        />
-      </div>
+      <Select
+        openMenuOnFocus={true}
+        classes={classes}
+        styles={selectStyles}
+        options={options}
+        InnerTextFieldProps={innerTextFieldProps}
+        components={{
+          Control,
+          Menu,
+          MenuList: RenderNothingGivenEmptyOptionsMenuList,
+          ValueContainer
+        }}
+        value={{
+          label: addressHint,
+          value: addressHint
+        }}
+        required={false}
+        disabled={disabled}
+        onChange={onChange}
+      />
     );
   }
 }
