@@ -1,13 +1,16 @@
 describe("The page for creating a link", () => {
   it("should prefill the PeerID field with the value returned from the comit_node", () => {
     cy.server();
-    cy.route("http://localhost:8000/", "fixture:comitNodeInfo.json");
+    cy.route("http://localhost:8000/", "fixture:comitNodeInfo.json").as(
+      "fetchComitNodeInfo"
+    );
 
     cy.visit("/make_link");
+    cy.wait("@fetchComitNodeInfo");
 
     cy.get("[data-cy=peer-input]")
       .find("input")
-      .should("contain", "QmaGpit2yYH44a1EKPrAR9YCo2MvjGRH4bZzzpT8tEQNEa");
+      .should("have.value", "QmaGpit2yYH44a1EKPrAR9YCo2MvjGRH4bZzzpT8tEQNEa");
   });
 
   it("should render a tooltip that describes where the PeerID is coming from", () => {

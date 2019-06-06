@@ -3,10 +3,11 @@ import CheckCircleOutlined from "@material-ui/icons/CheckCircleOutlined";
 import ErrorOutlined from "@material-ui/icons/ErrorOutlined";
 import FileCopy from "@material-ui/icons/FileCopy";
 import copy from "copy-to-clipboard";
-import React, { useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
+import getComitInfo from "../../api/getComitInfo";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
 import TextField from "../../components/TextField";
@@ -23,6 +24,15 @@ const MakeLink = () => {
   const [protocol, setProtocol] = useState("");
   const [peerId, setPeerId] = useState("");
   const [addressHint, setAddressHint] = useState("");
+
+  useEffect(() => {
+    getComitInfo().then(
+      info => {
+        setPeerId(info.id);
+      },
+      () => undefined
+    );
+  });
 
   let comitLink = new URI({
     protocol: "web+comit",
