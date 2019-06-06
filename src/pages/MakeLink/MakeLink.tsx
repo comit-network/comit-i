@@ -8,7 +8,10 @@ import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
 import getComitInfo from "../../api/getComitInfo";
+import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
+import PeerAddressHintTextField from "../../components/PeerAddressHintTextField";
+import PeerIDTextField from "../../components/PeerIDTextField";
 import { SubTitle } from "../../components/text";
 import TextField from "../../components/TextField";
 import SwapForm, {
@@ -16,7 +19,6 @@ import SwapForm, {
   reducer as swapReducer,
   SwapValue
 } from "../../forms/SwapForm";
-import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const MakeLink = () => {
@@ -119,16 +121,17 @@ const MakeLink = () => {
           </TextField>
         </Grid>
         <Grid item={true} xs={12}>
-          <ToForm
-            peerId={peerId}
-            addressHint={addressHint}
-            onPeerChange={event => {
-              setPeerId(event.target.value);
-            }}
-            onAddressHintChange={event => {
-              setAddressHint(event.target.value);
-            }}
-          />
+          <Fieldset legend={"To"}>
+            <Grid item={true} xs={12}>
+              <PeerIDTextField peerID={peerId} onPeerIDChange={setPeerId} />
+            </Grid>
+            <Grid item={true} xs={12}>
+              <PeerAddressHintTextField
+                addressHint={addressHint}
+                onAddressHintChange={setAddressHint}
+              />
+            </Grid>
+          </Fieldset>
         </Grid>
         <Grid item={true} xs={12}>
           <SubTitle text={"The generated link"} />

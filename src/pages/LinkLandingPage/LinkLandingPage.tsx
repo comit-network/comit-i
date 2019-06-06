@@ -6,6 +6,8 @@ import postRfc003Swap from "../../api/postRfc003Swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
+import PeerAddressHintTextField from "../../components/PeerAddressHintTextField";
+import PeerIDTextField from "../../components/PeerIDTextField";
 import ProtocolTextField from "../../components/ProtocolTextField";
 import SendButton from "../../components/SendButton";
 import Rfc003ParamsForm, {
@@ -13,7 +15,6 @@ import Rfc003ParamsForm, {
   Rfc003Params
 } from "../../forms/Rfc003ParamsForm";
 import SwapForm, { emptySwap } from "../../forms/SwapForm";
-import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 import ErrorMessage from "./ErrorMessage";
 import InfoMessage from "./InfoMessage";
@@ -113,11 +114,17 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <ToForm
-                peerId={peerId}
-                addressHint={addressHint}
-                disabled={true}
-              />
+              <Fieldset legend={"To"}>
+                <Grid item={true} xs={12}>
+                  <PeerIDTextField peerID={peerId} disabled={true} />
+                </Grid>
+                <Grid item={true} xs={12}>
+                  <PeerAddressHintTextField
+                    addressHint={addressHint}
+                    disabled={true}
+                  />
+                </Grid>
+              </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
               <SendButton />
