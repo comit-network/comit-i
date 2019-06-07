@@ -2,8 +2,7 @@ import {
   Button,
   CircularProgress,
   TableCell,
-  TableRow,
-  Typography
+  TableRow
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useReducer } from "react";
@@ -25,6 +24,7 @@ import {
   sirenParameterDialogSubmitted
 } from "./events";
 import { ActionExecutionStatus, initialState, reducer } from "./reducer";
+import SwapId from "./SwapId";
 
 interface AssetCellProps {
   asset: Asset;
@@ -93,8 +93,6 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
     link.rel.includes("human-protocol-spec")
   );
 
-  /* TODO: Force ellipsis on swap_id so that it doesn't take up
-     so much space*/
   return (
     <React.Fragment key={swapLink.href}>
       <TableRow
@@ -108,8 +106,8 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
         <TableCell align="center">
           <SwapStatusIcon status={properties.status} />
         </TableCell>
-        <TableCell align="center">
-          <Typography noWrap={true}>{properties.id}</Typography>
+        <TableCell>
+          <SwapId id={properties.id || ""} />
         </TableCell>
         <TableCell>{properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>
