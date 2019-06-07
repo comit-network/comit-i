@@ -1,6 +1,6 @@
 import { Typography } from "@material-ui/core";
 import useInterval from "@use-it/interval";
-import React, { useState } from "react";
+import React from "react";
 import { useAsync } from "react-async";
 import { RouteComponentProps } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../gen/siren";
@@ -10,29 +10,24 @@ import ErrorSnackbar from "../components/ErrorSnackbar";
 import SwapList from "./SwapList/SwapList";
 import Swap from "./SwapPage/Swap";
 
-const getComitResourceFn = async ({ resourcePath, callback }: any) => {
-  return getComitResource(resourcePath).then(data => {
-    callback();
-    return data;
-  });
+const getComitResourceFn = async ({ resourcePath }: any) => {
+  return getComitResource(resourcePath);
 };
 
 function ShowResource({ location }: RouteComponentProps) {
   const resourcePath = location.pathname.replace("/show_resource/", "");
-  const [previousPath, setPreviousPath] = useState("");
 
   const { data: entity, isLoading, error, reload } = useAsync(
     getComitResourceFn,
     {
       resourcePath,
-      callback: () => setPreviousPath(location.pathname),
       watch: location.pathname
     }
   );
 
   useInterval(() => reload(), isLoading ? null : 15000);
 
-  if (isLoading && previousPath !== location.pathname) {
+  if (isLoading) {
     return <CenteredProgress title="Fetching..." />;
   } else if (
     !error &&
