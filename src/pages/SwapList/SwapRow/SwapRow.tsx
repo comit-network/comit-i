@@ -2,7 +2,8 @@ import {
   Button,
   CircularProgress,
   TableCell,
-  TableRow
+  TableRow,
+  Typography
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useReducer } from "react";
@@ -92,6 +93,8 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
     link.rel.includes("human-protocol-spec")
   );
 
+  /* TODO: Force ellipsis on swap_id so that it doesn't take up
+     so much space*/
   return (
     <React.Fragment key={swapLink.href}>
       <TableRow
@@ -104,6 +107,9 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
       >
         <TableCell align="center">
           <SwapStatusIcon status={properties.status} />
+        </TableCell>
+        <TableCell align="center">
+          <Typography noWrap={true}>{properties.swap_id}</Typography>
         </TableCell>
         <TableCell>{properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>
