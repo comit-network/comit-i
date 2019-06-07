@@ -109,7 +109,7 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
           <SwapStatusIcon status={properties.status} />
         </TableCell>
         <TableCell align="center">
-          <Typography noWrap={true}>{properties.swap_id}</Typography>
+          <Typography noWrap={true}>{properties.id}</Typography>
         </TableCell>
         <TableCell>{properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>

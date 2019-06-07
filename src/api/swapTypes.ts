@@ -99,7 +99,7 @@ export interface Properties {
   status: Status;
   role: Role;
   counterparty: string;
-  swap_id: string;
+  id: string;
 }
 
 export interface AdditionalProperties {

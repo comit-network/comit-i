@@ -44,7 +44,7 @@ function Swap({ swap }: SwapProps) {
         <Grid container={true} spacing={2} justify="space-evenly">
           <Grid item={true} xs={12}>
             <SwapMetaDataCard
-              swapId={properties.swap_id}
+              swapId={properties.id}
               counterparty={properties.counterparty}
             />
           </Grid>
