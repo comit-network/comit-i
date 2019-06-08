@@ -41,7 +41,7 @@ function ShowResource({ location }: RouteComponentProps) {
     entity.class &&
     entity.class.includes("swap")
   ) {
-    return <Swap swap={entity} />;
+    return <Swap swap={entity} reload={reload} />;
   } else if (error) {
     return (
       <React.Fragment>

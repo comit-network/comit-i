@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import { Action } from "../../../../gen/siren";
+import { Action } from "../../../gen/siren";
 
 export type ReducerEvent =
   | {
