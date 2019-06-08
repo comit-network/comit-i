@@ -11,14 +11,15 @@ import executeAction from "../../api/executeAction";
 import {
   AdditionalProperties,
   CommunicationStatus,
+  LedgerKind,
   Properties,
   Role
 } from "../../api/swapTypes";
 import Dialog from "../../components/Dialog";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
-import LedgerActionDialogBody from "../ListSwaps/LedgerActionDialogBody";
-import SirenActionParametersDialogBody from "../ListSwaps/SirenActionParametersDialogBody";
+import LedgerActionDialogBody from "../SwapList/LedgerActionDialogBody";
+import SirenActionParametersDialogBody from "../SwapList/SirenActionParametersDialogBody";
 import {
   actionButtonClicked,
   actionFailed,
@@ -26,15 +27,15 @@ import {
   closeLedgerActionDialog,
   closeSirenParametersDialog,
   sirenParameterDialogSubmitted
-} from "../ListSwaps/SwapRow/events";
+} from "../SwapList/SwapRow/events";
 import {
   ActionExecutionStatus,
   initialState,
   reducer
-} from "../ListSwaps/SwapRow/reducer";
+} from "../SwapList/SwapRow/reducer";
 import AssetCard from "./AssetCard";
-import Rfc003BlockchainLog from "./BlockchainLog";
 import CommunicationCardHeader from "./CommunicationCard";
+import LedgerCard from "./LedgerCard";
 import SwapMetaDataCard from "./SwapMetaDataCard";
 
 interface SwapProps {
@@ -84,6 +85,24 @@ function Swap({ swap, reload }: SwapProps) {
   const ledgerActions = actions.filter(
     action => action.name !== "accept" && action.name !== "decline"
   );
+  const alphaLedgerActions =
+    properties.role === Role.Alice
+      ? ledgerActions.filter(
+          action =>
+            action.name === "deploy" ||
+            action.name === "fund" ||
+            action.name === "refund"
+        )
+      : actions.filter(action => action.name === "redeem");
+  const betaLedgerActions =
+    properties.role === Role.Alice
+      ? actions.filter(action => action.name === "redeem")
+      : actions.filter(
+          action =>
+            action.name === "deploy" ||
+            action.name === "fund" ||
+            action.name === "refund"
+        );
 
   const [
     {
@@ -169,17 +188,32 @@ function Swap({ swap, reload }: SwapProps) {
               <Grid item={true} xs={12}>
                 <SubTitle text={"Ledger events and actions"} />
               </Grid>
-              <Rfc003BlockchainLog
-                alphaState={properties.state.alpha_ledger}
-                alphaLedger={properties.parameters.alpha_ledger}
-                betaState={properties.state.beta_ledger}
-                betaLedger={properties.parameters.beta_ledger}
-                role={properties.role}
-                actions={ledgerActions}
-                actionInProgress={
-                  actionExecutionStatus === ActionExecutionStatus.InProgress
-                }
-              />
+              <Grid item={true} xs={6}>
+                <LedgerCard
+                  ledgerKind={LedgerKind.Alpha}
+                  ledger={properties.parameters.alpha_ledger}
+                  ledgerState={properties.state.alpha_ledger}
+                  otherLedgerState={properties.state.beta_ledger}
+                  role={properties.role}
+                  actions={alphaLedgerActions}
+                  actionInProgress={
+                    actionExecutionStatus === ActionExecutionStatus.InProgress
+                  }
+                />
+              </Grid>
+              <Grid item={true} xs={6}>
+                <LedgerCard
+                  ledgerKind={LedgerKind.Beta}
+                  ledger={properties.parameters.beta_ledger}
+                  ledgerState={properties.state.beta_ledger}
+                  otherLedgerState={properties.state.alpha_ledger}
+                  role={properties.role}
+                  actions={betaLedgerActions}
+                  actionInProgress={
+                    actionExecutionStatus === ActionExecutionStatus.InProgress
+                  }
+                />
+              </Grid>
             </React.Fragment>
           )}
         </Grid>
