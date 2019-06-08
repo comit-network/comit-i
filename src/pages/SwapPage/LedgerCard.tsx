@@ -36,7 +36,8 @@ function LedgerCard({
   otherLedgerState,
   role,
   actions,
-  isActionInProgress
+  isActionInProgress,
+  ...remainingProps
 }: LedgerCardProps) {
   let transactions = [
     { verb: "deployed", hash: ledgerState.deploy_tx },
@@ -54,7 +55,7 @@ function LedgerCard({
     ledgerKind === LedgerKind.Alpha ? ledgerStates : ledgerStates.reverse();
 
   return (
-    <Card>
+    <Card {...remainingProps}>
       <CardHeader title={ledgerKind} />
       <CardContent>
         {ledgerState.htlc_location && (

@@ -128,7 +128,7 @@ function Swap({ swap, reload }: SwapProps) {
             />
           </Grid>
           <Grid item={true} xs={12}>
-            <Card>
+            <Card data-cy="communication-card">
               <CommunicationCardHeader
                 status={properties.state.communication.status}
                 role={properties.role}
@@ -172,6 +172,7 @@ function Swap({ swap, reload }: SwapProps) {
                     />
                   ))}
                   isActionInProgress={isActionInProgress}
+                  data-cy={"alpha-ledger-card"}
                 />
               </Grid>
               <Grid item={true} xs={6}>
@@ -189,6 +190,7 @@ function Swap({ swap, reload }: SwapProps) {
                     />
                   ))}
                   isActionInProgress={isActionInProgress}
+                  data-cy={"beta-ledger-card"}
                 />
               </Grid>
             </React.Fragment>
