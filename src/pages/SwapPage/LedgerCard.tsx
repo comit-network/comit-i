@@ -25,8 +25,8 @@ interface LedgerCardProps {
   ledgerState: LedgerState;
   otherLedgerState: LedgerState;
   role: Role;
-  actions: Array<{ name: string; button: React.ReactNode }>;
-  actionInProgress: boolean;
+  actions: React.ReactNode[];
+  isActionInProgress: boolean;
 }
 
 function LedgerCard({
@@ -36,7 +36,7 @@ function LedgerCard({
   otherLedgerState,
   role,
   actions,
-  actionInProgress
+  isActionInProgress
 }: LedgerCardProps) {
   let transactions = [
     { verb: "deployed", hash: ledgerState.deploy_tx },
@@ -93,13 +93,13 @@ function LedgerCard({
         />
       </CardContent>
       <CardActions>
-        {actionInProgress ? (
+        {isActionInProgress ? (
           <CircularProgress
             size={30}
             data-cy={"action-request-circular-progress"}
           />
         ) : (
-          actions.map(elem => elem.button)
+          actions
         )}
       </CardActions>
     </Card>

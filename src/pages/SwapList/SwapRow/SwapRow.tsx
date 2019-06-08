@@ -1,15 +1,11 @@
-import {
-  Button,
-  CircularProgress,
-  TableCell,
-  TableRow
-} from "@material-ui/core";
+import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React, { useEffect, useReducer } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../../../gen/siren";
 import executeAction from "../../../api/executeAction";
 import { Asset, Properties, toMainUnit } from "../../../api/swapTypes";
+import ActionButton from "../../../components/ActionButton";
 import Dialog from "../../../components/Dialog";
 import ExternalLink from "../../../components/ExternalLink";
 import LedgerActionDialogBody from "../LedgerActionDialogBody";
@@ -137,20 +133,16 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
             />
           ) : (
             actions.map(action => (
-              <Button
-                data-cy={`${action.name}-button`}
-                type={"button"}
+              <ActionButton
                 key={action.name}
-                variant={"contained"}
+                action={action}
                 onClick={e => {
                   // otherwise we trigger the onClick handler of the whole row and go to the swap detail page
                   e.stopPropagation();
 
                   dispatch(actionButtonClicked(action));
                 }}
-              >
-                {action.title || action.name}
-              </Button>
+              />
             ))
           )}
         </TableCell>

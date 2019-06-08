@@ -1,10 +1,4 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CircularProgress,
-  Grid
-} from "@material-ui/core";
+import { Card, CardActions, CircularProgress, Grid } from "@material-ui/core";
 import React, { useEffect, useReducer } from "react";
 import { Entity } from "../../../gen/siren";
 import executeAction from "../../api/executeAction";
@@ -15,6 +9,7 @@ import {
   Properties,
   Role
 } from "../../api/swapTypes";
+import ActionButton from "../../components/ActionButton";
 import Dialog from "../../components/Dialog";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
@@ -63,26 +58,11 @@ function Swap({ swap, reload }: SwapProps) {
   const [alphaTradeAction, betaTradeAction] =
     properties.role === Role.Alice ? tradeActions : tradeActions.reverse();
 
-  const actions = (swap.actions || []).map(action => ({
-    name: action.name,
-    button: (
-      <Button
-        data-cy={`${action.name}-button`}
-        type={"button"}
-        key={action.name}
-        variant={"contained"}
-        onClick={() => {
-          dispatch(actionButtonClicked(action));
-        }}
-      >
-        {action.title || action.name}
-      </Button>
-    )
-  }));
-  const communicationActions = actions.filter(
+  const communicationActions = (swap.actions || []).filter(
     action => action.name === "accept" || action.name === "decline"
   );
-  const ledgerActions = actions.filter(
+
+  const ledgerActions = (swap.actions || []).filter(
     action => action.name !== "accept" && action.name !== "decline"
   );
   const alphaLedgerActions =
@@ -93,11 +73,11 @@ function Swap({ swap, reload }: SwapProps) {
             action.name === "fund" ||
             action.name === "refund"
         )
-      : actions.filter(action => action.name === "redeem");
+      : ledgerActions.filter(action => action.name === "redeem");
   const betaLedgerActions =
     properties.role === Role.Alice
-      ? actions.filter(action => action.name === "redeem")
-      : actions.filter(
+      ? ledgerActions.filter(action => action.name === "redeem")
+      : ledgerActions.filter(
           action =>
             action.name === "deploy" ||
             action.name === "fund" ||
@@ -136,6 +116,9 @@ function Swap({ swap, reload }: SwapProps) {
     }
   }, [sideEffect, reload]);
 
+  const isActionInProgress =
+    actionExecutionStatus === ActionExecutionStatus.InProgress;
+
   return (
     <React.Fragment>
       <Page title="Swap">
@@ -171,13 +154,19 @@ function Swap({ swap, reload }: SwapProps) {
                 role={properties.role}
               />
               <CardActions>
-                {actionExecutionStatus === ActionExecutionStatus.InProgress ? (
+                {isActionInProgress ? (
                   <CircularProgress
                     size={30}
                     data-cy={"action-request-circular-progress"}
                   />
                 ) : (
-                  communicationActions.map(action => action.button)
+                  communicationActions.map(action => (
+                    <ActionButton
+                      key={action.name}
+                      action={action}
+                      onClick={() => dispatch(actionButtonClicked(action))}
+                    />
+                  ))
                 )}
               </CardActions>
             </Card>
@@ -195,10 +184,14 @@ function Swap({ swap, reload }: SwapProps) {
                   ledgerState={properties.state.alpha_ledger}
                   otherLedgerState={properties.state.beta_ledger}
                   role={properties.role}
-                  actions={alphaLedgerActions}
-                  actionInProgress={
-                    actionExecutionStatus === ActionExecutionStatus.InProgress
-                  }
+                  actions={alphaLedgerActions.map(action => (
+                    <ActionButton
+                      key={action.name}
+                      action={action}
+                      onClick={() => dispatch(actionButtonClicked(action))}
+                    />
+                  ))}
+                  isActionInProgress={isActionInProgress}
                 />
               </Grid>
               <Grid item={true} xs={6}>
@@ -208,10 +201,14 @@ function Swap({ swap, reload }: SwapProps) {
                   ledgerState={properties.state.beta_ledger}
                   otherLedgerState={properties.state.alpha_ledger}
                   role={properties.role}
-                  actions={betaLedgerActions}
-                  actionInProgress={
-                    actionExecutionStatus === ActionExecutionStatus.InProgress
-                  }
+                  actions={betaLedgerActions.map(action => (
+                    <ActionButton
+                      key={action.name}
+                      action={action}
+                      onClick={() => dispatch(actionButtonClicked(action))}
+                    />
+                  ))}
+                  isActionInProgress={isActionInProgress}
                 />
               </Grid>
             </React.Fragment>
