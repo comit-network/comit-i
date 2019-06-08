@@ -1,7 +1,7 @@
 import { AxiosResponse } from "axios";
 import ContentType from "content-type";
-import { Action } from "../../../../gen/siren";
-import { LedgerAction } from "../../../api/getAction";
+import { Action } from "../../../gen/siren";
+import { LedgerAction } from "../../api/getAction";
 import { ReducerEvent } from "./events";
 
 interface ReducerState {
@@ -9,7 +9,7 @@ interface ReducerState {
   sideEffect?: SideEffect;
 }
 
-type SideEffect =
+export type SideEffect =
   | {
       type: "executeAction";
       payload: {

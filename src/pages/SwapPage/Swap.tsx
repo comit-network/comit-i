@@ -1,7 +1,6 @@
 import { Card, CardActions, CircularProgress, Grid } from "@material-ui/core";
-import React, { useEffect, useReducer } from "react";
+import React, { useReducer } from "react";
 import { Entity } from "../../../gen/siren";
-import executeAction from "../../api/executeAction";
 import {
   AdditionalProperties,
   CommunicationStatus,
@@ -13,21 +12,20 @@ import ActionButton from "../../components/ActionButton";
 import Dialog from "../../components/Dialog";
 import Page from "../../components/Page";
 import { SubTitle } from "../../components/text";
-import LedgerActionDialogBody from "../SwapList/LedgerActionDialogBody";
-import SirenActionParametersDialogBody from "../SwapList/SirenActionParametersDialogBody";
 import {
   actionButtonClicked,
-  actionFailed,
-  actionSuccessful,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
   sirenParameterDialogSubmitted
-} from "../SwapList/SwapRow/events";
+} from "../actions/events";
 import {
   ActionExecutionStatus,
   initialState,
   reducer
-} from "../SwapList/SwapRow/reducer";
+} from "../actions/reducer";
+import useSideEffect from "../actions/useSideEffect";
+import LedgerActionDialogBody from "../SwapList/LedgerActionDialogBody";
+import SirenActionParametersDialogBody from "../SwapList/SirenActionParametersDialogBody";
 import AssetCard from "./AssetCard";
 import CommunicationCardHeader from "./CommunicationCard";
 import LedgerCard from "./LedgerCard";
@@ -96,25 +94,7 @@ function Swap({ swap, reload }: SwapProps) {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useEffect(() => {
-    if (!sideEffect) {
-      return;
-    }
-
-    switch (sideEffect.type) {
-      case "reloadData": {
-        reload();
-        return;
-      }
-      case "executeAction": {
-        executeAction(sideEffect.payload.action, sideEffect.payload.data).then(
-          response => dispatch(actionSuccessful(response)),
-          error => dispatch(actionFailed(error))
-        );
-        return;
-      }
-    }
-  }, [sideEffect, reload]);
+  useSideEffect(reload, dispatch, sideEffect);
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;
