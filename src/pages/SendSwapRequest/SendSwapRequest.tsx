@@ -6,6 +6,8 @@ import postRfc003Swap from "../../api/postRfc003Swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
+import PeerAddressHintTextField from "../../components/PeerAddressHintTextField";
+import PeerIDTextField from "../../components/PeerIDTextField";
 import ProtocolTextField from "../../components/ProtocolTextField";
 import SendButton from "../../components/SendButton";
 import Rfc003ParamsForm, {
@@ -18,7 +20,6 @@ import SwapForm, {
   emptySwap,
   reducer as swapReducer
 } from "../../forms/SwapForm";
-import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const SendSwap = ({ location, history }: RouteComponentProps) => {
@@ -81,16 +82,23 @@ const SendSwap = ({ location, history }: RouteComponentProps) => {
               </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
-              <ToForm
-                peerId={peerId}
-                addressHint={addressHint}
-                onPeerChange={event => {
-                  setPeerId(event.target.value);
-                }}
-                onAddressHintChange={event => {
-                  setAddressHint(event.target.value);
-                }}
-              />
+              <Fieldset legend={"To"}>
+                <Grid item={true} xs={12}>
+                  <PeerIDTextField
+                    peerID={peerId}
+                    onPeerIDChange={setPeerId}
+                    helperText={
+                      "The PeerID of the COMIT node you want to send the SWAP request to."
+                    }
+                  />
+                </Grid>
+                <Grid item={true} xs={12}>
+                  <PeerAddressHintTextField
+                    addressHint={addressHint}
+                    onAddressHintChange={setAddressHint}
+                  />
+                </Grid>
+              </Fieldset>
             </Grid>
             <Grid item={true} xs={12}>
               <SendButton />

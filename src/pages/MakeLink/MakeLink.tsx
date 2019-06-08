@@ -4,10 +4,15 @@ import ErrorOutlined from "@material-ui/icons/ErrorOutlined";
 import FileCopy from "@material-ui/icons/FileCopy";
 import copy from "copy-to-clipboard";
 import React, { useReducer, useState } from "react";
+import { useAsync } from "react-async";
 import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
 import { fromWei } from "web3-utils";
+import getComitInfo from "../../api/getComitInfo";
+import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
+import PeerAddressHintTextField from "../../components/PeerAddressHintTextField";
+import PeerIDTextField from "../../components/PeerIDTextField";
 import { SubTitle } from "../../components/text";
 import TextField from "../../components/TextField";
 import SwapForm, {
@@ -15,7 +20,6 @@ import SwapForm, {
   reducer as swapReducer,
   SwapValue
 } from "../../forms/SwapForm";
-import ToForm from "../../forms/ToForm";
 import ledgers from "../../ledgerSpec";
 
 const MakeLink = () => {
@@ -23,6 +27,10 @@ const MakeLink = () => {
   const [protocol, setProtocol] = useState("");
   const [peerId, setPeerId] = useState("");
   const [addressHint, setAddressHint] = useState("");
+
+  const { data } = useAsync(getComitInfo, {
+    onResolve: data => setPeerId(data.id)
+  });
 
   let comitLink = new URI({
     protocol: "web+comit",
@@ -87,6 +95,35 @@ const MakeLink = () => {
     </Button>
   );
 
+  const peerIDTextFieldProps = {
+    peerID: peerId,
+    onPeerIDChange: setPeerId,
+    helperText:
+      "The PeerID to include in the link. Very likely, this will be the PeerID of your COMIT node."
+  };
+
+  const peerIDTextField =
+    data && peerId === data.id ? (
+      <Tooltip
+        PopperProps={{
+          "data-cy": "peer-autofill-tooltip"
+        }}
+        title={"This is your COMIT node's PeerID!"}
+      >
+        {React.createElement(
+          React.forwardRef((props, ref) => (
+            <PeerIDTextField
+              {...props}
+              inputRef={ref}
+              {...peerIDTextFieldProps}
+            />
+          ))
+        )}
+      </Tooltip>
+    ) : (
+      <PeerIDTextField {...peerIDTextFieldProps} />
+    );
+
   return (
     <Page title={"Create a new swap link"}>
       <Grid container={true} spacing={5}>
@@ -109,16 +146,18 @@ const MakeLink = () => {
           </TextField>
         </Grid>
         <Grid item={true} xs={12}>
-          <ToForm
-            peerId={peerId}
-            addressHint={addressHint}
-            onPeerChange={event => {
-              setPeerId(event.target.value);
-            }}
-            onAddressHintChange={event => {
-              setAddressHint(event.target.value);
-            }}
-          />
+          <Fieldset legend={"To"}>
+            <Grid item={true} xs={12}>
+              {peerIDTextField}
+            </Grid>
+            <Grid item={true} xs={12}>
+              <PeerAddressHintTextField
+                addressHint={addressHint}
+                onAddressHintChange={setAddressHint}
+                suggestions={(data && data.listen_addresses) || []}
+              />
+            </Grid>
+          </Fieldset>
         </Grid>
         <Grid item={true} xs={12}>
           <SubTitle text={"The generated link"} />
