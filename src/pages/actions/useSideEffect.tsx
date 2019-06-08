@@ -26,5 +26,5 @@ export default function useSideEffect(
         return;
       }
     }
-  }, [sideEffect, reload]);
+  }, [sideEffect, reload, dispatch]);
 }
