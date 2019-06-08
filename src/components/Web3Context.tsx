@@ -1,24 +1,19 @@
-import React, { ReactNode, useContext } from "react";
+import React, { ReactNode, useContext, useEffect, useState } from "react";
 import Web3 from "web3";
 
-const Web3Context = React.createContext<Web3 | undefined>(undefined);
+interface Web3ContextData {
+  web3?: Web3;
+  declined: boolean;
+  defaultAccount?: string;
+}
+
+const Web3Context = React.createContext<Web3ContextData>({
+  declined: false
+});
 
 interface Web3ProviderProps {
   window?: Window;
   children: ReactNode;
-}
-
-function newWeb3(window: Window) {
-  if (window.web3) {
-    const web3 = new Web3(window.web3.currentProvider);
-
-    // Why? Because: https://github.com/ethereum/web3.js/issues/2822
-    web3.eth.transactionConfirmationBlocks = 1;
-
-    return web3;
-  } else {
-    return undefined;
-  }
 }
 
 const globalWindow = window;
@@ -27,10 +22,39 @@ export function Web3Provider({
   children,
   window = globalWindow
 }: Web3ProviderProps) {
+  const [contextData, setContextData] = useState<Web3ContextData>({
+    declined: false
+  });
+
+  useEffect(() => {
+    const injectedEthereum = window.ethereum;
+    const injectedWeb3 = window.web3;
+
+    if (injectedEthereum && injectedWeb3) {
+      injectedEthereum.enable().then(
+        accounts => {
+          const web3 = new Web3(injectedWeb3.currentProvider);
+
+          // Why? Because: https://github.com/ethereum/web3.js/issues/2822
+          web3.eth.transactionConfirmationBlocks = 1;
+
+          setContextData({
+            web3,
+            declined: false,
+            defaultAccount: accounts[0]
+          });
+        },
+        () => {
+          setContextData({
+            declined: true
+          });
+        }
+      );
+    }
+  }, [window.web3, window.ethereum]);
+
   return (
-    <Web3Context.Provider value={newWeb3(window)}>
-      {children}
-    </Web3Context.Provider>
+    <Web3Context.Provider value={contextData}>{children}</Web3Context.Provider>
   );
 }
 
@@ -45,7 +69,9 @@ export function Web3Loader({
 }: Web3LoaderProps) {
   return (
     <Web3Context.Consumer>
-      {web3 => (web3 ? ifPresent(web3) : ifNotPresent())}
+      {({ web3, declined }) =>
+        web3 && !declined ? ifPresent(web3) : ifNotPresent()
+      }
     </Web3Context.Consumer>
   );
 }

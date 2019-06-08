@@ -28,7 +28,7 @@ function Web3SendTransactionButton({
   minTimestamp,
   onSuccess
 }: Props) {
-  const web3 = useWeb3();
+  const { web3, defaultAccount } = useWeb3();
   const [state, setState] = useState(TransactionState.Initial);
   const [networkTime, setNetworkTime] = useState(0);
 
@@ -41,12 +41,9 @@ function Web3SendTransactionButton({
         if (actionReady) {
           setState(TransactionState.Signing);
           try {
-            // Have to fetch default account ourselves until this works:
-            // https://github.com/MetaMask/metamask-extension/issues/6339
-            const accounts = await web3.eth.getAccounts();
             await web3.eth.sendTransaction({
               ...transactionConfig,
-              from: accounts[0]
+              from: defaultAccount
             });
             setState(TransactionState.Sent);
             onSuccess();
@@ -60,7 +57,7 @@ function Web3SendTransactionButton({
     : () => undefined;
 
   return (
-    <NoWeb3Tooltip title={"Please enable Metamask first."}>
+    <NoWeb3Tooltip>
       {state === TransactionState.Initial && (
         <Button disabled={!web3} color={"primary"} onClick={onClickHandler}>
           Send transaction &nbsp;
