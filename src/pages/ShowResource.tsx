@@ -6,7 +6,7 @@ import { EmbeddedRepresentationSubEntity } from "../../gen/siren";
 import getComitResource from "../api/getComitResource";
 import CenteredProgress from "../components/CenteredProgress";
 import ErrorSnackbar from "../components/ErrorSnackbar";
-import SwapList from "./ListSwaps/ListSwaps";
+import SwapList from "./SwapList/SwapList";
 import Swap from "./SwapPage/Swap";
 
 const getComitResourceFn = async ({ resourcePath }: any) => {

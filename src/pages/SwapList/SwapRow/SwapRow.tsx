@@ -24,6 +24,7 @@ import {
   sirenParameterDialogSubmitted
 } from "./events";
 import { ActionExecutionStatus, initialState, reducer } from "./reducer";
+import SwapId from "./SwapId";
 
 interface AssetCellProps {
   asset: Asset;
@@ -104,6 +105,9 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
       >
         <TableCell align="center">
           <SwapStatusIcon status={properties.status} />
+        </TableCell>
+        <TableCell>
+          <SwapId id={properties.id} />
         </TableCell>
         <TableCell>{properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>

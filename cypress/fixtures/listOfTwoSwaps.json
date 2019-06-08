@@ -5,6 +5,7 @@
     {
       "class": ["swap"],
       "properties": {
+        "id": "db1325ee-e6e6-42da-94f0-79e4b9143196",
         "parameters": {
           "alpha_asset": {
             "name": "bitcoin",
@@ -52,6 +53,7 @@
     {
       "class": ["swap"],
       "properties": {
+        "id": "3df29ad1-1588-4474-8ba7-b4d6e9c37259",
         "parameters": {
           "alpha_asset": {
             "name": "bitcoin",

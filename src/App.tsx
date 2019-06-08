@@ -25,12 +25,10 @@ import {
 } from "react-router-dom";
 import LinkPlusIcon from "./components/LinkPlus";
 import LinkLandingPage from "./pages/LinkLandingPage/LinkLandingPage";
-/* import ListSwaps from "./pages/ListSwaps/ListSwaps"; */
 import MakeLink from "./pages/MakeLink/MakeLink";
 import SendSwap from "./pages/SendSwapRequest/SendSwapRequest";
 import Settings from "./pages/Settings/Settings";
 import ShowResource from "./pages/ShowResource";
-/* import SwapPage from "./pages/SwapPage/SwapPage"; */
 
 const drawerWidth = 240;
 

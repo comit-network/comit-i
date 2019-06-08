@@ -3,6 +3,7 @@
     "swap"
   ],
   "properties": {
+    "id": "db1325ee-e6e6-42da-94f0-79e4b9143196",
     "counterparty": "QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd",
     "parameters": {
       "alpha_asset": {

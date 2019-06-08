@@ -23,6 +23,7 @@ function SwapList({ swaps, reload }: SwapListProps) {
       <TableHead>
         <TableRow>
           <TableCell component="th">Status</TableCell>
+          <TableCell component="th">ID</TableCell>
           <TableCell component="th">Alpha Ledger</TableCell>
           <TableCell component="th">Alpha Asset</TableCell>
           <TableCell component="th">Beta Ledger</TableCell>

@@ -3,14 +3,16 @@ import CardContent from "@material-ui/core/CardContent";
 import React from "react";
 
 interface SwapMetaDataCardProps {
+  swapId: string;
   counterparty: string;
 }
 
-function SwapMetaDataCard({ counterparty }: SwapMetaDataCardProps) {
+function SwapMetaDataCard({ swapId, counterparty }: SwapMetaDataCardProps) {
   return (
     <Card>
       <CardContent>
-        <Typography>{`Other party: ${counterparty}`}</Typography>
+        <Typography>{`Swap ID: ${swapId}`}</Typography>
+        <Typography>{`Trading with: ${counterparty}`}</Typography>
       </CardContent>
     </Card>
   );
