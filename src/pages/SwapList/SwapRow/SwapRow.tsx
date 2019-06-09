@@ -42,9 +42,10 @@ const useStyles = makeStyles(() => ({
 interface SwapRowProps extends RouteComponentProps {
   swap: EmbeddedRepresentationSubEntity;
   reload: () => void;
+  setPreventReload: (arg: boolean) => void;
 }
 
-function SwapRow({ swap, history, reload }: SwapRowProps) {
+function SwapRow({ swap, history, reload, setPreventReload }: SwapRowProps) {
   const [
     {
       state: {
@@ -57,7 +58,7 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, dispatch, sideEffect);
+  useSideEffect(reload, setPreventReload, dispatch, sideEffect);
 
   const classes = useStyles();
 

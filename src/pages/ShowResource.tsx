@@ -17,7 +17,6 @@ const getComitResourceFn = async ({ resourcePath }: any) => {
 
 function ShowResource({ location }: RouteComponentProps) {
   const resourcePath = location.pathname.replace("/show_resource/", "");
-  const [showLoading, setShowLoading] = useState(false);
 
   const { data: entity, isLoading, error, reload } = useAsync(
     getComitResourceFn,
@@ -28,22 +27,35 @@ function ShowResource({ location }: RouteComponentProps) {
   );
   const axiosError = error as AxiosError;
 
+  const [showLoading, setShowLoading] = useState(false);
+  const [preventReload, setPreventReload] = useState(false);
+
   useEffect(() => {
-    setShowLoading(true);
+    if (isLoading) {
+      setShowLoading(true);
+    }
   }, [isLoading]);
 
-  useInterval(() => reload(), isLoading ? null : 15000);
+  useInterval(() => reload(), preventReload || isLoading ? null : 15000);
 
   let resource;
-  if (entity && entity.class && entity.class.includes("swaps")) {
+  if (!axiosError && entity && entity.class && entity.class.includes("swaps")) {
     resource = (
       <SwapList
         swaps={entity.entities as EmbeddedRepresentationSubEntity[]}
         reload={reload}
+        setPreventReload={setPreventReload}
       />
     );
-  } else if (entity && entity.class && entity.class.includes("swap")) {
-    resource = <Swap swap={entity} reload={reload} />;
+  } else if (
+    !axiosError &&
+    entity &&
+    entity.class &&
+    entity.class.includes("swap")
+  ) {
+    resource = (
+      <Swap swap={entity} reload={reload} setPreventReload={setPreventReload} />
+    );
   } else if (axiosError) {
     if (
       axiosError.response &&
@@ -89,12 +101,12 @@ function ShowResource({ location }: RouteComponentProps) {
     <React.Fragment>
       {resource}
       <Snackbar
-        open={showLoading}
+        open={!axiosError && !preventReload && showLoading}
         onClose={() => setShowLoading(false)}
         message="Loading"
         icon={CircularProgress}
         backgroundPaletteVariant="primary"
-        backgroundColor="light"
+        backgroundColor="dark"
         autoHideDuration={3000}
       />
     </React.Fragment>
