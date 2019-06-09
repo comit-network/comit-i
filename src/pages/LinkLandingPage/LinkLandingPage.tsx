@@ -84,6 +84,10 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
     );
   };
 
+  const onClose = () => {
+    setDisplayError(false);
+  };
+
   return (
     <React.Fragment>
       <Page title={"Send a swap request"}>
@@ -141,7 +145,7 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
 
       <ErrorSnackbar
         message={"Failed to create swap."}
-        onClose={() => setDisplayError(false)}
+        onClose={onClose}
         open={displayError}
       />
     </React.Fragment>

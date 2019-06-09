@@ -1,80 +1,24 @@
-// TODO: Create generic Snackbar component out of this and ErrorSnackbar
-import {
-  createStyles,
-  IconButton,
-  Snackbar,
-  SnackbarContent,
-  Theme,
-  Typography,
-  WithStyles,
-  withStyles
-} from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
 import DoneIcon from "@material-ui/icons/Done";
 import React from "react";
+import Snackbar from "./Snackbar";
 
-const styles = (theme: Theme) =>
-  createStyles({
-    content: {
-      backgroundColor: theme.palette.primary.dark
-    },
-    message: {
-      display: "flex",
-      alignItems: "center"
-    },
-    icon: {
-      marginRight: theme.spacing(1)
-    }
-  });
-
-interface SuccessSnackbarProps extends WithStyles<typeof styles> {
+interface SuccessSnackbarProps {
   open: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   message: string;
 }
 
-function SuccessSnackbar({
-  open,
-  onClose,
-  message,
-  classes
-}: SuccessSnackbarProps) {
+function SuccessSnackbar({ open, onClose, message }: SuccessSnackbarProps) {
   return (
     <Snackbar
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "left"
-      }}
       open={open}
       onClose={onClose}
-      ClickAwayListenerProps={{
-        onClickAway: () => undefined
-      }}
-    >
-      <SnackbarContent
-        classes={{
-          root: classes.content,
-          message: classes.message
-        }}
-        message={
-          <React.Fragment>
-            <DoneIcon className={classes.icon} />
-            <Typography color={"inherit"}>{message}</Typography>
-          </React.Fragment>
-        }
-        action={[
-          <IconButton
-            key="close"
-            aria-label="Close"
-            color="inherit"
-            onClick={onClose}
-          >
-            <CloseIcon />
-          </IconButton>
-        ]}
-      />
-    </Snackbar>
+      message={message}
+      icon={DoneIcon}
+      backgroundPaletteVariant="primary"
+      backgroundColor="dark"
+    />
   );
 }
 
-export default withStyles(styles)(SuccessSnackbar);
+export default SuccessSnackbar;

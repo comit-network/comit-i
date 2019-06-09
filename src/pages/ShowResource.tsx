@@ -1,12 +1,13 @@
-import { Typography } from "@material-ui/core";
+import { CircularProgress, Typography } from "@material-ui/core";
+import useInterval from "@use-it/interval";
 import { AxiosError } from "axios";
-/* import useInterval from "@use-it/interval"; */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useAsync } from "react-async";
 import { RouteComponentProps } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../gen/siren";
 import getComitResource from "../api/getComitResource";
 import ErrorSnackbar from "../components/ErrorSnackbar";
+import Snackbar from "../components/Snackbar";
 import SwapList from "./SwapList/SwapList";
 import Swap from "./SwapPage/Swap";
 
@@ -16,6 +17,7 @@ const getComitResourceFn = async ({ resourcePath }: any) => {
 
 function ShowResource({ location }: RouteComponentProps) {
   const resourcePath = location.pathname.replace("/show_resource/", "");
+  const [showLoading, setShowLoading] = useState(false);
 
   const { data: entity, isLoading, error, reload } = useAsync(
     getComitResourceFn,
@@ -26,31 +28,36 @@ function ShowResource({ location }: RouteComponentProps) {
   );
   const axiosError = error as AxiosError;
 
-  /* useInterval(() => reload(), isLoading ? null : 15000); */
+  useEffect(() => {
+    setShowLoading(true);
+  }, [isLoading]);
 
+  useInterval(() => reload(), isLoading ? null : 15000);
+
+  let resource;
   if (entity && entity.class && entity.class.includes("swaps")) {
-    return (
+    resource = (
       <SwapList
         swaps={entity.entities as EmbeddedRepresentationSubEntity[]}
         reload={reload}
       />
     );
   } else if (entity && entity.class && entity.class.includes("swap")) {
-    return <Swap swap={entity} reload={reload} />;
+    resource = <Swap swap={entity} reload={reload} />;
   } else if (axiosError) {
     if (
       axiosError.response &&
       axiosError.response.status &&
       Math.floor(axiosError.response.status / 100) !== 2
     ) {
-      return (
+      resource = (
         <Typography variant="h3" align="center" data-cy="404-typography">
           404 Resource Not Found
         </Typography>
       );
     } else {
       // Network error
-      return (
+      resource = (
         <React.Fragment>
           <Typography variant="h3" align="center" data-cy="404-typography">
             404 Resource Not Found
@@ -62,10 +69,10 @@ function ShowResource({ location }: RouteComponentProps) {
         </React.Fragment>
       );
     }
-  } else if (isLoading && !entity) {
-    return null;
+  } else if (!entity) {
+    resource = null;
   } else {
-    return (
+    resource = (
       <React.Fragment>
         <Typography variant="h3" align="center" data-cy="bad-json-typography">
           Bad JSON
@@ -77,6 +84,21 @@ function ShowResource({ location }: RouteComponentProps) {
       </React.Fragment>
     );
   }
+
+  return (
+    <React.Fragment>
+      {resource}
+      <Snackbar
+        open={showLoading}
+        onClose={() => setShowLoading(false)}
+        message="Loading"
+        icon={CircularProgress}
+        backgroundPaletteVariant="primary"
+        backgroundColor="light"
+        autoHideDuration={3000}
+      />
+    </React.Fragment>
+  );
 }
 
 export default ShowResource;
