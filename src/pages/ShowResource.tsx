@@ -1,11 +1,11 @@
 import { Typography } from "@material-ui/core";
-import useInterval from "@use-it/interval";
+import { AxiosError } from "axios";
+/* import useInterval from "@use-it/interval"; */
 import React from "react";
 import { useAsync } from "react-async";
 import { RouteComponentProps } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../gen/siren";
 import getComitResource from "../api/getComitResource";
-import CenteredProgress from "../components/CenteredProgress";
 import ErrorSnackbar from "../components/ErrorSnackbar";
 import SwapList from "./SwapList/SwapList";
 import Swap from "./SwapPage/Swap";
@@ -24,44 +24,46 @@ function ShowResource({ location }: RouteComponentProps) {
       watch: location.pathname
     }
   );
+  const axiosError = error as AxiosError;
 
-  useInterval(() => reload(), isLoading ? null : 15000);
+  /* useInterval(() => reload(), isLoading ? null : 15000); */
 
-  if (isLoading) {
-    return <CenteredProgress title="Fetching..." />;
-  } else if (
-    !error &&
-    entity &&
-    entity.class &&
-    entity.class.includes("swaps")
-  ) {
+  if (entity && entity.class && entity.class.includes("swaps")) {
     return (
       <SwapList
         swaps={entity.entities as EmbeddedRepresentationSubEntity[]}
         reload={reload}
       />
     );
-  } else if (
-    !error &&
-    entity &&
-    entity.class &&
-    entity.class.includes("swap")
-  ) {
+  } else if (entity && entity.class && entity.class.includes("swap")) {
     return <Swap swap={entity} reload={reload} />;
-  } else if (error) {
-    return (
-      <React.Fragment>
+  } else if (axiosError) {
+    if (
+      axiosError.response &&
+      axiosError.response.status &&
+      Math.floor(axiosError.response.status / 100) !== 2
+    ) {
+      return (
         <Typography variant="h3" align="center" data-cy="404-typography">
           404 Resource Not Found
         </Typography>
-        {error && error.message === "Network Error" && (
+      );
+    } else {
+      // Network error
+      return (
+        <React.Fragment>
+          <Typography variant="h3" align="center" data-cy="404-typography">
+            404 Resource Not Found
+          </Typography>
           <ErrorSnackbar
             message="Failed to fetch resource. Is your COMIT node running?"
             open={true}
           />
-        )}
-      </React.Fragment>
-    );
+        </React.Fragment>
+      );
+    }
+  } else if (isLoading && !entity) {
+    return null;
   } else {
     return (
       <React.Fragment>
