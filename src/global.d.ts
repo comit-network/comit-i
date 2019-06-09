@@ -5,9 +5,14 @@ declare interface ComitNodeApiEndpoint {
   port: number;
 }
 
+declare interface Metamask {
+  enable: () => Promise<string[]>;
+}
+
 declare global {
   interface Window {
-    web3: Web3 | null;
+    web3?: Web3;
+    ethereum?: Metamask;
     getComitNodeApiEndpoint?: () => ComitNodeApiEndpoint;
   }
 

@@ -3,18 +3,23 @@ import React from "react";
 import { useWeb3 } from "./Web3Context";
 
 interface Props {
-  title: string;
   children: React.ReactNode;
 }
 
-function NoWeb3Tooltip({ title, children }: Props) {
-  const web3 = useWeb3();
+function NoWeb3Tooltip({ children }: Props) {
+  const { web3, declined } = useWeb3();
 
   // Need to wrap children of tooltip in span because tooltips don't show for
   // disabled children by default and children of this tooltip are likely to be
   // disabled when this one is shown e.g. when web3 is not available.
   const tooltip = (
-    <Tooltip title={title}>
+    <Tooltip
+      title={
+        declined
+          ? "Please give COMIT-i access to your metamask first."
+          : "Please enable Metamask first."
+      }
+    >
       <span>{children}</span>
     </Tooltip>
   );
