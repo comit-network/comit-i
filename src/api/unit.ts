@@ -1,5 +1,5 @@
-import { toBitcoin } from "satoshi-bitcoin-ts";
-import { fromWei } from "web3-utils";
+import { toBitcoin, toSatoshi } from "satoshi-bitcoin-ts";
+import { fromWei, toWei } from "web3-utils";
 import { Asset } from "./swapTypes";
 
 export function toMainUnit(asset: Asset) {
@@ -8,6 +8,18 @@ export function toMainUnit(asset: Asset) {
       return fromWei(asset.quantity, "ether");
     case "bitcoin":
       return toBitcoin(asset.quantity, true).toString();
+    case "erc20":
+    default:
+      return asset.quantity;
+  }
+}
+
+export function toSmallestUnit(asset: Asset) {
+  switch (asset.name) {
+    case "ether":
+      return toWei(asset.quantity);
+    case "bitcoin":
+      return toSatoshi(asset.quantity).toString();
     case "erc20":
     default:
       return asset.quantity;

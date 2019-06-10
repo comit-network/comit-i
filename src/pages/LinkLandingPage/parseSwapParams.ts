@@ -1,5 +1,3 @@
-import { toSatoshi } from "satoshi-bitcoin-ts";
-import { toWei } from "web3-utils";
 import { SwapValue } from "../../forms/SwapForm";
 import { QueryDialInfo, QueryParams } from "./parseQuery";
 
@@ -75,20 +73,6 @@ function tokenIdToAssetParameter(asset: string, tokenId: string) {
   }
 }
 
-function toDisplayUnit(symbol: string, quantity: string) {
-  switch (symbol) {
-    case "BTC": {
-      return toSatoshi(quantity).toString();
-    }
-    case "ETH": {
-      return toWei(quantity);
-    }
-    case "ERC20":
-    default:
-      return quantity;
-  }
-}
-
 function parseAsset(input: string | undefined, asset: string): SwapValue {
   if (!input) {
     throw new Error(asset + " undefined");
@@ -99,13 +83,12 @@ function parseAsset(input: string | undefined, asset: string): SwapValue {
   if (!match.length || !match[1] || !match[2]) {
     throw new Error(asset + " asset could not be parsed. Was: " + input);
   }
-  let quantity = match[1];
+  const quantity = match[1];
   const symbol = match[2];
   const tokenId = match[4];
 
   const name = symbolToAssetName(symbol);
   const tokenIdParameters = tokenIdToAssetParameter(name, tokenId);
-  quantity = toDisplayUnit(symbol, quantity);
 
   return { name, quantity, ...tokenIdParameters };
 }
