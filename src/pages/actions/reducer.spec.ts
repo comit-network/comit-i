@@ -48,7 +48,7 @@ describe("SwapRowReducer", () => {
       href: "/foo/bar"
     };
 
-    const { state, sideEffect } = reducer(
+    const { state } = reducer(
       initialState,
       actionButtonClicked(actionWithField)
     );
@@ -56,7 +56,6 @@ describe("SwapRowReducer", () => {
     expect(state).toStrictEqual({
       activeSirenParameterDialog: actionWithField
     });
-    expect(sideEffect).toBeUndefined();
   });
 
   it("should trigger action if parameters dialog is submitted", () => {
