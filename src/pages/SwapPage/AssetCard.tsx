@@ -13,7 +13,8 @@ import { makeStyles } from "@material-ui/styles";
 import classnames from "classnames";
 import moment from "moment";
 import React, { useState } from "react";
-import { Asset, Ledger, toMainUnit } from "../../api/swapTypes";
+import { Asset, Ledger } from "../../api/swapTypes";
+import { mainUnitSymbol, toMainUnit } from "../../api/unit";
 import ExplorerLink, { ResourceType } from "./ExplorerLink";
 
 const useStyles = makeStyles<Theme>(theme => ({
@@ -58,6 +59,8 @@ function AssetCard({
           tradeAction +
           " " +
           toMainUnit(asset) +
+          " " +
+          mainUnitSymbol(asset) +
           " on " +
           ledger.name +
           " " +
