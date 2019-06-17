@@ -24,7 +24,7 @@ export default function postRfc003Swap(
   swap: Swap,
   params: Rfc003Params,
   peerId: string,
-  addressHint: string
+  addressHint?: string
 ) {
   const uri = apiEndpoint()
     .path("swaps/rfc003")
