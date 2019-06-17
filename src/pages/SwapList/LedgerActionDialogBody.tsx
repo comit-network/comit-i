@@ -7,6 +7,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { LedgerAction } from "../../api/getAction";
+import { toMainUnit } from "../../api/unit";
 import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
 import CopyToClipboardButton from "./CopyToClipboard";
 
@@ -56,21 +57,23 @@ function LedgerActionDialogBody({
       );
     }
     case "bitcoin-send-amount-to-address": {
+      const amount = toMainUnit({
+        name: "bitcoin",
+        quantity: action.payload.amount
+      });
+
       return (
         <React.Fragment>
           <DialogTitle>Send Bitcoin</DialogTitle>
           <DialogContent>
             <Typography paragraph={true}>
-              Please send <b>{action.payload.amount}</b> satoshi to the
-              following <b>{action.payload.network}</b> address:
+              Please send <b>{amount}</b> BTC to the following{" "}
+              <b>{action.payload.network}</b> address:
             </Typography>
             {action.payload.to}
           </DialogContent>
           <DialogActions>
-            <CopyToClipboardButton
-              content={action.payload.amount}
-              name="amount"
-            />
+            <CopyToClipboardButton content={amount} name="amount" />
             <CopyToClipboardButton content={action.payload.to} name="address" />
             <Button onClick={onClose} color="secondary">
               Close
@@ -79,15 +82,22 @@ function LedgerActionDialogBody({
         </React.Fragment>
       );
     }
+    /* This action is too generic and it doesn't differentiate between ether
+         and ERC20. This is enough for performing the action, but not for
+         informing the user about what the action does */
     case "ethereum-deploy-contract": {
+      const amount = toMainUnit({
+        name: "ether",
+        quantity: action.payload.amount
+      });
+
       return (
         <React.Fragment>
           <DialogTitle>Deploy Ethereum contract</DialogTitle>
           <DialogContent>
             <Typography paragraph={true}>
               Deploy the following contract to the Ethereum{" "}
-              <b>{action.payload.network}</b> network with{" "}
-              <b>{action.payload.amount}</b> wei:
+              <b>{action.payload.network}</b> network with <b>{amount}</b> ETH:
             </Typography>
             <Typography
               variant={"body1"}
