@@ -5,7 +5,7 @@ import { SideEffect } from "./reducer";
 
 export default function useSideEffect(
   reload: () => void,
-  setPreventReload: (arg: boolean) => void,
+  setAllowReload: (arg: boolean) => void,
   dispatch: React.Dispatch<ReducerEvent>,
   sideEffect: SideEffect | undefined
 ) {
@@ -16,12 +16,12 @@ export default function useSideEffect(
 
     switch (sideEffect.type) {
       case "reloadData": {
-        setPreventReload(false);
+        setAllowReload(true);
         reload();
         return;
       }
       case "executeAction": {
-        setPreventReload(true);
+        setAllowReload(false);
         executeAction(sideEffect.payload.action, sideEffect.payload.data).then(
           response => dispatch(actionSuccessful(response)),
           error => dispatch(actionFailed(error))
@@ -29,13 +29,13 @@ export default function useSideEffect(
         return;
       }
       case "allowReload": {
-        setPreventReload(false);
+        setAllowReload(true);
         return;
       }
       case "preventReload": {
-        setPreventReload(true);
+        setAllowReload(false);
         return;
       }
     }
-  }, [sideEffect, reload, setPreventReload, dispatch]);
+  }, [sideEffect, reload, setAllowReload, dispatch]);
 }

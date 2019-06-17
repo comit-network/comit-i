@@ -28,7 +28,7 @@ function ShowResource({ location }: RouteComponentProps) {
   const axiosError = error as AxiosError;
 
   const [showLoading, setShowLoading] = useState(false);
-  const [preventReload, setPreventReload] = useState(false);
+  const [allowReload, setAllowReload] = useState(true);
 
   useEffect(() => {
     if (isLoading) {
@@ -36,7 +36,7 @@ function ShowResource({ location }: RouteComponentProps) {
     }
   }, [isLoading]);
 
-  useInterval(() => reload(), preventReload || isLoading ? null : 15000);
+  useInterval(() => reload(), allowReload && !isLoading ? 15000 : null);
 
   function resource() {
     if (
@@ -49,7 +49,7 @@ function ShowResource({ location }: RouteComponentProps) {
         <SwapList
           swaps={entity.entities as EmbeddedRepresentationSubEntity[]}
           reload={reload}
-          setPreventReload={setPreventReload}
+          setAllowReload={setAllowReload}
         />
       );
     } else if (
@@ -59,11 +59,7 @@ function ShowResource({ location }: RouteComponentProps) {
       entity.class.includes("swap")
     ) {
       return (
-        <Swap
-          swap={entity}
-          reload={reload}
-          setPreventReload={setPreventReload}
-        />
+        <Swap swap={entity} reload={reload} setAllowReload={setAllowReload} />
       );
     } else if (axiosError) {
       if (
@@ -111,7 +107,7 @@ function ShowResource({ location }: RouteComponentProps) {
     <React.Fragment>
       {resource()}
       <Snackbar
-        open={!axiosError && !preventReload && showLoading}
+        open={!axiosError && !allowReload && showLoading}
         onClose={() => setShowLoading(false)}
         message="Loading"
         icon={CircularProgress}

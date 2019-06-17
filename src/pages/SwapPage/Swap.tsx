@@ -34,10 +34,10 @@ import SwapMetaDataCard from "./SwapMetaDataCard";
 interface SwapProps {
   swap: Entity;
   reload: () => void;
-  setPreventReload: (arg: boolean) => void;
+  setAllowReload: (arg: boolean) => void;
 }
 
-function Swap({ swap, reload, setPreventReload }: SwapProps) {
+function Swap({ swap, reload, setAllowReload }: SwapProps) {
   const properties = swap.properties as Properties & AdditionalProperties;
   const [alphaLedger, betaLedger] = [
     properties.parameters.alpha_ledger,
@@ -95,7 +95,7 @@ function Swap({ swap, reload, setPreventReload }: SwapProps) {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, setPreventReload, dispatch, sideEffect);
+  useSideEffect(reload, setAllowReload, dispatch, sideEffect);
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;
