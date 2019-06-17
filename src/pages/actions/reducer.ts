@@ -19,12 +19,6 @@ export type SideEffect =
     }
   | {
       type: "reloadData";
-    }
-  | {
-      type: "allowReload";
-    }
-  | {
-      type: "preventReload";
     };
 
 interface State {
@@ -52,9 +46,6 @@ export function reducer(
         return {
           state: {
             activeSirenParameterDialog: action
-          },
-          sideEffect: {
-            type: "preventReload"
           }
         };
       } else {
@@ -134,14 +125,9 @@ export function reducer(
         }
       };
     }
-    case "closeSirenParametersDialog": {
-      return {
-        state: {},
-        sideEffect: {
-          type: "allowReload"
-        }
-      };
-    }
+    case "closeSirenParametersDialog":
+    case "resetState":
+      return initialState;
   }
 
   return { state };

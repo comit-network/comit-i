@@ -23,6 +23,7 @@ import {
   initialState,
   reducer
 } from "../actions/reducer";
+import useAllowReload from "../actions/useAllowReload";
 import useSideEffect from "../actions/useSideEffect";
 import LedgerActionDialogBody from "../SwapList/LedgerActionDialogBody";
 import SirenActionParametersDialogBody from "../SwapList/SirenActionParametersDialogBody";
@@ -95,7 +96,11 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, setAllowReload, dispatch, sideEffect);
+  useSideEffect(reload, dispatch, sideEffect);
+  useAllowReload(
+    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    setAllowReload
+  );
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;

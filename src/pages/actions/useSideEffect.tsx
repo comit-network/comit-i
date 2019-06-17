@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
 import executeAction from "../../api/executeAction";
-import { actionFailed, actionSuccessful, ReducerEvent } from "./events";
+import {
+  actionFailed,
+  actionSuccessful,
+  ReducerEvent,
+  resetState
+} from "./events";
 import { SideEffect } from "./reducer";
 
 export default function useSideEffect(
   reload: () => void,
-  setAllowReload: (arg: boolean) => void,
   dispatch: React.Dispatch<ReducerEvent>,
   sideEffect: SideEffect | undefined
 ) {
@@ -16,26 +20,16 @@ export default function useSideEffect(
 
     switch (sideEffect.type) {
       case "reloadData": {
-        setAllowReload(true);
         reload();
-        return;
+        return dispatch(resetState());
       }
       case "executeAction": {
-        setAllowReload(false);
         executeAction(sideEffect.payload.action, sideEffect.payload.data).then(
           response => dispatch(actionSuccessful(response)),
           error => dispatch(actionFailed(error))
         );
         return;
       }
-      case "allowReload": {
-        setAllowReload(true);
-        return;
-      }
-      case "preventReload": {
-        setAllowReload(false);
-        return;
-      }
     }
-  }, [sideEffect, reload, setAllowReload, dispatch]);
+  }, [sideEffect, reload, dispatch]);
 }

@@ -107,13 +107,13 @@ function ShowResource({ location }: RouteComponentProps) {
     <React.Fragment>
       {resource()}
       <Snackbar
-        open={!axiosError && !allowReload && showLoading}
+        open={!axiosError && allowReload && showLoading}
         onClose={() => setShowLoading(false)}
         message="Loading"
         icon={CircularProgress}
         backgroundPaletteVariant="primary"
         backgroundColor="dark"
-        autoHideDuration={3000}
+        autoHideDuration={1000}
       />
     </React.Fragment>
   );
