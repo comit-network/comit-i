@@ -38,68 +38,78 @@ function ShowResource({ location }: RouteComponentProps) {
 
   useInterval(() => reload(), preventReload || isLoading ? null : 15000);
 
-  let resource;
-  if (!axiosError && entity && entity.class && entity.class.includes("swaps")) {
-    resource = (
-      <SwapList
-        swaps={entity.entities as EmbeddedRepresentationSubEntity[]}
-        reload={reload}
-        setPreventReload={setPreventReload}
-      />
-    );
-  } else if (
-    !axiosError &&
-    entity &&
-    entity.class &&
-    entity.class.includes("swap")
-  ) {
-    resource = (
-      <Swap swap={entity} reload={reload} setPreventReload={setPreventReload} />
-    );
-  } else if (axiosError) {
+  function resource() {
     if (
-      axiosError.response &&
-      axiosError.response.status &&
-      Math.floor(axiosError.response.status / 100) !== 2
+      !axiosError &&
+      entity &&
+      entity.class &&
+      entity.class.includes("swaps")
     ) {
-      resource = (
-        <Typography variant="h3" align="center" data-cy="404-typography">
-          404 Resource Not Found
-        </Typography>
+      return (
+        <SwapList
+          swaps={entity.entities as EmbeddedRepresentationSubEntity[]}
+          reload={reload}
+          setPreventReload={setPreventReload}
+        />
       );
-    } else {
-      // Network error
-      resource = (
-        <React.Fragment>
+    } else if (
+      !axiosError &&
+      entity &&
+      entity.class &&
+      entity.class.includes("swap")
+    ) {
+      return (
+        <Swap
+          swap={entity}
+          reload={reload}
+          setPreventReload={setPreventReload}
+        />
+      );
+    } else if (axiosError) {
+      if (
+        axiosError.response &&
+        axiosError.response.status &&
+        Math.floor(axiosError.response.status / 100) !== 2
+      ) {
+        return (
           <Typography variant="h3" align="center" data-cy="404-typography">
             404 Resource Not Found
           </Typography>
+        );
+      } else {
+        // Network error
+        return (
+          <React.Fragment>
+            <Typography variant="h3" align="center" data-cy="404-typography">
+              404 Resource Not Found
+            </Typography>
+            <ErrorSnackbar
+              message="Failed to fetch resource. Is your COMIT node running?"
+              open={true}
+            />
+          </React.Fragment>
+        );
+      }
+    } else if (!entity) {
+      return;
+    } else {
+      return (
+        <React.Fragment>
+          <Typography variant="h3" align="center" data-cy="bad-json-typography">
+            Bad JSON
+          </Typography>
           <ErrorSnackbar
-            message="Failed to fetch resource. Is your COMIT node running?"
+            message="Could not handle comit node's response. Are your comit-i and comit node versions compatible?"
             open={true}
           />
         </React.Fragment>
       );
     }
-  } else if (!entity) {
-    resource = null;
-  } else {
-    resource = (
-      <React.Fragment>
-        <Typography variant="h3" align="center" data-cy="bad-json-typography">
-          Bad JSON
-        </Typography>
-        <ErrorSnackbar
-          message="Could not handle comit node's response. Are your comit-i and comit node versions compatible?"
-          open={true}
-        />
-      </React.Fragment>
-    );
   }
 
   return (
     <React.Fragment>
-      {resource}
+      {resource()}
       <Snackbar
         open={!axiosError && !preventReload && showLoading}
         onClose={() => setShowLoading(false)}
