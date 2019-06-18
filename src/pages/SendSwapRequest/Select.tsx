@@ -111,10 +111,10 @@ function Select({
                     data-cy="quantity-input"
                     disabled={disabled}
                     InputProps={
-                      param.smallestUnit && {
+                      param.unit && {
                         endAdornment: (
                           <InputAdornment position="end">
-                            {param.smallestUnit}
+                            {param.unit}
                           </InputAdornment>
                         )
                       }

@@ -132,9 +132,10 @@ Array [
     >
       Please send 
       <b>
-        100000000
+        1
       </b>
-       satoshi to the following 
+       BTC to the following
+       
       <b>
         regtest
       </b>
@@ -523,12 +524,11 @@ Array [
       <b>
         regtest
       </b>
-       network with
-       
+       network with 
       <b>
-        111111111111111111111
+        111.111111111111111111
       </b>
-       wei:
+       ETH:
     </p>
     <p
       className="MuiTypography-root MuiTypography-body1"

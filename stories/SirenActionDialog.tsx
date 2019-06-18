@@ -4,7 +4,7 @@ import { ThemeProvider } from "@material-ui/styles";
 import { storiesOf } from "@storybook/react";
 import React from "react";
 import { Web3Provider } from "../src/components/Web3Context";
-import SirenActionParametersDialogBody from "../src/pages/ListSwaps/SirenActionParametersDialogBody";
+import SirenActionParametersDialogBody from "../src/pages/SwapList/SirenActionParametersDialogBody";
 import appTheme from "../src/theme";
 
 interface DialogStoryState {

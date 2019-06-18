@@ -14,6 +14,7 @@
     "@types/react-select": "^2.0.17",
     "@types/uuidjs": "^3.6.0",
     "axios": "^0.18.0",
+    "axios-mock-adapter": "^1.16.0",
     "classnames": "^2.2.6",
     "content-type": "^1.0.4",
     "copy-to-clipboard": "^3.2.0",

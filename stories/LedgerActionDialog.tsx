@@ -1,6 +1,6 @@
 import { storiesOf } from "@storybook/react";
 import { Button, Dialog } from "@material-ui/core";
-import LedgerActionDialogBody from "../src/pages/ListSwaps/LedgerActionDialogBody";
+import LedgerActionDialogBody from "../src/pages/SwapList/LedgerActionDialogBody";
 import { Store, withState } from "@dump247/storybook-state";
 import React from "react";
 

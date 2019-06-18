@@ -5,9 +5,7 @@ import FileCopy from "@material-ui/icons/FileCopy";
 import copy from "copy-to-clipboard";
 import React, { useReducer, useState } from "react";
 import { useAsync } from "react-async";
-import { toBitcoin } from "satoshi-bitcoin-ts";
 import URI from "urijs";
-import { fromWei } from "web3-utils";
 import getComitInfo from "../../api/getComitInfo";
 import Fieldset from "../../components/Fieldset";
 import Page from "../../components/Page";
@@ -212,10 +210,10 @@ function assetToQueryValue(value: SwapValue) {
   if (value.quantity) {
     switch (value.name) {
       case "bitcoin": {
-        return `${toBitcoin(value.quantity, true)}BTC`;
+        return `${value.quantity}BTC`;
       }
       case "ether": {
-        return `${fromWei(value.quantity)}ETH`;
+        return `${value.quantity}ETH`;
       }
       case "erc20": {
         return `${value.quantity}ERC20:${value.token_contract}`;

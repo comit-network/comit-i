@@ -3,7 +3,8 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useReducer } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../../../gen/siren";
-import { Asset, Properties, toMainUnit } from "../../../api/swapTypes";
+import { Asset, Properties } from "../../../api/swapTypes";
+import { mainUnitSymbol, toMainUnit } from "../../../api/unit";
 import ActionButton from "../../../components/ActionButton";
 import Dialog from "../../../components/Dialog";
 import ExternalLink from "../../../components/ExternalLink";
@@ -29,7 +30,7 @@ interface AssetCellProps {
 }
 
 function AssetCell({ asset }: AssetCellProps) {
-  return <span>{toMainUnit(asset)}</span>;
+  return <span>{toMainUnit(asset) + " " + mainUnitSymbol(asset)}</span>;
 }
 
 const useStyles = makeStyles(() => ({
