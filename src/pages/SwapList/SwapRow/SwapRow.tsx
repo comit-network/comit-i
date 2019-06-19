@@ -57,7 +57,7 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, dispatch, sideEffect);
+  useSideEffect(sideEffect, dispatch, reload);
 
   const classes = useStyles();
 

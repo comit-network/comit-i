@@ -4,9 +4,9 @@ import { actionFailed, actionSuccessful, ReducerEvent } from "./events";
 import { SideEffect } from "./reducer";
 
 export default function useSideEffect(
-  reload: () => void,
+  sideEffect: SideEffect | undefined,
   dispatch: React.Dispatch<ReducerEvent>,
-  sideEffect: SideEffect | undefined
+  reload: () => void
 ) {
   useEffect(() => {
     if (!sideEffect) {

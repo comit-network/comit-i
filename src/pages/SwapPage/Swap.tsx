@@ -94,7 +94,7 @@ function Swap({ swap, reload }: SwapProps) {
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, dispatch, sideEffect);
+  useSideEffect(sideEffect, dispatch, reload);
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;
