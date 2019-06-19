@@ -32,6 +32,9 @@ export type ReducerEvent =
       payload: {
         error: any;
       };
+    }
+  | {
+      type: "resetState";
     };
 
 export function sirenParameterDialogSubmitted(
@@ -83,5 +86,11 @@ export function closeSirenParametersDialog(): ReducerEvent {
 export function closeLedgerActionDialog(): ReducerEvent {
   return {
     type: "closeLedgerActionDialog"
+  };
+}
+
+export function resetState(): ReducerEvent {
+  return {
+    type: "resetState"
   };
 }

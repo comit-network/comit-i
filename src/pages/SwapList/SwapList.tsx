@@ -13,9 +13,10 @@ import SwapRow from "./SwapRow/SwapRow";
 interface SwapListProps {
   swaps: EmbeddedRepresentationSubEntity[];
   reload: () => void;
+  setAllowReload: (arg: boolean) => void;
 }
 
-function SwapList({ swaps, reload }: SwapListProps) {
+function SwapList({ swaps, reload, setAllowReload }: SwapListProps) {
   const hasSwaps = swaps.length !== 0;
 
   return (
@@ -36,7 +37,12 @@ function SwapList({ swaps, reload }: SwapListProps) {
       <TableBody>
         {hasSwaps &&
           swaps.map((swap, index) => (
-            <SwapRow key={index} swap={swap} reload={reload} />
+            <SwapRow
+              key={index}
+              swap={swap}
+              reload={reload}
+              setAllowReload={setAllowReload}
+            />
           ))}
         {!hasSwaps && <EmptySwapListTableRow />}
       </TableBody>

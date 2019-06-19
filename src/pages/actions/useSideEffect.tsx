@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import executeAction from "../../api/executeAction";
-import { actionFailed, actionSuccessful, ReducerEvent } from "./events";
+import {
+  actionFailed,
+  actionSuccessful,
+  ReducerEvent,
+  resetState
+} from "./events";
 import { SideEffect } from "./reducer";
 
 export default function useSideEffect(
@@ -16,7 +21,7 @@ export default function useSideEffect(
     switch (sideEffect.type) {
       case "reloadData": {
         reload();
-        return;
+        return dispatch(resetState());
       }
       case "executeAction": {
         executeAction(sideEffect.payload.action, sideEffect.payload.data).then(

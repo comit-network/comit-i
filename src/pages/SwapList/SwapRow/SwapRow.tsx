@@ -19,6 +19,7 @@ import {
   initialState,
   reducer
 } from "../../actions/reducer";
+import useAllowReload from "../../actions/useAllowReload";
 import useSideEffect from "../../actions/useSideEffect";
 import LedgerActionDialogBody from "../LedgerActionDialogBody";
 import SirenActionParametersDialogBody from "../SirenActionParametersDialogBody";
@@ -42,9 +43,10 @@ const useStyles = makeStyles(() => ({
 interface SwapRowProps extends RouteComponentProps {
   swap: EmbeddedRepresentationSubEntity;
   reload: () => void;
+  setAllowReload: (arg: boolean) => void;
 }
 
-function SwapRow({ swap, history, reload }: SwapRowProps) {
+function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
   const [
     {
       state: {
@@ -58,6 +60,10 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
   ] = useReducer(reducer, initialState);
 
   useSideEffect(reload, dispatch, sideEffect);
+  useAllowReload(
+    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    setAllowReload
+  );
 
   const classes = useStyles();
 

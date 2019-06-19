@@ -126,6 +126,7 @@ export function reducer(
       };
     }
     case "closeSirenParametersDialog":
+    case "resetState":
       return initialState;
   }
 
