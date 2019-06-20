@@ -5,6 +5,7 @@ import { RouteComponentProps, withRouter } from "react-router-dom";
 import postRfc003Swap from "../../api/postRfc003Swap";
 import ErrorSnackbar from "../../components/ErrorSnackbar";
 import Fieldset from "../../components/Fieldset";
+import InfoMessage from "../../components/InfoMessage";
 import Page from "../../components/Page";
 import PeerAddressHintTextField from "../../components/PeerAddressHintTextField";
 import PeerIDTextField from "../../components/PeerIDTextField";
@@ -17,7 +18,6 @@ import Rfc003ParamsForm, {
 import SwapForm, { emptySwap } from "../../forms/SwapForm";
 import ledgers from "../../ledgerSpec";
 import ErrorMessage from "./ErrorMessage";
-import InfoMessage from "./InfoMessage";
 import parseQuery from "./parseQuery";
 import parseSwapParams from "./parseSwapParams";
 
@@ -90,7 +90,14 @@ const LinkLandingPage = ({ location, history }: RouteComponentProps) => {
         <form onSubmit={onSubmit}>
           <Grid container={true} spacing={2}>
             <Grid item={true} xs={12}>
-              {error ? <ErrorMessage /> : <InfoMessage />}
+              {error ? (
+                <ErrorMessage />
+              ) : (
+                <InfoMessage
+                  text="This form has been prefilled with information from the link you just
+              clicked."
+                />
+              )}
             </Grid>
             <SwapForm
               swap={swap}

@@ -84,6 +84,32 @@ Array [
       />
     </button>
     <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-textPrimary MuiButton-text"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Confirm
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
+    <button
       className="MuiButtonBase-root MuiButton-root MuiButton-textSecondary MuiButton-text"
       disabled={false}
       onBlur={[Function]}
@@ -227,6 +253,32 @@ Array [
           />
         </svg>
         Copy address to clipboard
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-text"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Confirm
       </span>
       <span
         className="MuiTouchRipple-root"

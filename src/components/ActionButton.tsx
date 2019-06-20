@@ -5,9 +5,17 @@ import { Action } from "../../gen/siren";
 interface ActionButtonProps {
   action: Action;
   onClick: (e: any) => void;
+  actionDoneBefore?: boolean;
 }
 
-function ActionButton({ action, onClick }: ActionButtonProps) {
+function ActionButton({
+  action,
+  onClick,
+  actionDoneBefore = false
+}: ActionButtonProps) {
+  let title = action.title || action.name;
+  title = actionDoneBefore ? title + " again" : title;
+
   return (
     <Button
       data-cy={`${action.name}-button`}
@@ -16,7 +24,7 @@ function ActionButton({ action, onClick }: ActionButtonProps) {
       variant={"contained"}
       onClick={onClick}
     >
-      {action.title || action.name}
+      {title}
     </Button>
   );
 }

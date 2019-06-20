@@ -19,12 +19,21 @@ export type SideEffect =
     }
   | {
       type: "reloadData";
+    }
+  | {
+      type: "updateActionRecord";
+      payload: {
+        actionName: string;
+        swapId: string;
+        transactionId?: string;
+      };
     };
 
 interface State {
   actionExecutionStatus?: ActionExecutionStatus;
   activeSirenParameterDialog?: Action;
   activeLedgerActionDialog?: LedgerAction;
+  activeLedgerActionName?: string;
 }
 
 export enum ActionExecutionStatus {
@@ -75,11 +84,13 @@ export function reducer(
         body.payload
       ) {
         const ledgerAction = body as LedgerAction;
+        const ledgerActionName = event.payload.actionName;
 
         return {
           state: {
             actionExecutionStatus: ActionExecutionStatus.Done,
-            activeLedgerActionDialog: ledgerAction
+            activeLedgerActionDialog: ledgerAction,
+            activeLedgerActionName: ledgerActionName
           }
         };
       } else {
@@ -117,6 +128,16 @@ export function reducer(
       };
     }
 
+    case "ledgerActionSuccessful": {
+      return {
+        state: {},
+        sideEffect: {
+          type: "updateActionRecord",
+          payload: event.payload
+        }
+      };
+    }
+
     case "closeLedgerActionDialog": {
       return {
         state: {},
@@ -125,6 +146,7 @@ export function reducer(
         }
       };
     }
+
     case "closeSirenParametersDialog":
       return initialState;
   }

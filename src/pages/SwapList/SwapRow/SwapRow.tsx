@@ -12,8 +12,10 @@ import {
   actionButtonClicked,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
+  ledgerActionSuccessful,
   sirenParameterDialogSubmitted
 } from "../../actions/events";
+import { LocalStorageLedgerActionStore } from "../../actions/ledgerActionStore";
 import {
   ActionExecutionStatus,
   initialState,
@@ -50,7 +52,8 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
       state: {
         actionExecutionStatus,
         activeLedgerActionDialog,
-        activeSirenParameterDialog
+        activeSirenParameterDialog,
+        activeLedgerActionName
       },
       sideEffect
     },
@@ -63,7 +66,12 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
 
   const links = swap.links || [];
   const properties = swap.properties as Properties;
-  const actions = swap.actions || [];
+  const actions = (swap.actions || []).filter(action => {
+    const ledgerActionStore = new LocalStorageLedgerActionStore(
+      window.localStorage
+    );
+    return !ledgerActionStore.isStored(action.name, properties.id);
+  });
   const swapLink = links.find(link => link.rel.includes("self"));
 
   if (!swapLink) {
@@ -73,6 +81,10 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
   const protocolSpecLink = links.find(link =>
     link.rel.includes("human-protocol-spec")
   );
+
+  function onLedgerActionSuccess(action: string, transactionId?: string) {
+    dispatch(ledgerActionSuccessful(properties.id, action, transactionId));
+  }
 
   return (
     <React.Fragment key={swapLink.href}>
@@ -145,10 +157,11 @@ function SwapRow({ swap, history, reload }: SwapRowProps) {
           />
         </Dialog>
       )}
-      {activeLedgerActionDialog && (
+      {activeLedgerActionDialog && activeLedgerActionName && (
         <Dialog open={true}>
           <LedgerActionDialogBody
             action={activeLedgerActionDialog}
+            onSuccess={onLedgerActionSuccess.bind(null, activeLedgerActionName)}
             onClose={() => dispatch(closeLedgerActionDialog())}
           />
         </Dialog>

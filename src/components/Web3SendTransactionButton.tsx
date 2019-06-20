@@ -12,7 +12,7 @@ import { useWeb3 } from "./Web3Context";
 interface Props {
   transactionConfig: TransactionConfig;
   minTimestamp?: number;
-  onSuccess: () => void;
+  onSuccess: (transactionId: string) => void;
 }
 
 enum TransactionState {
@@ -41,12 +41,12 @@ function Web3SendTransactionButton({
         if (actionReady) {
           setState(TransactionState.Signing);
           try {
-            await web3.eth.sendTransaction({
+            const receipt = await web3.eth.sendTransaction({
               ...transactionConfig,
               from: defaultAccount
             });
             setState(TransactionState.Sent);
-            onSuccess();
+            onSuccess(receipt.transactionHash);
           } catch (e) {
             setState(TransactionState.Error);
           }

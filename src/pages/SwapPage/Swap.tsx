@@ -16,8 +16,10 @@ import {
   actionButtonClicked,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
+  ledgerActionSuccessful,
   sirenParameterDialogSubmitted
 } from "../actions/events";
+import { LocalStorageLedgerActionStore } from "../actions/ledgerActionStore";
 import {
   ActionExecutionStatus,
   initialState,
@@ -82,12 +84,17 @@ function Swap({ swap, reload }: SwapProps) {
             action.name === "refund"
         );
 
+  const ledgerActionStore = new LocalStorageLedgerActionStore(
+    window.localStorage
+  );
+
   const [
     {
       state: {
         actionExecutionStatus,
         activeLedgerActionDialog,
-        activeSirenParameterDialog
+        activeSirenParameterDialog,
+        activeLedgerActionName
       },
       sideEffect
     },
@@ -98,6 +105,10 @@ function Swap({ swap, reload }: SwapProps) {
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;
+
+  function onLedgerActionSuccess(action: string, transactionId?: string) {
+    dispatch(ledgerActionSuccessful(properties.id, action, transactionId));
+  }
 
   return (
     <React.Fragment>
@@ -164,13 +175,22 @@ function Swap({ swap, reload }: SwapProps) {
                   ledgerState={properties.state.alpha_ledger}
                   otherLedgerState={properties.state.beta_ledger}
                   role={properties.role}
-                  actions={alphaLedgerActions.map(action => (
-                    <ActionButton
-                      key={action.name}
-                      action={action}
-                      onClick={() => dispatch(actionButtonClicked(action))}
-                    />
-                  ))}
+                  actions={alphaLedgerActions.map(action => {
+                    const ledgerActionStore = new LocalStorageLedgerActionStore(
+                      window.localStorage
+                    );
+                    return (
+                      <ActionButton
+                        key={action.name}
+                        action={action}
+                        onClick={() => dispatch(actionButtonClicked(action))}
+                        actionDoneBefore={ledgerActionStore.isStored(
+                          action.name,
+                          properties.id
+                        )}
+                      />
+                    );
+                  })}
                   isActionInProgress={isActionInProgress}
                 />
               </Grid>
@@ -181,13 +201,19 @@ function Swap({ swap, reload }: SwapProps) {
                   ledgerState={properties.state.beta_ledger}
                   otherLedgerState={properties.state.alpha_ledger}
                   role={properties.role}
-                  actions={betaLedgerActions.map(action => (
-                    <ActionButton
-                      key={action.name}
-                      action={action}
-                      onClick={() => dispatch(actionButtonClicked(action))}
-                    />
-                  ))}
+                  actions={betaLedgerActions.map(action => {
+                    return (
+                      <ActionButton
+                        key={action.name}
+                        action={action}
+                        onClick={() => dispatch(actionButtonClicked(action))}
+                        actionDoneBefore={ledgerActionStore.isStored(
+                          action.name,
+                          properties.id
+                        )}
+                      />
+                    );
+                  })}
                   isActionInProgress={isActionInProgress}
                 />
               </Grid>
@@ -208,11 +234,16 @@ function Swap({ swap, reload }: SwapProps) {
           />
         </Dialog>
       )}
-      {activeLedgerActionDialog && (
+      {activeLedgerActionDialog && activeLedgerActionName && (
         <Dialog open={true}>
           <LedgerActionDialogBody
             action={activeLedgerActionDialog}
+            onSuccess={onLedgerActionSuccess.bind(null, activeLedgerActionName)}
             onClose={() => dispatch(closeLedgerActionDialog())}
+            actionDoneBefore={ledgerActionStore.isStored(
+              activeLedgerActionName,
+              properties.id
+            )}
           />
         </Dialog>
       )}

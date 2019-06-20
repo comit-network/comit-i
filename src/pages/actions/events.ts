@@ -25,6 +25,7 @@ export type ReducerEvent =
       type: "actionSuccessful";
       payload: {
         response: AxiosResponse;
+        actionName: string;
       };
     }
   | {
@@ -32,6 +33,10 @@ export type ReducerEvent =
       payload: {
         error: any;
       };
+    }
+  | {
+      type: "ledgerActionSuccessful";
+      payload: { swapId: string; actionName: string; transactionId?: string };
     };
 
 export function sirenParameterDialogSubmitted(
@@ -56,11 +61,15 @@ export function actionButtonClicked(action: Action): ReducerEvent {
   };
 }
 
-export function actionSuccessful(response: AxiosResponse): ReducerEvent {
+export function actionSuccessful(
+  response: AxiosResponse,
+  actionName: string
+): ReducerEvent {
   return {
     type: "actionSuccessful",
     payload: {
-      response
+      response,
+      actionName
     }
   };
 }
@@ -77,6 +86,17 @@ export function actionFailed(error: any): ReducerEvent {
 export function closeSirenParametersDialog(): ReducerEvent {
   return {
     type: "closeSirenParametersDialog"
+  };
+}
+
+export function ledgerActionSuccessful(
+  swapId: string,
+  actionName: string,
+  transactionId?: string
+): ReducerEvent {
+  return {
+    type: "ledgerActionSuccessful",
+    payload: { swapId, actionName, transactionId }
   };
 }
 

@@ -8,18 +8,40 @@ import {
 import React from "react";
 import { LedgerAction } from "../../api/getAction";
 import { toMainUnit } from "../../api/unit";
+import InfoMessage from "../../components/InfoMessage";
 import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
 import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
-  onClose: () => void;
   action: LedgerAction;
+  onSuccess: (transactionId?: string) => void;
+  onClose: () => void;
+  actionDoneBefore?: boolean;
+}
+
+function actionDoneMessage() {
+  return (
+    <InfoMessage
+      text="You have already performed this action. Do not try again unless you are sure it didn't go through last time."
+      color="error"
+    />
+  );
 }
 
 function LedgerActionDialogBody({
+  action,
+  onSuccess,
   onClose,
-  action
+  actionDoneBefore = false
 }: LedgerActionDialogBodyProps) {
+  function onSuccessBitcoin() {
+    onSuccess();
+  }
+
+  function onSuccessEthereum(transactionId: string) {
+    onSuccess(transactionId);
+  }
+
   switch (action.type) {
     case "bitcoin-broadcast-signed-transaction": {
       const expiry = action.payload.min_median_block_time;
@@ -30,6 +52,7 @@ function LedgerActionDialogBody({
       return (
         <React.Fragment>
           <DialogTitle>Broadcast Bitcoin transaction</DialogTitle>
+          {actionDoneBefore && actionDoneMessage()}
           <DialogContent>
             <Typography paragraph={true}>
               Please broadcast the following signed transaction on the{" "}
@@ -49,6 +72,9 @@ function LedgerActionDialogBody({
               content={action.payload.hex}
               name="transaction"
             />
+            <Button onClick={onSuccessBitcoin} color="primary">
+              Confirm
+            </Button>
             <Button onClick={onClose} color="secondary">
               Close
             </Button>
@@ -66,6 +92,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Send Bitcoin</DialogTitle>
           <DialogContent>
+            {actionDoneBefore && actionDoneMessage()}
             <Typography paragraph={true}>
               Please send <b>{amount}</b> BTC to the following{" "}
               <b>{action.payload.network}</b> address:
@@ -75,6 +102,7 @@ function LedgerActionDialogBody({
           <DialogActions>
             <CopyToClipboardButton content={amount} name="amount" />
             <CopyToClipboardButton content={action.payload.to} name="address" />
+            <Button onClick={onSuccessBitcoin}>Confirm</Button>
             <Button onClick={onClose} color="secondary">
               Close
             </Button>
@@ -95,6 +123,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Deploy Ethereum contract</DialogTitle>
           <DialogContent>
+            {actionDoneBefore && actionDoneMessage()}
             <Typography paragraph={true}>
               Deploy the following contract to the Ethereum{" "}
               <b>{action.payload.network}</b> network with <b>{amount}</b> ETH:
@@ -115,7 +144,7 @@ function LedgerActionDialogBody({
                 value: action.payload.amount,
                 gas: +action.payload.gas_limit
               }}
-              onSuccess={onClose}
+              onSuccess={onSuccessEthereum}
             />
             <Button onClick={onClose} color="secondary">
               Close
@@ -131,6 +160,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
           <DialogContent>
+            {actionDoneBefore && actionDoneMessage()}
             <Typography paragraph={true}>
               Invoke the contract at <b>{action.payload.contract_address}</b> on
               the Ethereum <b>{action.payload.network}</b> network with this
@@ -153,7 +183,7 @@ function LedgerActionDialogBody({
                 data: action.payload.data,
                 gas: action.payload.gas_limit
               }}
-              onSuccess={onClose}
+              onSuccess={onSuccessEthereum}
             />
             <Button onClick={onClose} color="secondary">
               Close
