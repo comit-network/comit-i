@@ -25,6 +25,7 @@ import {
   initialState,
   reducer
 } from "../actions/reducer";
+import useAllowReload from "../actions/useAllowReload";
 import useSideEffect from "../actions/useSideEffect";
 import LedgerActionDialogBody from "../SwapList/LedgerActionDialogBody";
 import SirenActionParametersDialogBody from "../SwapList/SirenActionParametersDialogBody";
@@ -36,9 +37,10 @@ import SwapMetaDataCard from "./SwapMetaDataCard";
 interface SwapProps {
   swap: Entity;
   reload: () => void;
+  setAllowReload: (arg: boolean) => void;
 }
 
-function Swap({ swap, reload }: SwapProps) {
+function Swap({ swap, reload, setAllowReload }: SwapProps) {
   const properties = swap.properties as Properties & AdditionalProperties;
   const [alphaLedger, betaLedger] = [
     properties.parameters.alpha_ledger,
@@ -102,6 +104,10 @@ function Swap({ swap, reload }: SwapProps) {
   ] = useReducer(reducer, initialState);
 
   useSideEffect(sideEffect, dispatch, reload);
+  useAllowReload(
+    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    setAllowReload
+  );
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;

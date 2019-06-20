@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import executeAction from "../../api/executeAction";
-import { actionFailed, actionSuccessful, ReducerEvent } from "./events";
+import {
+  actionFailed,
+  actionSuccessful,
+  ReducerEvent,
+  resetState
+} from "./events";
 import { LocalStorageLedgerActionStore } from "./ledgerActionStore";
 import { SideEffect } from "./reducer";
 
@@ -38,7 +43,7 @@ export default function useSideEffect(
       // falls through
       case "reloadData": {
         reload();
-        return;
+        return dispatch(resetState());
       }
     }
   }, [sideEffect, reload, dispatch]);

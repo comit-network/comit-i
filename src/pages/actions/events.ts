@@ -37,6 +37,9 @@ export type ReducerEvent =
   | {
       type: "ledgerActionSuccessful";
       payload: { swapId: string; actionName: string; transactionId?: string };
+    }
+  | {
+      type: "resetState";
     };
 
 export function sirenParameterDialogSubmitted(
@@ -103,5 +106,11 @@ export function ledgerActionSuccessful(
 export function closeLedgerActionDialog(): ReducerEvent {
   return {
     type: "closeLedgerActionDialog"
+  };
+}
+
+export function resetState(): ReducerEvent {
+  return {
+    type: "resetState"
   };
 }
