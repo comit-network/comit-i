@@ -22,7 +22,7 @@ interface LedgerActionDialogBodyProps {
 function actionDoneMessage() {
   return (
     <InfoMessage
-      text="You have already performed this action. Do not try again unless you are sure it didn't go through last time."
+      text="You have already performed this action. Do not try again unless you are sure it failed last time."
       color="error"
     />
   );
