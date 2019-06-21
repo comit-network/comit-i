@@ -72,6 +72,8 @@ function LedgerActionDialogBody({
               content={action.payload.hex}
               name="transaction"
             />
+          </DialogActions>
+          <DialogActions>
             <Button onClick={onSuccessBitcoin} color="primary">
               Confirm
             </Button>
@@ -102,6 +104,8 @@ function LedgerActionDialogBody({
           <DialogActions>
             <CopyToClipboardButton content={amount} name="amount" />
             <CopyToClipboardButton content={action.payload.to} name="address" />
+          </DialogActions>
+          <DialogActions>
             <Button onClick={onSuccessBitcoin}>Confirm</Button>
             <Button onClick={onClose} color="secondary">
               Close
