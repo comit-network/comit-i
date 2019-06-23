@@ -8,7 +8,7 @@ Array [
     <h6
       className="MuiTypography-root MuiTypography-h6"
     >
-      Fetch the 'Redeem' action?
+      Fetch the 'Redeem' action
     </h6>
   </div>,
   <form
@@ -136,7 +136,7 @@ Array [
         <span
           className="MuiButton-label"
         >
-          OK
+          Confirm
         </span>
       </button>
     </div>
