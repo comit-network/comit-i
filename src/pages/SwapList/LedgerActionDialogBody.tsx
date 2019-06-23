@@ -59,7 +59,7 @@ function LedgerActionDialogBody({
               <b>{action.payload.network}</b> network {whenReadyMessage}:
             </Typography>
             <Typography
-              variant={"body1"}
+              variant="body1"
               style={{
                 wordWrap: "break-word"
               }}
@@ -74,11 +74,15 @@ function LedgerActionDialogBody({
             />
           </DialogActions>
           <DialogActions>
-            <Button onClick={onSuccessBitcoin} color="primary">
-              Confirm
-            </Button>
-            <Button onClick={onClose} color="secondary">
+            <Button onClick={onClose} variant="contained" color="secondary">
               Close
+            </Button>
+            <Button
+              onClick={onSuccessBitcoin}
+              variant="contained"
+              color="primary"
+            >
+              Confirm
             </Button>
           </DialogActions>
         </React.Fragment>
@@ -106,9 +110,15 @@ function LedgerActionDialogBody({
             <CopyToClipboardButton content={action.payload.to} name="address" />
           </DialogActions>
           <DialogActions>
-            <Button onClick={onSuccessBitcoin}>Confirm</Button>
-            <Button onClick={onClose} color="secondary">
+            <Button onClick={onClose} variant="contained" color="secondary">
               Close
+            </Button>
+            <Button
+              onClick={onSuccessBitcoin}
+              variant="contained"
+              color="primary"
+            >
+              Confirm
             </Button>
           </DialogActions>
         </React.Fragment>
@@ -133,7 +143,7 @@ function LedgerActionDialogBody({
               <b>{action.payload.network}</b> network with <b>{amount}</b> ETH:
             </Typography>
             <Typography
-              variant={"body1"}
+              variant="body1"
               style={{
                 wordWrap: "break-word"
               }}
@@ -142,6 +152,9 @@ function LedgerActionDialogBody({
             </Typography>
           </DialogContent>
           <DialogActions>
+            <Button onClick={onClose} variant="contained" color="secondary">
+              Close
+            </Button>
             <Web3SendTransactionButton
               transactionConfig={{
                 data: action.payload.data,
@@ -150,9 +163,6 @@ function LedgerActionDialogBody({
               }}
               onSuccess={onSuccessEthereum}
             />
-            <Button onClick={onClose} color="secondary">
-              Close
-            </Button>
           </DialogActions>
         </React.Fragment>
       );
@@ -171,7 +181,7 @@ function LedgerActionDialogBody({
               data:
             </Typography>
             <Typography
-              variant={"body1"}
+              variant="body1"
               style={{
                 wordWrap: "break-word"
               }}
@@ -180,6 +190,9 @@ function LedgerActionDialogBody({
             </Typography>
           </DialogContent>
           <DialogActions>
+            <Button onClick={onClose} variant="contained" color="secondary">
+              Close
+            </Button>
             <Web3SendTransactionButton
               minTimestamp={expiry}
               transactionConfig={{
@@ -189,9 +202,6 @@ function LedgerActionDialogBody({
               }}
               onSuccess={onSuccessEthereum}
             />
-            <Button onClick={onClose} color="secondary">
-              Close
-            </Button>
           </DialogActions>
         </React.Fragment>
       );

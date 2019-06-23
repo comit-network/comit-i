@@ -59,37 +59,42 @@ function Web3SendTransactionButton({
   return (
     <NoWeb3Tooltip>
       {state === TransactionState.Initial && (
-        <Button disabled={!web3} color={"primary"} onClick={onClickHandler}>
+        <Button
+          variant="contained"
+          disabled={!web3}
+          color="primary"
+          onClick={onClickHandler}
+        >
           Send transaction &nbsp;
-          <MetamaskIcon fontSize={"small"} />
+          <MetamaskIcon fontSize="small" />
         </Button>
       )}
       {state === TransactionState.Signing && (
-        <Button disabled={true} color={"primary"}>
+        <Button variant="contained" disabled={true} color="primary">
           <CircularProgress size={20} />
           &nbsp; Signing in progress...
         </Button>
       )}
       {state === TransactionState.Sent && (
-        <Tooltip title={"Transaction was already sent!"}>
+        <Tooltip title="Transaction was already sent!">
           <span>
-            <Button disabled={true} color={"primary"}>
-              <DoneIcon color={"primary"} fontSize={"small"} />
+            <Button variant="contained" disabled={true} color="primary">
+              <DoneIcon color="primary" fontSize="small" />
               &nbsp; Transaction sent!
             </Button>
           </span>
         </Tooltip>
       )}
       {state === TransactionState.Error && (
-        <Button color={"primary"} onClick={onClickHandler}>
-          <ErrorIcon color={"error"} fontSize={"small"} />
+        <Button variant="contained" color="primary" onClick={onClickHandler}>
+          <ErrorIcon color="error" fontSize="small" />
           &nbsp; Failed. Try again?
         </Button>
       )}
       {state === TransactionState.TooEarly && (
         <TooEarlyTooltip whenValid={minTimestamp || 0} networkNow={networkTime}>
-          <Button color={"primary"} onClick={onClickHandler}>
-            <TimerIcon color={"error"} fontSize={"small"} />
+          <Button variant="contained" color="primary" onClick={onClickHandler}>
+            <TimerIcon color="error" fontSize="small" />
             &nbsp; Too early. Please try again later
           </Button>
         </TooEarlyTooltip>
