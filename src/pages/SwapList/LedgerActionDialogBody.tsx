@@ -75,7 +75,7 @@ function LedgerActionDialogBody({
           </DialogActions>
           <DialogActions>
             <Button onClick={onClose} variant="contained" color="secondary">
-              Close
+              Cancel
             </Button>
             <Button
               onClick={onSuccessBitcoin}
@@ -111,7 +111,7 @@ function LedgerActionDialogBody({
           </DialogActions>
           <DialogActions>
             <Button onClick={onClose} variant="contained" color="secondary">
-              Close
+              Cancel
             </Button>
             <Button
               onClick={onSuccessBitcoin}
@@ -153,7 +153,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} variant="contained" color="secondary">
-              Close
+              Cancel
             </Button>
             <Web3SendTransactionButton
               transactionConfig={{
@@ -191,7 +191,7 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <Button onClick={onClose} variant="contained" color="secondary">
-              Close
+              Cancel
             </Button>
             <Web3SendTransactionButton
               minTimestamp={expiry}
