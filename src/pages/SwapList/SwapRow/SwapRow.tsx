@@ -68,7 +68,8 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
 
   useSideEffect(sideEffect, dispatch, reload);
   useAllowReload(
-    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    activeLedgerActionDialog,
+    activeSirenParameterDialog,
     setAllowReload
   );
 

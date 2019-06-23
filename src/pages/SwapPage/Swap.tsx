@@ -105,7 +105,8 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
 
   useSideEffect(sideEffect, dispatch, reload);
   useAllowReload(
-    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    activeLedgerActionDialog,
+    activeSirenParameterDialog,
     setAllowReload
   );
 
