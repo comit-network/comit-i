@@ -30,7 +30,7 @@ export default function useSideEffect(
         );
         return;
       }
-      case "updateActionRecord": {
+      case "memoriseLedgerAction": {
         const ledgerActionMemory = new LocalStorageLedgerActionMemory(
           window.localStorage
         );

@@ -21,7 +21,7 @@ export type SideEffect =
       type: "reloadData";
     }
   | {
-      type: "updateActionRecord";
+      type: "memoriseLedgerAction";
       payload: {
         actionName: string;
         swapId: string;
@@ -132,7 +132,7 @@ export function reducer(
       return {
         state: {},
         sideEffect: {
-          type: "updateActionRecord",
+          type: "memoriseLedgerAction",
           payload: event.payload
         }
       };
