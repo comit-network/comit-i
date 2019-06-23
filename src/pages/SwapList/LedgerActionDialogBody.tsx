@@ -19,7 +19,7 @@ interface LedgerActionDialogBodyProps {
   actionDoneBefore?: boolean;
 }
 
-function actionDoneMessage() {
+function ActionDoneMessage() {
   return (
     <InfoMessage
       text="You have already performed this action. Do not try again unless you are sure it failed last time."
@@ -52,7 +52,7 @@ function LedgerActionDialogBody({
       return (
         <React.Fragment>
           <DialogTitle>Broadcast Bitcoin transaction</DialogTitle>
-          {actionDoneBefore && actionDoneMessage()}
+          {actionDoneBefore && <ActionDoneMessage />}
           <DialogContent>
             <Typography paragraph={true}>
               Please broadcast the following signed transaction on the{" "}
@@ -98,7 +98,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Send Bitcoin</DialogTitle>
           <DialogContent>
-            {actionDoneBefore && actionDoneMessage()}
+            {actionDoneBefore && <ActionDoneMessage />}
             <Typography paragraph={true}>
               Please send <b>{amount}</b> BTC to the following{" "}
               <b>{action.payload.network}</b> address:
@@ -137,7 +137,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Deploy Ethereum contract</DialogTitle>
           <DialogContent>
-            {actionDoneBefore && actionDoneMessage()}
+            {actionDoneBefore && <ActionDoneMessage />}
             <Typography paragraph={true}>
               Deploy the following contract to the Ethereum{" "}
               <b>{action.payload.network}</b> network with <b>{amount}</b> ETH:
@@ -174,7 +174,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
           <DialogContent>
-            {actionDoneBefore && actionDoneMessage()}
+            {actionDoneBefore && <ActionDoneMessage />}
             <Typography paragraph={true}>
               Invoke the contract at <b>{action.payload.contract_address}</b> on
               the Ethereum <b>{action.payload.network}</b> network with this
