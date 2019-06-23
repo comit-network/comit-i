@@ -38,8 +38,7 @@ export class LocalStorageLedgerActionMemory implements LedgerActionMemory {
   };
 
   private generateKey = (swapId: string, actionName: string) => {
-    // There must be a better approach than this
-    return swapId + actionName;
+    return "swap-" + swapId + "-" + actionName + "-executed";
   };
 }
 
