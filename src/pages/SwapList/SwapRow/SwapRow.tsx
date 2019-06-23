@@ -36,6 +36,10 @@ function AssetCell({ asset }: AssetCellProps) {
   return <span>{toMainUnit(asset) + " " + mainUnitSymbol(asset)}</span>;
 }
 
+const ledgerActionStore = new LocalStorageLedgerActionStore(
+  window.localStorage
+);
+
 const useStyles = makeStyles(() => ({
   tableRow: {
     cursor: "pointer"
@@ -73,9 +77,6 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
   const links = swap.links || [];
   const properties = swap.properties as Properties;
   const actions = (swap.actions || []).filter(action => {
-    const ledgerActionStore = new LocalStorageLedgerActionStore(
-      window.localStorage
-    );
     return !ledgerActionStore.isStored(action.name, properties.id);
   });
   const swapLink = links.find(link => link.rel.includes("self"));

@@ -34,6 +34,10 @@ import CommunicationCardHeader from "./CommunicationCard";
 import LedgerCard from "./LedgerCard";
 import SwapMetaDataCard from "./SwapMetaDataCard";
 
+const ledgerActionStore = new LocalStorageLedgerActionStore(
+  window.localStorage
+);
+
 interface SwapProps {
   swap: Entity;
   reload: () => void;
@@ -85,10 +89,6 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             action.name === "fund" ||
             action.name === "refund"
         );
-
-  const ledgerActionStore = new LocalStorageLedgerActionStore(
-    window.localStorage
-  );
 
   const [
     {
@@ -182,9 +182,6 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                   otherLedgerState={properties.state.beta_ledger}
                   role={properties.role}
                   actions={alphaLedgerActions.map(action => {
-                    const ledgerActionStore = new LocalStorageLedgerActionStore(
-                      window.localStorage
-                    );
                     return (
                       <ActionButton
                         key={action.name}
