@@ -1,17 +1,21 @@
-export interface LedgerActionStore {
-  storeAction(actionName: string, swapId: string, transactionId?: string): void;
-  isStored(actionName: string, swapId: string): boolean;
+export interface LedgerActionMemory {
+  rememberActionExecution(
+    actionName: string,
+    swapId: string,
+    transactionId?: string
+  ): void;
+  wasActionAlreadyExecuted(actionName: string, swapId: string): boolean;
   getTransactionId(actionName: string, swapId: string): string | null;
 }
 
-export class LocalStorageLedgerActionStore implements LedgerActionStore {
+export class LocalStorageLedgerActionMemory implements LedgerActionMemory {
   private localStorage: Storage;
 
   constructor(localStorage: Storage) {
     this.localStorage = localStorage;
   }
 
-  public storeAction = (
+  public rememberActionExecution = (
     actionName: string,
     swapId: string,
     transactionId?: string
@@ -21,7 +25,7 @@ export class LocalStorageLedgerActionStore implements LedgerActionStore {
     this.localStorage.setItem(key, transactionId || "noTransactionId");
   };
 
-  public isStored = (actionName: string, swapId: string) => {
+  public wasActionAlreadyExecuted = (actionName: string, swapId: string) => {
     const key = this.generateKey(swapId, actionName);
 
     return !!this.localStorage.getItem(key);
@@ -39,4 +43,4 @@ export class LocalStorageLedgerActionStore implements LedgerActionStore {
   };
 }
 
-export default new LocalStorageLedgerActionStore(window.localStorage);
+export default new LocalStorageLedgerActionMemory(window.localStorage);

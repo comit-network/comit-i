@@ -35,7 +35,7 @@ export type ReducerEvent =
       };
     }
   | {
-      type: "ledgerActionSuccessful";
+      type: "ledgerActionConfirmed";
       payload: { swapId: string; actionName: string; transactionId?: string };
     }
   | {
@@ -92,13 +92,13 @@ export function closeSirenParametersDialog(): ReducerEvent {
   };
 }
 
-export function ledgerActionSuccessful(
+export function ledgerActionConfirmed(
   swapId: string,
   actionName: string,
   transactionId?: string
 ): ReducerEvent {
   return {
-    type: "ledgerActionSuccessful",
+    type: "ledgerActionConfirmed",
     payload: { swapId, actionName, transactionId }
   };
 }

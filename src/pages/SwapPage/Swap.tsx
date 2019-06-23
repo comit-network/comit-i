@@ -16,10 +16,10 @@ import {
   actionButtonClicked,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
-  ledgerActionSuccessful,
+  ledgerActionConfirmed,
   sirenParameterDialogSubmitted
 } from "../actions/events";
-import { LocalStorageLedgerActionStore } from "../actions/ledgerActionStore";
+import { LocalStorageLedgerActionMemory } from "../actions/ledgerActionMemory";
 import {
   ActionExecutionStatus,
   initialState,
@@ -34,7 +34,7 @@ import CommunicationCardHeader from "./CommunicationCard";
 import LedgerCard from "./LedgerCard";
 import SwapMetaDataCard from "./SwapMetaDataCard";
 
-const ledgerActionStore = new LocalStorageLedgerActionStore(
+const ledgerActionMemory = new LocalStorageLedgerActionMemory(
   window.localStorage
 );
 
@@ -113,7 +113,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
     actionExecutionStatus === ActionExecutionStatus.InProgress;
 
   function onLedgerActionSuccess(action: string, transactionId?: string) {
-    dispatch(ledgerActionSuccessful(properties.id, action, transactionId));
+    dispatch(ledgerActionConfirmed(properties.id, action, transactionId));
   }
 
   return (
@@ -187,7 +187,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                         key={action.name}
                         action={action}
                         onClick={() => dispatch(actionButtonClicked(action))}
-                        actionDoneBefore={ledgerActionStore.isStored(
+                        actionDoneBefore={ledgerActionMemory.wasActionAlreadyExecuted(
                           action.name,
                           properties.id
                         )}
@@ -210,7 +210,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                         key={action.name}
                         action={action}
                         onClick={() => dispatch(actionButtonClicked(action))}
-                        actionDoneBefore={ledgerActionStore.isStored(
+                        actionDoneBefore={ledgerActionMemory.wasActionAlreadyExecuted(
                           action.name,
                           properties.id
                         )}
@@ -243,7 +243,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             action={activeLedgerActionDialog}
             onSuccess={onLedgerActionSuccess.bind(null, activeLedgerActionName)}
             onClose={() => dispatch(closeLedgerActionDialog())}
-            actionDoneBefore={ledgerActionStore.isStored(
+            actionDoneBefore={ledgerActionMemory.wasActionAlreadyExecuted(
               activeLedgerActionName,
               properties.id
             )}

@@ -6,7 +6,7 @@ import {
   ReducerEvent,
   resetState
 } from "./events";
-import { LocalStorageLedgerActionStore } from "./ledgerActionStore";
+import { LocalStorageLedgerActionMemory } from "./ledgerActionMemory";
 import { SideEffect } from "./reducer";
 
 export default function useSideEffect(
@@ -31,14 +31,18 @@ export default function useSideEffect(
         return;
       }
       case "updateActionRecord": {
-        const ledgerActionStore = new LocalStorageLedgerActionStore(
+        const ledgerActionMemory = new LocalStorageLedgerActionMemory(
           window.localStorage
         );
         const actionName = sideEffect.payload.actionName;
         const swapId = sideEffect.payload.swapId;
         const transactionId = sideEffect.payload.transactionId;
 
-        ledgerActionStore.storeAction(actionName, swapId, transactionId);
+        ledgerActionMemory.rememberActionExecution(
+          actionName,
+          swapId,
+          transactionId
+        );
       }
       // falls through
       case "reloadData": {

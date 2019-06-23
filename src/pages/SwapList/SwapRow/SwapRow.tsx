@@ -12,10 +12,10 @@ import {
   actionButtonClicked,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
-  ledgerActionSuccessful,
+  ledgerActionConfirmed,
   sirenParameterDialogSubmitted
 } from "../../actions/events";
-import { LocalStorageLedgerActionStore } from "../../actions/ledgerActionStore";
+import { LocalStorageLedgerActionMemory } from "../../actions/ledgerActionMemory";
 import {
   ActionExecutionStatus,
   initialState,
@@ -36,7 +36,7 @@ function AssetCell({ asset }: AssetCellProps) {
   return <span>{toMainUnit(asset) + " " + mainUnitSymbol(asset)}</span>;
 }
 
-const ledgerActionStore = new LocalStorageLedgerActionStore(
+const ledgerActionMemory = new LocalStorageLedgerActionMemory(
   window.localStorage
 );
 
@@ -77,7 +77,10 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
   const links = swap.links || [];
   const properties = swap.properties as Properties;
   const actions = (swap.actions || []).filter(action => {
-    return !ledgerActionStore.isStored(action.name, properties.id);
+    return !ledgerActionMemory.wasActionAlreadyExecuted(
+      action.name,
+      properties.id
+    );
   });
   const swapLink = links.find(link => link.rel.includes("self"));
 
@@ -90,7 +93,7 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
   );
 
   function onLedgerActionSuccess(action: string, transactionId?: string) {
-    dispatch(ledgerActionSuccessful(properties.id, action, transactionId));
+    dispatch(ledgerActionConfirmed(properties.id, action, transactionId));
   }
 
   return (

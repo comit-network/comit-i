@@ -128,7 +128,7 @@ export function reducer(
       };
     }
 
-    case "ledgerActionSuccessful": {
+    case "ledgerActionConfirmed": {
       return {
         state: {},
         sideEffect: {
