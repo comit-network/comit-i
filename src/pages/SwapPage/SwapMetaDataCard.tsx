@@ -2,7 +2,7 @@ import { Card, Typography } from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import React from "react";
 import { Link } from "../../../gen/siren";
-import { Protocol } from "../../api/swapTypes";
+import { Protocol, Role } from "../../api/swapTypes";
 import ExternalLink from "../../components/ExternalLink";
 
 interface SwapMetaDataCardProps {
@@ -10,13 +10,15 @@ interface SwapMetaDataCardProps {
   counterparty: string;
   protocol: Protocol;
   protocolSpecLink: Link | undefined;
+  role: Role;
 }
 
 function SwapMetaDataCard({
   swapId,
   counterparty,
   protocol,
-  protocolSpecLink
+  protocolSpecLink,
+  role
 }: SwapMetaDataCardProps) {
   return (
     <Card data-cy="swap-metadata-card">
@@ -31,6 +33,7 @@ function SwapMetaDataCard({
             protocol
           )}
         </Typography>
+        <Typography>{`Role: ${role}`}</Typography>
       </CardContent>
     </Card>
   );

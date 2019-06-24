@@ -119,6 +119,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
               counterparty={properties.counterparty}
               protocol={properties.protocol}
               protocolSpecLink={protocolSpecLink}
+              role={properties.role}
             />
           </Grid>
           <Grid item={true} xs={6}>
