@@ -96,11 +96,9 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
         <TableCell>
           <SwapId id={properties.id} />
         </TableCell>
-        <TableCell>{properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>
           <AssetCell asset={properties.parameters.alpha_asset} />
         </TableCell>
-        <TableCell>{properties.parameters.beta_ledger.name}</TableCell>
         <TableCell>
           <AssetCell asset={properties.parameters.beta_asset} />
         </TableCell>
