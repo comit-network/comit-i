@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import React, { useReducer } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../../../gen/siren";
-import { Asset, Properties } from "../../../api/swapTypes";
+import { Asset, Properties, Role } from "../../../api/swapTypes";
 import { mainUnitSymbol, toMainUnit } from "../../../api/unit";
 import ActionButton from "../../../components/ActionButton";
 import Dialog from "../../../components/Dialog";
@@ -80,6 +80,13 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
     link.rel.includes("human-protocol-spec")
   );
 
+  const assets = [
+    properties.parameters.alpha_asset,
+    properties.parameters.beta_asset
+  ];
+  const [sellAsset, buyAsset] =
+    properties.role === Role.Alice ? assets : assets.reverse();
+
   return (
     <React.Fragment key={swapLink.href}>
       <TableRow
@@ -97,10 +104,10 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
           <SwapId id={properties.id} />
         </TableCell>
         <TableCell>
-          <AssetCell asset={properties.parameters.alpha_asset} />
+          <AssetCell asset={buyAsset} />
         </TableCell>
         <TableCell>
-          <AssetCell asset={properties.parameters.beta_asset} />
+          <AssetCell asset={sellAsset} />
         </TableCell>
         <TableCell>
           {protocolSpecLink ? (
