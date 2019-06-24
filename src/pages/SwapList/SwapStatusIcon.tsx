@@ -33,37 +33,45 @@ function SwapStatusIcon({ status }: SwapStatusIconProps) {
     case Status.InProgress:
       return (
         <Tooltip title="Swap in progress" placement="bottom-start">
-          <FontAwesomeIcon
-            icon={faSync}
-            className={classes.inProgressIcon}
-            size="lg"
-          />
+          <div>
+            <FontAwesomeIcon
+              icon={faSync}
+              className={classes.inProgressIcon}
+              size="lg"
+            />
+          </div>
         </Tooltip>
       );
     case Status.Swapped:
       return (
         <Tooltip title="Swap completed" placement="bottom-start">
-          <FontAwesomeIcon icon={faCheck} color="green" size="lg" />
+          <div>
+            <FontAwesomeIcon icon={faCheck} color="green" size="lg" />
+          </div>
         </Tooltip>
       );
     case Status.NotSwapped:
       return (
         <Tooltip title="Swap finished unsuccessfully" placement="bottom-start">
-          <FontAwesomeIcon
-            icon={faTimes}
-            className={classes.notSwappedIcon}
-            size="lg"
-          />
+          <div>
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={classes.notSwappedIcon}
+              size="lg"
+            />
+          </div>
         </Tooltip>
       );
     case Status.InternalFailure:
       return (
         <Tooltip title="Internal failure" placement="bottom-start">
-          <FontAwesomeIcon
-            icon={faExclamationCircle}
-            className={classes.internalFailureIcon}
-            size="lg"
-          />
+          <div>
+            <FontAwesomeIcon
+              icon={faExclamationCircle}
+              className={classes.internalFailureIcon}
+              size="lg"
+            />
+          </div>
         </Tooltip>
       );
   }
