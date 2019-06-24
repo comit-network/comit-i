@@ -1,0 +1,105 @@
+{
+  "class": [
+    "swap"
+  ],
+  "properties": {
+    "id": "73ff8ac1-80b5-4322-a896-0ee638a9e0a6",
+    "counterparty": "QmPRNaiDUcJmnuJWUyoADoqvFotwaMRFKV2RyZ7ZVr1fqd",
+    "parameters": {
+      "alpha_asset": {
+        "name": "bitcoin",
+        "quantity": "1"
+      },
+      "alpha_ledger": {
+        "name": "bitcoin",
+        "network": "regtest"
+      },
+      "beta_asset": {
+        "name": "ether",
+        "quantity": "1"
+      },
+      "beta_ledger": {
+        "name": "ethereum",
+        "network": "regtest"
+      }
+    },
+    "protocol": "rfc003",
+    "role": "Bob",
+    "state": {
+      "alpha_ledger": {
+        "deploy_tx": null,
+        "fund_tx": null,
+        "htlc_location": null,
+        "redeem_tx": null,
+        "refund_tx": null,
+        "status": "NotDeployed"
+      },
+      "beta_ledger": {
+        "deploy_tx": null,
+        "fund_tx": null,
+        "htlc_location": null,
+        "redeem_tx": null,
+        "refund_tx": null,
+        "status": "NotDeployed"
+      },
+      "communication": {
+        "alpha_expiry": 1559662508,
+        "alpha_redeem_identity": null,
+        "alpha_refund_identity": "2302195d7f57f786ab927718d9273a57f9a9249c",
+        "beta_expiry": 1559662388,
+        "beta_redeem_identity": "0x493a5a0eafdeae28f430f74ac5031b3ee37b6a6d",
+        "beta_refund_identity": null,
+        "secret_hash": "1bcfc33cc40d4994d834b5a3ab2f2527753eefe1d95b509b93791ad40ad028c6",
+        "status": "ACCEPTED"
+      }
+    },
+    "status": "IN_PROGRESS"
+  },
+  "entities": [],
+  "links": [
+    {
+      "rel": [
+        "self"
+      ],
+      "class": [],
+      "href": "/swaps/rfc003/73ff8ac1-80b5-4322-a896-0ee638a9e0a6"
+    },
+    {
+      "rel": [
+        "human-protocol-spec"
+      ],
+      "class": [],
+      "href": "https://github.com/comit-network/RFCs/blob/master/RFC-003-SWAP-Basic.md"
+    }
+  ],
+  "actions": [
+    {
+      "name": "deploy",
+      "class": [],
+      "method": "GET",
+      "href": "/swaps/rfc003/73ff8ac1-80b5-4322-a896-0ee638a9e0a6/deploy",
+      "fields": []
+    },
+    {
+      "name": "fund",
+      "class": [],
+      "method": "GET",
+      "href": "/swaps/rfc003/73ff8ac1-80b5-4322-a896-0ee638a9e0a6/fund",
+      "fields": []
+    },
+    {
+      "name": "redeem",
+      "class": [],
+      "method": "GET",
+      "href": "/swaps/rfc003/73ff8ac1-80b5-4322-a896-0ee638a9e0a6/redeem",
+      "fields": []
+    },
+    {
+      "name": "refund",
+      "class": [],
+      "method": "GET",
+      "href": "/swaps/rfc003/73ff8ac1-80b5-4322-a896-0ee638a9e0a6/refund",
+      "fields": []
+    }
+  ]
+}

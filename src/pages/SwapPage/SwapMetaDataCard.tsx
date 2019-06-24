@@ -9,7 +9,7 @@ interface SwapMetaDataCardProps {
 
 function SwapMetaDataCard({ swapId, counterparty }: SwapMetaDataCardProps) {
   return (
-    <Card>
+    <Card data-cy="swap-metadata-card">
       <CardContent>
         <Typography>{`Swap ID: ${swapId}`}</Typography>
         <Typography>{`Trading with: ${counterparty}`}</Typography>
