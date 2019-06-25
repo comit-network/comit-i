@@ -8,26 +8,46 @@ import {
 import React from "react";
 import { EthereumAction, LedgerAction } from "../../api/getAction";
 import { toMainUnit } from "../../api/unit";
+import InfoMessage from "../../components/InfoMessage";
 import { useWeb3 } from "../../components/Web3Context";
 import Web3SendTransactionButton from "../../components/Web3SendTransactionButton";
 import CopyToClipboardButton from "./CopyToClipboard";
 
 interface LedgerActionDialogBodyProps {
   action: LedgerAction;
+  onSuccess: (transactionId?: string) => void;
   onClose: () => void;
+  actionDoneBefore?: boolean;
+}
+
+function ActionDoneMessage() {
+  return (
+    <InfoMessage
+      text="You have already performed this action. Do not try again unless you are sure it failed last time."
+      color="error"
+    />
+  );
 }
 
 function LedgerActionDialogBody({
   action,
-  onClose
+  onSuccess,
+  onClose,
+  actionDoneBefore = false
 }: LedgerActionDialogBodyProps) {
+  function onSuccessBitcoin() {
+    onSuccess();
+  }
+
   switch (action.type) {
     case "ethereum-deploy-contract":
     case "ethereum-call-contract": {
       return (
         <EthereumActionDialogBody
           action={action as EthereumAction}
+          onSuccess={onSuccess}
           onClose={onClose}
+          actionDoneBefore={actionDoneBefore}
         />
       );
     }
@@ -41,13 +61,14 @@ function LedgerActionDialogBody({
       return (
         <React.Fragment>
           <DialogTitle>Broadcast Bitcoin transaction</DialogTitle>
+          {actionDoneBefore && <ActionDoneMessage />}
           <DialogContent>
             <Typography paragraph={true}>
               Please broadcast the following signed transaction on the{" "}
               <b>{action.payload.network}</b> network {whenReadyMessage}:
             </Typography>
             <Typography
-              variant={"body1"}
+              variant="body1"
               style={{
                 wordWrap: "break-word"
               }}
@@ -57,8 +78,17 @@ function LedgerActionDialogBody({
           </DialogContent>
           <DialogActions>
             <CopyToClipboardButton content={transaction} name="transaction" />
-            <Button onClick={onClose} color="secondary">
-              Close
+          </DialogActions>
+          <DialogActions>
+            <Button onClick={onClose} variant="contained" color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={onSuccessBitcoin}
+              variant="contained"
+              color="primary"
+            >
+              Confirm
             </Button>
           </DialogActions>
         </React.Fragment>
@@ -75,6 +105,7 @@ function LedgerActionDialogBody({
         <React.Fragment>
           <DialogTitle>Send Bitcoin</DialogTitle>
           <DialogContent>
+            {actionDoneBefore && <ActionDoneMessage />}
             <Typography paragraph={true}>
               Please send <b>{amount}</b> BTC to the following{" "}
               <b>{action.payload.network}</b> address:
@@ -84,8 +115,17 @@ function LedgerActionDialogBody({
           <DialogActions>
             <CopyToClipboardButton content={amount} name="amount" />
             <CopyToClipboardButton content={address} name="address" />
-            <Button onClick={onClose} color="secondary">
-              Close
+          </DialogActions>
+          <DialogActions>
+            <Button onClick={onClose} variant="contained" color="secondary">
+              Cancel
+            </Button>
+            <Button
+              onClick={onSuccessBitcoin}
+              variant="contained"
+              color="primary"
+            >
+              Confirm
             </Button>
           </DialogActions>
         </React.Fragment>
@@ -95,15 +135,23 @@ function LedgerActionDialogBody({
 }
 
 interface EthereumActionDialogBodyProps {
-  onClose: () => void;
   action: EthereumAction;
+  onSuccess: (transactionId?: string) => void;
+  onClose: () => void;
+  actionDoneBefore?: boolean;
 }
 
 function EthereumActionDialogBody({
   action,
-  onClose
+  onSuccess,
+  onClose,
+  actionDoneBefore = false
 }: EthereumActionDialogBodyProps) {
   const { web3 } = useWeb3();
+
+  function onSuccessEthereum(transactionId: string) {
+    onSuccess(transactionId);
+  }
 
   switch (action.type) {
     /* This action is too generic and it doesn't differentiate between ether
@@ -121,6 +169,7 @@ function EthereumActionDialogBody({
         <React.Fragment>
           <DialogTitle>Deploy Ethereum contract</DialogTitle>
           <DialogContent>
+            {actionDoneBefore && <ActionDoneMessage />}
             <Typography paragraph={true}>
               Deploy the following contract to the Ethereum{" "}
               <b>{action.payload.network}</b> network with{" "}
@@ -128,7 +177,7 @@ function EthereumActionDialogBody({
               wei:
             </Typography>
             <Typography
-              variant={"body1"}
+              variant="body1"
               style={{
                 wordWrap: "break-word"
               }}
@@ -147,17 +196,17 @@ function EthereumActionDialogBody({
             </DialogActions>
           )}
           <DialogActions>
+            <Button onClick={onClose} variant="contained" color="secondary">
+              Cancel
+            </Button>
             <Web3SendTransactionButton
               transactionConfig={{
                 data: contract,
                 value: action.payload.amount,
                 gas: gasLimit
               }}
-              onSuccess={onClose}
+              onSuccess={onSuccessEthereum}
             />
-            <Button onClick={onClose} color="secondary">
-              Close
-            </Button>
           </DialogActions>
         </React.Fragment>
       );
@@ -173,13 +222,14 @@ function EthereumActionDialogBody({
         <React.Fragment>
           <DialogTitle>Invoke Ethereum contract</DialogTitle>
           <DialogContent>
+            {actionDoneBefore && <ActionDoneMessage />}
             <Typography paragraph={true}>
               Invoke the contract at <b>{address}</b> on the Ethereum{" "}
               <b>{action.payload.network}</b> network using a gas limit of{" "}
               <b>{gasLimit}</b> wei with this data:
             </Typography>
             <Typography
-              variant={"body1"}
+              variant="body1"
               style={{
                 wordWrap: "break-word"
               }}
@@ -198,6 +248,9 @@ function EthereumActionDialogBody({
             </DialogActions>
           )}
           <DialogActions>
+            <Button onClick={onClose} variant="contained" color="secondary">
+              Cancel
+            </Button>
             <Web3SendTransactionButton
               minTimestamp={expiry}
               transactionConfig={{
@@ -205,11 +258,8 @@ function EthereumActionDialogBody({
                 data,
                 gas: gasLimit
               }}
-              onSuccess={onClose}
+              onSuccess={onSuccessEthereum}
             />
-            <Button onClick={onClose} color="secondary">
-              Close
-            </Button>
           </DialogActions>
         </React.Fragment>
       );

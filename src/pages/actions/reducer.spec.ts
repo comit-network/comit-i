@@ -122,9 +122,11 @@ describe("SwapRowReducer", () => {
       statusText: "OK"
     } as AxiosResponse;
 
+    const actionName = "redeem";
+
     const { state, sideEffect } = reducer(
       initialState,
-      actionSuccessful(response)
+      actionSuccessful(response, actionName)
     );
 
     expect(state).toStrictEqual({
@@ -132,7 +134,8 @@ describe("SwapRowReducer", () => {
       activeLedgerActionDialog: {
         type: "ethereum-call-contract",
         payload: {}
-      }
+      },
+      activeLedgerActionName: actionName
     });
     expect(sideEffect).toBeUndefined();
   });
@@ -147,7 +150,7 @@ describe("SwapRowReducer", () => {
 
     const { state, sideEffect } = reducer(
       initialState,
-      actionSuccessful(response)
+      actionSuccessful(response, "fund")
     );
 
     expect(state).toStrictEqual({
