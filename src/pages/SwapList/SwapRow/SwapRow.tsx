@@ -1,9 +1,14 @@
-import { CircularProgress, TableCell, TableRow } from "@material-ui/core";
+import {
+  CircularProgress,
+  TableCell,
+  TableRow,
+  Tooltip
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/styles";
 import React, { useReducer } from "react";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { EmbeddedRepresentationSubEntity } from "../../../../gen/siren";
-import { Asset, Properties } from "../../../api/swapTypes";
+import { Asset, Ledger, Properties, Role } from "../../../api/swapTypes";
 import { mainUnitSymbol, toMainUnit } from "../../../api/unit";
 import ActionButton from "../../../components/ActionButton";
 import Dialog from "../../../components/Dialog";
@@ -25,14 +30,6 @@ import LedgerActionDialogBody from "../LedgerActionDialogBody";
 import SirenActionParametersDialogBody from "../SirenActionParametersDialogBody";
 import SwapStatusIcon from "../SwapStatusIcon";
 import SwapId from "./SwapId";
-
-interface AssetCellProps {
-  asset: Asset;
-}
-
-function AssetCell({ asset }: AssetCellProps) {
-  return <span>{toMainUnit(asset) + " " + mainUnitSymbol(asset)}</span>;
-}
 
 const useStyles = makeStyles(() => ({
   tableRow: {
@@ -80,6 +77,20 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
     link.rel.includes("human-protocol-spec")
   );
 
+  const assets = [
+    properties.parameters.alpha_asset,
+    properties.parameters.beta_asset
+  ];
+  const [sellAsset, buyAsset] =
+    properties.role === Role.Alice ? assets : assets.reverse();
+
+  const ledgers = [
+    properties.parameters.alpha_ledger,
+    properties.parameters.beta_ledger
+  ];
+  const [sellLedger, buyLedger] =
+    properties.role === Role.Alice ? ledgers : ledgers.reverse();
+
   return (
     <React.Fragment key={swapLink.href}>
       <TableRow
@@ -96,13 +107,11 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
         <TableCell>
           <SwapId id={properties.id} />
         </TableCell>
-        <TableCell>{properties.parameters.alpha_ledger.name}</TableCell>
         <TableCell>
-          <AssetCell asset={properties.parameters.alpha_asset} />
+          <AssetCell asset={buyAsset} ledger={buyLedger} />
         </TableCell>
-        <TableCell>{properties.parameters.beta_ledger.name}</TableCell>
         <TableCell>
-          <AssetCell asset={properties.parameters.beta_asset} />
+          <AssetCell asset={sellAsset} ledger={sellLedger} />
         </TableCell>
         <TableCell>
           {protocolSpecLink ? (
@@ -160,6 +169,19 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
         </Dialog>
       )}
     </React.Fragment>
+  );
+}
+
+interface AssetCellProps {
+  asset: Asset;
+  ledger: Ledger;
+}
+
+function AssetCell({ asset, ledger }: AssetCellProps) {
+  return (
+    <Tooltip title={"On " + ledger.name + " " + ledger.network}>
+      <span>{toMainUnit(asset) + " " + mainUnitSymbol(asset)}</span>
+    </Tooltip>
   );
 }
 

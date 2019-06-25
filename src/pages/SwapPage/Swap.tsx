@@ -84,6 +84,10 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             action.name === "refund"
         );
 
+  const protocolSpecLink = (swap.links || []).find(link =>
+    link.rel.includes("human-protocol-spec")
+  );
+
   const [
     {
       state: {
@@ -113,6 +117,9 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             <SwapMetaDataCard
               swapId={properties.id}
               counterparty={properties.counterparty}
+              protocol={properties.protocol}
+              protocolSpecLink={protocolSpecLink}
+              role={properties.role}
             />
           </Grid>
           <Grid item={true} xs={6}>
