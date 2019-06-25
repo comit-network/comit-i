@@ -32,6 +32,7 @@ function LedgerActionDialogBody({
       );
     }
     case "bitcoin-broadcast-signed-transaction": {
+      const transaction = action.payload.hex;
       const expiry = action.payload.min_median_block_time;
       const whenReadyMessage = !expiry
         ? "now"
@@ -51,14 +52,11 @@ function LedgerActionDialogBody({
                 wordWrap: "break-word"
               }}
             >
-              {action.payload.hex}
+              {transaction}
             </Typography>
           </DialogContent>
           <DialogActions>
-            <CopyToClipboardButton
-              content={action.payload.hex}
-              name="transaction"
-            />
+            <CopyToClipboardButton content={transaction} name="transaction" />
             <Button onClick={onClose} color="secondary">
               Close
             </Button>
@@ -71,6 +69,7 @@ function LedgerActionDialogBody({
         name: "bitcoin",
         quantity: action.payload.amount
       });
+      const address = action.payload.to;
 
       return (
         <React.Fragment>
@@ -80,11 +79,11 @@ function LedgerActionDialogBody({
               Please send <b>{amount}</b> BTC to the following{" "}
               <b>{action.payload.network}</b> address:
             </Typography>
-            {action.payload.to}
+            {address}
           </DialogContent>
           <DialogActions>
             <CopyToClipboardButton content={amount} name="amount" />
-            <CopyToClipboardButton content={action.payload.to} name="address" />
+            <CopyToClipboardButton content={address} name="address" />
             <Button onClick={onClose} color="secondary">
               Close
             </Button>
