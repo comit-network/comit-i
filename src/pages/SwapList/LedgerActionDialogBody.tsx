@@ -149,8 +149,12 @@ function EthereumActionDialogBody({
 }: EthereumActionDialogBodyProps) {
   const { web3 } = useWeb3();
 
-  function onSuccessEthereum(transactionId: string) {
+  function onSuccessMetaMask(transactionId: string) {
     onSuccess(transactionId);
+  }
+
+  function onManualConfirmation() {
+    onSuccess();
   }
 
   switch (action.type) {
@@ -199,13 +203,22 @@ function EthereumActionDialogBody({
             <Button onClick={onClose} variant="contained" color="secondary">
               Cancel
             </Button>
+            {!web3 && (
+              <Button
+                onClick={onManualConfirmation}
+                variant="contained"
+                color="primary"
+              >
+                Confirm
+              </Button>
+            )}
             <Web3SendTransactionButton
               transactionConfig={{
                 data: contract,
                 value: action.payload.amount,
                 gas: gasLimit
               }}
-              onSuccess={onSuccessEthereum}
+              onSuccess={onSuccessMetaMask}
             />
           </DialogActions>
         </React.Fragment>
@@ -251,6 +264,15 @@ function EthereumActionDialogBody({
             <Button onClick={onClose} variant="contained" color="secondary">
               Cancel
             </Button>
+            {!web3 && (
+              <Button
+                onClick={onManualConfirmation}
+                variant="contained"
+                color="primary"
+              >
+                Confirm
+              </Button>
+            )}
             <Web3SendTransactionButton
               minTimestamp={expiry}
               transactionConfig={{
@@ -258,7 +280,7 @@ function EthereumActionDialogBody({
                 data,
                 gas: gasLimit
               }}
-              onSuccess={onSuccessEthereum}
+              onSuccess={onSuccessMetaMask}
             />
           </DialogActions>
         </React.Fragment>

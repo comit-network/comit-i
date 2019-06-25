@@ -528,6 +528,32 @@ Array [
         className="MuiTouchRipple-root"
       />
     </button>
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedPrimary MuiButton-contained"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Confirm
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
     <span
       aria-describedby={null}
       className=""
@@ -903,6 +929,32 @@ Array [
         className="MuiButton-label"
       >
         Cancel
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedPrimary MuiButton-contained"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Confirm
       </span>
       <span
         className="MuiTouchRipple-root"
