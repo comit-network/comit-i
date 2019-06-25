@@ -25,10 +25,8 @@ function SwapList({ swaps, reload, setAllowReload }: SwapListProps) {
         <TableRow>
           <TableCell component="th">Status</TableCell>
           <TableCell component="th">ID</TableCell>
-          <TableCell component="th">Alpha Ledger</TableCell>
-          <TableCell component="th">Alpha Asset</TableCell>
-          <TableCell component="th">Beta Ledger</TableCell>
-          <TableCell component="th">Beta Asset</TableCell>
+          <TableCell component="th">Buy</TableCell>
+          <TableCell component="th">Sell</TableCell>
           <TableCell component="th">Protocol</TableCell>
           <TableCell component="th">Role</TableCell>
           <TableCell component="th">Actions</TableCell>

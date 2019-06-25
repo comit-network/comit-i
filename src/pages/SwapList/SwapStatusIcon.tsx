@@ -32,38 +32,46 @@ function SwapStatusIcon({ status }: SwapStatusIconProps) {
   switch (status) {
     case Status.InProgress:
       return (
-        <Tooltip title="Swap in progress" placement="bottom-start">
-          <FontAwesomeIcon
-            icon={faSync}
-            className={classes.inProgressIcon}
-            size="lg"
-          />
+        <Tooltip title="Swap in progress">
+          <div>
+            <FontAwesomeIcon
+              icon={faSync}
+              className={classes.inProgressIcon}
+              size="lg"
+            />
+          </div>
         </Tooltip>
       );
     case Status.Swapped:
       return (
-        <Tooltip title="Swap completed" placement="bottom-start">
-          <FontAwesomeIcon icon={faCheck} color="green" size="lg" />
+        <Tooltip title="Swap completed">
+          <div>
+            <FontAwesomeIcon icon={faCheck} color="green" size="lg" />
+          </div>
         </Tooltip>
       );
     case Status.NotSwapped:
       return (
-        <Tooltip title="Swap finished unsuccessfully" placement="bottom-start">
-          <FontAwesomeIcon
-            icon={faTimes}
-            className={classes.notSwappedIcon}
-            size="lg"
-          />
+        <Tooltip title="Swap finished unsuccessfully">
+          <div>
+            <FontAwesomeIcon
+              icon={faTimes}
+              className={classes.notSwappedIcon}
+              size="lg"
+            />
+          </div>
         </Tooltip>
       );
     case Status.InternalFailure:
       return (
-        <Tooltip title="Internal failure" placement="bottom-start">
-          <FontAwesomeIcon
-            icon={faExclamationCircle}
-            className={classes.internalFailureIcon}
-            size="lg"
-          />
+        <Tooltip title="Internal failure">
+          <div>
+            <FontAwesomeIcon
+              icon={faExclamationCircle}
+              className={classes.internalFailureIcon}
+              size="lg"
+            />
+          </div>
         </Tooltip>
       );
   }

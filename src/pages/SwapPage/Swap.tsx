@@ -90,6 +90,10 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             action.name === "refund"
         );
 
+  const protocolSpecLink = (swap.links || []).find(link =>
+    link.rel.includes("human-protocol-spec")
+  );
+
   const [
     {
       state: {
@@ -125,6 +129,9 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             <SwapMetaDataCard
               swapId={properties.id}
               counterparty={properties.counterparty}
+              protocol={properties.protocol}
+              protocolSpecLink={protocolSpecLink}
+              role={properties.role}
             />
           </Grid>
           <Grid item={true} xs={6}>
@@ -146,7 +153,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
             />
           </Grid>
           <Grid item={true} xs={12}>
-            <Card>
+            <Card data-cy="communication-card">
               <CommunicationCardHeader
                 status={properties.state.communication.status}
                 role={properties.role}
@@ -196,6 +203,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                     );
                   })}
                   isActionInProgress={isActionInProgress}
+                  data-cy={"alpha-ledger-card"}
                 />
               </Grid>
               <Grid item={true} xs={6}>
@@ -219,6 +227,7 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                     );
                   })}
                   isActionInProgress={isActionInProgress}
+                  data-cy={"beta-ledger-card"}
                 />
               </Grid>
             </React.Fragment>
