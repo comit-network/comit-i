@@ -77,7 +77,7 @@ export default function SirenActionParametersDialogBody({
             color={"primary"}
             data-cy={`ok-button`}
           >
-            OK
+            Confirm
           </Button>
         </DialogActions>
       </form>
@@ -164,13 +164,13 @@ function Title({
       return (
         <DialogTitle
           {...dialogTitleProps}
-        >{`Fetch the '${title}' action?`}</DialogTitle>
+        >{`Fetch the '${title}' action`}</DialogTitle>
       );
     default:
       return (
         <DialogTitle
           {...dialogTitleProps}
-        >{`Execute the '${title}' action?`}</DialogTitle>
+        >{`Execute the '${title}' action`}</DialogTitle>
       );
   }
 }

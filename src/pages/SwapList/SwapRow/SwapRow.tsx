@@ -17,8 +17,10 @@ import {
   actionButtonClicked,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
+  ledgerActionConfirmed,
   sirenParameterDialogSubmitted
 } from "../../actions/events";
+import { LocalStorageLedgerActionMemory } from "../../actions/ledgerActionMemory";
 import {
   ActionExecutionStatus,
   initialState,
@@ -30,6 +32,10 @@ import LedgerActionDialogBody from "../LedgerActionDialogBody";
 import SirenActionParametersDialogBody from "../SirenActionParametersDialogBody";
 import SwapStatusIcon from "../SwapStatusIcon";
 import SwapId from "./SwapId";
+
+const ledgerActionMemory = new LocalStorageLedgerActionMemory(
+  window.localStorage
+);
 
 const useStyles = makeStyles(() => ({
   tableRow: {
@@ -49,16 +55,18 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
       state: {
         actionExecutionStatus,
         activeLedgerActionDialog,
-        activeSirenParameterDialog
+        activeSirenParameterDialog,
+        activeLedgerActionName
       },
       sideEffect
     },
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, dispatch, sideEffect);
+  useSideEffect(sideEffect, dispatch, reload);
   useAllowReload(
-    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    activeLedgerActionDialog,
+    activeSirenParameterDialog,
     setAllowReload
   );
 
@@ -66,7 +74,12 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
 
   const links = swap.links || [];
   const properties = swap.properties as Properties;
-  const actions = swap.actions || [];
+  const actions = (swap.actions || []).filter(action => {
+    return !ledgerActionMemory.wasActionAlreadyExecuted(
+      action.name,
+      properties.id
+    );
+  });
   const swapLink = links.find(link => link.rel.includes("self"));
 
   if (!swapLink) {
@@ -90,6 +103,10 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
   ];
   const [sellLedger, buyLedger] =
     properties.role === Role.Alice ? ledgers : ledgers.reverse();
+
+  function onLedgerActionSuccess(action: string, transactionId?: string) {
+    dispatch(ledgerActionConfirmed(properties.id, action, transactionId));
+  }
 
   return (
     <React.Fragment key={swapLink.href}>
@@ -160,10 +177,11 @@ function SwapRow({ swap, history, reload, setAllowReload }: SwapRowProps) {
           />
         </Dialog>
       )}
-      {activeLedgerActionDialog && (
+      {activeLedgerActionDialog && activeLedgerActionName && (
         <Dialog open={true}>
           <LedgerActionDialogBody
             action={activeLedgerActionDialog}
+            onSuccess={onLedgerActionSuccess.bind(null, activeLedgerActionName)}
             onClose={() => dispatch(closeLedgerActionDialog())}
           />
         </Dialog>

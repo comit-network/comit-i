@@ -11,17 +11,22 @@ const useStyles = makeStyles((theme: Theme) => ({
   }
 }));
 
-export default function InfoMessage() {
+interface InfoMessageProps {
+  text: string;
+  color?: "primary" | "secondary" | "error";
+}
+
+export default function InfoMessage({
+  text,
+  color = "primary"
+}: InfoMessageProps) {
   const classes = useStyles();
 
   return (
     <Paper elevation={2} className={classes.root}>
-      <InfoIcon color={"primary"} />
+      <InfoIcon color={color} />
       &nbsp;
-      <Typography>
-        This form has been prefilled with information from the link you just
-        clicked.
-      </Typography>
+      <Typography color={color}>{text}</Typography>
     </Paper>
   );
 }

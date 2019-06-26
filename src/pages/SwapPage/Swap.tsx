@@ -16,8 +16,10 @@ import {
   actionButtonClicked,
   closeLedgerActionDialog,
   closeSirenParametersDialog,
+  ledgerActionConfirmed,
   sirenParameterDialogSubmitted
 } from "../actions/events";
+import { LocalStorageLedgerActionMemory } from "../actions/ledgerActionMemory";
 import {
   ActionExecutionStatus,
   initialState,
@@ -31,6 +33,10 @@ import AssetCard from "./AssetCard";
 import CommunicationCardHeader from "./CommunicationCard";
 import LedgerCard from "./LedgerCard";
 import SwapMetaDataCard from "./SwapMetaDataCard";
+
+const ledgerActionMemory = new LocalStorageLedgerActionMemory(
+  window.localStorage
+);
 
 interface SwapProps {
   swap: Entity;
@@ -93,21 +99,27 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
       state: {
         actionExecutionStatus,
         activeLedgerActionDialog,
-        activeSirenParameterDialog
+        activeSirenParameterDialog,
+        activeLedgerActionName
       },
       sideEffect
     },
     dispatch
   ] = useReducer(reducer, initialState);
 
-  useSideEffect(reload, dispatch, sideEffect);
+  useSideEffect(sideEffect, dispatch, reload);
   useAllowReload(
-    !!activeLedgerActionDialog || !!activeSirenParameterDialog,
+    activeLedgerActionDialog,
+    activeSirenParameterDialog,
     setAllowReload
   );
 
   const isActionInProgress =
     actionExecutionStatus === ActionExecutionStatus.InProgress;
+
+  function onLedgerActionSuccess(action: string, transactionId?: string) {
+    dispatch(ledgerActionConfirmed(properties.id, action, transactionId));
+  }
 
   return (
     <React.Fragment>
@@ -177,13 +189,19 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                   ledgerState={properties.state.alpha_ledger}
                   otherLedgerState={properties.state.beta_ledger}
                   role={properties.role}
-                  actions={alphaLedgerActions.map(action => (
-                    <ActionButton
-                      key={action.name}
-                      action={action}
-                      onClick={() => dispatch(actionButtonClicked(action))}
-                    />
-                  ))}
+                  actions={alphaLedgerActions.map(action => {
+                    return (
+                      <ActionButton
+                        key={action.name}
+                        action={action}
+                        onClick={() => dispatch(actionButtonClicked(action))}
+                        actionDoneBefore={ledgerActionMemory.wasActionAlreadyExecuted(
+                          action.name,
+                          properties.id
+                        )}
+                      />
+                    );
+                  })}
                   isActionInProgress={isActionInProgress}
                   data-cy={"alpha-ledger-card"}
                 />
@@ -195,13 +213,19 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
                   ledgerState={properties.state.beta_ledger}
                   otherLedgerState={properties.state.alpha_ledger}
                   role={properties.role}
-                  actions={betaLedgerActions.map(action => (
-                    <ActionButton
-                      key={action.name}
-                      action={action}
-                      onClick={() => dispatch(actionButtonClicked(action))}
-                    />
-                  ))}
+                  actions={betaLedgerActions.map(action => {
+                    return (
+                      <ActionButton
+                        key={action.name}
+                        action={action}
+                        onClick={() => dispatch(actionButtonClicked(action))}
+                        actionDoneBefore={ledgerActionMemory.wasActionAlreadyExecuted(
+                          action.name,
+                          properties.id
+                        )}
+                      />
+                    );
+                  })}
                   isActionInProgress={isActionInProgress}
                   data-cy={"beta-ledger-card"}
                 />
@@ -223,11 +247,16 @@ function Swap({ swap, reload, setAllowReload }: SwapProps) {
           />
         </Dialog>
       )}
-      {activeLedgerActionDialog && (
+      {activeLedgerActionDialog && activeLedgerActionName && (
         <Dialog open={true}>
           <LedgerActionDialogBody
             action={activeLedgerActionDialog}
+            onSuccess={onLedgerActionSuccess.bind(null, activeLedgerActionName)}
             onClose={() => dispatch(closeLedgerActionDialog())}
+            actionDoneBefore={ledgerActionMemory.wasActionAlreadyExecuted(
+              activeLedgerActionName,
+              properties.id
+            )}
           />
         </Dialog>
       )}

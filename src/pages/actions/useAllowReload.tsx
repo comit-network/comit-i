@@ -1,10 +1,13 @@
 import { useEffect } from "react";
+import { Action } from "../../../gen/siren";
+import { LedgerAction } from "../../api/getAction";
 
 export default function useAllowReload(
-  condition: boolean,
+  activeLedgerActionDialog: LedgerAction | undefined,
+  activeSirenParameterDialog: Action | undefined,
   setAllowReload: (arg: boolean) => void
 ) {
   useEffect(() => {
-    condition ? setAllowReload(false) : setAllowReload(true);
-  }, [condition, setAllowReload]);
+    setAllowReload(!!activeLedgerActionDialog || !!activeSirenParameterDialog);
+  }, [activeLedgerActionDialog, activeSirenParameterDialog, setAllowReload]);
 }

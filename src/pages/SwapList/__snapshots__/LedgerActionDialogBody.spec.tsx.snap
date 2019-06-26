@@ -83,8 +83,12 @@ Array [
         className="MuiTouchRipple-root"
       />
     </button>
+  </div>,
+  <div
+    className="MuiDialogActions-root MuiDialogActions-spacing"
+  >
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-textSecondary MuiButton-text"
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedSecondary MuiButton-contained"
       disabled={false}
       onBlur={[Function]}
       onClick={[Function]}
@@ -103,7 +107,33 @@ Array [
       <span
         className="MuiButton-label"
       >
-        Close
+        Cancel
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedPrimary MuiButton-contained"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Confirm
       </span>
       <span
         className="MuiTouchRipple-root"
@@ -232,8 +262,12 @@ Array [
         className="MuiTouchRipple-root"
       />
     </button>
+  </div>,
+  <div
+    className="MuiDialogActions-root MuiDialogActions-spacing"
+  >
     <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-textSecondary MuiButton-text"
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedSecondary MuiButton-contained"
       disabled={false}
       onBlur={[Function]}
       onClick={[Function]}
@@ -252,7 +286,33 @@ Array [
       <span
         className="MuiButton-label"
       >
-        Close
+        Cancel
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedPrimary MuiButton-contained"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Confirm
       </span>
       <span
         className="MuiTouchRipple-root"
@@ -303,6 +363,32 @@ Array [
   <div
     className="MuiDialogActions-root MuiDialogActions-spacing"
   >
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedSecondary MuiButton-contained"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Cancel
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
     <span
       aria-describedby={null}
       className=""
@@ -315,7 +401,7 @@ Array [
       title="Please enable Metamask first."
     >
       <button
-        className="MuiButtonBase-root MuiButton-root MuiButton-textPrimary MuiButton-text Mui-disabled Mui-disabled"
+        className="MuiButtonBase-root MuiButton-root MuiButton-containedPrimary MuiButton-contained Mui-disabled Mui-disabled"
         disabled={true}
         onBlur={[Function]}
         onClick={[Function]}
@@ -472,32 +558,6 @@ Array [
         </span>
       </button>
     </span>
-    <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-textSecondary MuiButton-text"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
-      type="button"
-    >
-      <span
-        className="MuiButton-label"
-      >
-        Close
-      </span>
-      <span
-        className="MuiTouchRipple-root"
-      />
-    </button>
   </div>,
 ]
 `;
@@ -544,6 +604,32 @@ Array [
   <div
     className="MuiDialogActions-root MuiDialogActions-spacing"
   >
+    <button
+      className="MuiButtonBase-root MuiButton-root MuiButton-containedSecondary MuiButton-contained"
+      disabled={false}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onKeyDown={[Function]}
+      onKeyUp={[Function]}
+      onMouseDown={[Function]}
+      onMouseLeave={[Function]}
+      onMouseUp={[Function]}
+      onTouchEnd={[Function]}
+      onTouchMove={[Function]}
+      onTouchStart={[Function]}
+      tabIndex={0}
+      type="button"
+    >
+      <span
+        className="MuiButton-label"
+      >
+        Cancel
+      </span>
+      <span
+        className="MuiTouchRipple-root"
+      />
+    </button>
     <span
       aria-describedby={null}
       className=""
@@ -556,7 +642,7 @@ Array [
       title="Please enable Metamask first."
     >
       <button
-        className="MuiButtonBase-root MuiButton-root MuiButton-textPrimary MuiButton-text Mui-disabled Mui-disabled"
+        className="MuiButtonBase-root MuiButton-root MuiButton-containedPrimary MuiButton-contained Mui-disabled Mui-disabled"
         disabled={true}
         onBlur={[Function]}
         onClick={[Function]}
@@ -713,32 +799,6 @@ Array [
         </span>
       </button>
     </span>
-    <button
-      className="MuiButtonBase-root MuiButton-root MuiButton-textSecondary MuiButton-text"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onKeyDown={[Function]}
-      onKeyUp={[Function]}
-      onMouseDown={[Function]}
-      onMouseLeave={[Function]}
-      onMouseUp={[Function]}
-      onTouchEnd={[Function]}
-      onTouchMove={[Function]}
-      onTouchStart={[Function]}
-      tabIndex={0}
-      type="button"
-    >
-      <span
-        className="MuiButton-label"
-      >
-        Close
-      </span>
-      <span
-        className="MuiTouchRipple-root"
-      />
-    </button>
   </div>,
 ]
 `;
