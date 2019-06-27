@@ -2,9 +2,9 @@ import { InputAdornment } from "@material-ui/core";
 import IconButton from "@material-ui/core/IconButton/IconButton";
 import { StandardTextFieldProps } from "@material-ui/core/TextField";
 import React from "react";
-import TextField from "../components/TextField";
 import MetamaskIcon from "./MetamaskIcon";
 import NoWeb3Tooltip from "./NoWeb3Tooltip";
+import TextField from "./TextField";
 import { useWeb3 } from "./Web3Context";
 
 interface Props extends StandardTextFieldProps {

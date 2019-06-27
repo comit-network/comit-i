@@ -20,6 +20,8 @@
     "content-type": "^1.0.4",
     "copy-to-clipboard": "^3.2.0",
     "deepmerge": "^3.2.0",
+    "hw-app-btc": "^4.24.0",
+    "hw-transport-u2f": "^4.24.3",
     "immutability-helper": "^3.0.0",
     "moment": "^2.24.0",
     "pascal-case": "^2.0.1",

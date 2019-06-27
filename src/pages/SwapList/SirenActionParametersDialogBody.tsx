@@ -8,6 +8,7 @@ import {
 import { DialogTitleProps } from "@material-ui/core/DialogTitle";
 import React, { useReducer } from "react";
 import { Action, Field } from "../../../gen/siren";
+import BitcoinNanoLedgerAddressTextField from "../../components/BitcoinNanoLedgerAddressTextField";
 import EthereumAddressTextField from "../../components/EthereumAddressTextField";
 import TextField from "../../components/TextField";
 
@@ -99,6 +100,20 @@ function renderField(
   if (field.class.includes("ethereum") && field.class.includes("address")) {
     return (
       <EthereumAddressTextField
+        data-cy={"action-text-field"}
+        required={true}
+        key={field.name}
+        label={field.title || field.name}
+        onAddress={onChange}
+        onChange={event => onChange(event.target.value)}
+        value={value}
+      />
+    );
+  }
+
+  if (field.class.includes("bitcoin") && field.class.includes("address")) {
+    return (
+      <BitcoinNanoLedgerAddressTextField
         data-cy={"action-text-field"}
         required={true}
         key={field.name}

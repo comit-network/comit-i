@@ -1806,6 +1806,34 @@
     "@types/istanbul-reports" "^1.1.1"
     "@types/yargs" "^12.0.9"
 
+"@ledgerhq/devices@^4.63.2":
+  version "4.63.2"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/devices/-/devices-4.63.2.tgz#8dc650b7ff9f074d4d83858618aa4bdc0a43bc87"
+  integrity sha512-91kWtrAcGoAV5zNWBDTMF3gqwMBvyZBvDnSiOJ2Top3hZvHUrwLqb6HuA87bOwPDIWBnW4BVGWswy2VnYb/ueQ==
+  dependencies:
+    "@ledgerhq/errors" "^4.63.2"
+    "@ledgerhq/logs" "^4.62.0"
+    rxjs "^6.5.2"
+
+"@ledgerhq/errors@^4.63.2":
+  version "4.63.2"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-4.63.2.tgz#c8882d5202045c801569b7816cea2b48f25b8a31"
+  integrity sha512-NF4KkRQ2X1ZEmaxcCXUv0VNHaMqy/t/PXvii5IoZeNochQn56DlXcbgMzZ8HBpGQYTLdZuliT7RjKSZmUMjhrg==
+
+"@ledgerhq/hw-transport@^4.24.0":
+  version "4.63.2"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-4.63.2.tgz#1ac9d04040f42d033bf1cc398348ced1ad4c3a31"
+  integrity sha512-WtejtJXyeDQe+ppiOvES2bxWaXkmHLxrwCt2cQzq2wvrH32AABE652isIxkJfUst0Q6p2QwCKO6YZN2PZiSRuQ==
+  dependencies:
+    "@ledgerhq/devices" "^4.63.2"
+    "@ledgerhq/errors" "^4.63.2"
+    events "^3.0.0"
+
+"@ledgerhq/logs@^4.62.0":
+  version "4.62.0"
+  resolved "https://registry.yarnpkg.com/@ledgerhq/logs/-/logs-4.62.0.tgz#6696e6d74576e09d72bc1d7a8fcff76cd190461e"
+  integrity sha512-f/XtWHzHxE4AJlB53vZllH/4gY3t7n1vNoGkjHFfu3keLmbyHWC1sGdG+lW9FRlToSLQuVotGIbm04SBn0vSIQ==
+
 "@material-ui/core@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@material-ui/core/-/core-4.0.1.tgz#7fe3bcb1a89b01376b181358a5ded58291da0016"
@@ -4955,7 +4983,7 @@ create-emotion@^9.2.12:
     stylis "^3.5.0"
     stylis-rule-sheet "^0.0.10"
 
-create-hash@^1.1.0, create-hash@^1.1.2, create-hash@^1.2.0:
+create-hash@^1.1.0, create-hash@^1.1.2, create-hash@^1.1.3, create-hash@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/create-hash/-/create-hash-1.2.0.tgz#889078af11a63756bcfb59bd221996be3a9ef196"
   integrity sha512-z00bCGNHDG8mHAkP7CtT1qVu+bFQUPjYq/4Iv3C3kWjTFV10zIjfSoeqXo9Asws8gwSHDGj/hl2u4OGIjapeCg==
@@ -7519,6 +7547,29 @@ humps@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/humps/-/humps-2.0.1.tgz#dd02ea6081bd0568dc5d073184463957ba9ef9aa"
   integrity sha1-3QLqYIG9BWjcXQcxhEY5V7qe+ao=
+
+hw-app-btc@^4.24.0:
+  version "4.24.0"
+  resolved "https://registry.yarnpkg.com/hw-app-btc/-/hw-app-btc-4.24.0.tgz#a2ce3aa02b665ea025db24545d7159024308821d"
+  integrity sha512-fe8O7LGSxOGcnzVDN4nUzCXLlMb5L7aUHQyMO2hs3cBFNUiJhWtNwppRSRUSoVxJEdrbOfBa4m0ygRr0jy6aXQ==
+  dependencies:
+    "@ledgerhq/hw-transport" "^4.24.0"
+    create-hash "^1.1.3"
+
+hw-transport-u2f@^4.24.3:
+  version "4.24.3"
+  resolved "https://registry.yarnpkg.com/hw-transport-u2f/-/hw-transport-u2f-4.24.3.tgz#28331fe85b9585e2bf7005f1899536a1cc09c7fc"
+  integrity sha512-E0l3xWwLiFCeRMoXxEHLoCCjw0+xqav0/7mgJldoB9V3K8A9wdorTtuYgwFFX7GC/BhWbviGpLzYbHdc/2he9w==
+  dependencies:
+    hw-transport "4.24.0"
+    u2f-api "0.2.7"
+
+hw-transport@4.24.0:
+  version "4.24.0"
+  resolved "https://registry.yarnpkg.com/hw-transport/-/hw-transport-4.24.0.tgz#cc874355e306c87c386679c49b685f55e63b57cc"
+  integrity sha512-Xy5tYIHQJ9ZbSeIDXhT30u2+XcD9LMBEE4hw3pdUfmJlg72Ld6fTWosMGy5hoAJv6aQEnIGhNfLSMXm+MjFkDA==
+  dependencies:
+    events "^3.0.0"
 
 hyphenate-style-name@^1.0.3:
   version "1.0.3"
@@ -12702,6 +12753,13 @@ rxjs@^6.1.0, rxjs@^6.4.0:
   dependencies:
     tslib "^1.9.0"
 
+rxjs@^6.5.2:
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/rxjs/-/rxjs-6.5.2.tgz#2e35ce815cd46d84d02a209fb4e5921e051dbec7"
+  integrity sha512-HUb7j3kvb7p7eCUHE3FqjoDsC1xfZQ4AHFWfTKSpZ+sAhhz5X1WX0ZuUqWbzB2QhSLp3DoLUG+hMdEDKqWo2Zg==
+  dependencies:
+    tslib "^1.9.0"
+
 safe-buffer@5.1.1:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.1.tgz#893312af69b2123def71f57889001671eeb2c853"
@@ -14127,6 +14185,11 @@ typescript@3.4.5:
   version "3.4.5"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.5.tgz#2d2618d10bb566572b8d7aad5180d84257d70a99"
   integrity sha512-YycBxUb49UUhdNMU5aJ7z5Ej2XGmaIBL0x34vZ82fn3hGvD+bgrMrVDpatgz2f7YxUMJxMkbWxJZeAvDxVe7Vw==
+
+u2f-api@0.2.7:
+  version "0.2.7"
+  resolved "https://registry.yarnpkg.com/u2f-api/-/u2f-api-0.2.7.tgz#17bf196b242f6bf72353d9858e6a7566cc192720"
+  integrity sha512-fqLNg8vpvLOD5J/z4B6wpPg4Lvowz1nJ9xdHcCzdUPKcFE/qNCceV2gNZxSJd5vhAZemHr/K/hbzVA0zxB5mkg==
 
 ua-parser-js@^0.7.18:
   version "0.7.19"

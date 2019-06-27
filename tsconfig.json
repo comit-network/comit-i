@@ -17,7 +17,8 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,
-    "rootDirs": ["src", "stories"]
+    "rootDirs": ["src", "stories"],
+    "typeRoots": ["./types", "./node_modules/@types"]
   },
   "include": ["src"],
   "exclude": ["build", "node_modules"]
