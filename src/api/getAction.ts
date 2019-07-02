@@ -1,6 +1,8 @@
 import axios from "axios";
 
-export type LedgerAction =
+export type LedgerAction = BitcoinAction | EthereumAction;
+
+export type BitcoinAction =
   | {
       type: "bitcoin-send-amount-to-address";
       payload: { to: string; amount: string; network: string };
@@ -8,7 +10,9 @@ export type LedgerAction =
   | {
       type: "bitcoin-broadcast-signed-transaction";
       payload: { hex: string; network: string; min_median_block_time?: number };
-    }
+    };
+
+export type EthereumAction =
   | {
       type: "ethereum-deploy-contract";
       payload: {
