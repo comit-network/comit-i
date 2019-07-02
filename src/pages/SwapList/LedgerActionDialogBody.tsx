@@ -148,6 +148,7 @@ function EthereumActionDialogBody({
   actionDoneBefore = false
 }: EthereumActionDialogBodyProps) {
   const { web3 } = useWeb3();
+  const gasLimit = parseInt(action.payload.gas_limit, 16);
 
   function onSuccessMetaMask(transactionId: string) {
     onSuccess(transactionId);
@@ -166,7 +167,6 @@ function EthereumActionDialogBody({
         name: "ether",
         quantity: action.payload.amount
       });
-      const gasLimit = parseInt(action.payload.gas_limit, 16);
       const contract = action.payload.data;
 
       return (
@@ -227,7 +227,6 @@ function EthereumActionDialogBody({
     case "ethereum-call-contract": {
       const address = action.payload.contract_address;
       const data = action.payload.data;
-      const gasLimit = parseInt(action.payload.gas_limit, 16);
 
       const expiry = action.payload.min_block_timestamp;
 
