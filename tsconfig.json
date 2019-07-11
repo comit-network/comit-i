@@ -17,8 +17,7 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noImplicitAny": true,
-    "rootDirs": ["src", "stories"]
+    "rootDirs": ["src"]
   },
-  "include": ["src"],
-  "exclude": ["build", "node_modules"]
+  "include": ["src", "stories"]
 }

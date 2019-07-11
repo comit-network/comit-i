@@ -19,6 +19,7 @@ describe("LedgerActionDialogBody", () => {
                 network: "regtest"
               }
             }}
+            onSuccess={() => undefined}
           />
         </ThemeProvider>
       )
@@ -41,6 +42,7 @@ describe("LedgerActionDialogBody", () => {
                 min_median_block_time: 1557508315
               }
             }}
+            onSuccess={() => undefined}
           />
         </ThemeProvider>
       )
@@ -64,6 +66,7 @@ describe("LedgerActionDialogBody", () => {
                 network: "regtest"
               }
             }}
+            onSuccess={() => undefined}
           />
         </ThemeProvider>
       )
@@ -87,6 +90,7 @@ describe("LedgerActionDialogBody", () => {
                 network: "regtest"
               }
             }}
+            onSuccess={() => undefined}
           />
         </ThemeProvider>
       )

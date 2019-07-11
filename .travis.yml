@@ -10,8 +10,10 @@ cache:
 script:
   - yarn run prettier
   - yarn run lint
+  - yarn run tsc
   - yarn run test
   - yarn run build
+  - yarn run build-storybook
   - yarn run serveAndRunUiTests
 before_deploy: "yarn run bestzip bundle.zip build/*"
 deploy:

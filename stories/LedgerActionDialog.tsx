@@ -1,8 +1,8 @@
-import { storiesOf } from "@storybook/react";
-import { Button, Dialog } from "@material-ui/core";
-import LedgerActionDialogBody from "../src/pages/SwapList/LedgerActionDialogBody";
 import { Store, withState } from "@dump247/storybook-state";
+import { Button, Dialog } from "@material-ui/core";
+import { storiesOf } from "@storybook/react";
 import React from "react";
+import LedgerActionDialogBody from "../src/pages/SwapList/LedgerActionDialogBody";
 
 interface DialogStoryState {
   open: boolean;
@@ -35,6 +35,7 @@ storiesOf("LedgerActionDialog", module)
                 network: "regtest"
               }
             }}
+            onSuccess={() => undefined}
           />
         </Dialog>
       </div>
@@ -57,6 +58,7 @@ storiesOf("LedgerActionDialog", module)
                 min_median_block_time: 1557508315
               }
             }}
+            onSuccess={() => undefined}
           />
         </Dialog>
       </div>
@@ -80,6 +82,7 @@ storiesOf("LedgerActionDialog", module)
                 network: "regtest"
               }
             }}
+            onSuccess={() => undefined}
           />
         </Dialog>
       </div>
@@ -103,6 +106,7 @@ storiesOf("LedgerActionDialog", module)
                 network: "regtest"
               }
             }}
+            onSuccess={() => undefined}
           />
         </Dialog>
       </div>

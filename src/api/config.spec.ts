@@ -10,10 +10,12 @@ class FakeSettingsStore implements SettingsStore {
     return 1234;
   }
 
+  // @ts-ignore
   public setHost(host: string) {
     return undefined;
   }
 
+  // @ts-ignore
   public setPort(port: number): void {
     return undefined;
   }

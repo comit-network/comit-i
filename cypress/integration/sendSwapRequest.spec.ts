@@ -1,7 +1,7 @@
 /// <reference types="Cypress" />
 
 describe("The page for sending a swap request", () => {
-  it("should not submit the form if a required field is empty", function() {
+  it("should not submit the form if a required field is empty", () => {
     cy.visit("/send_swap");
 
     // clear a required field

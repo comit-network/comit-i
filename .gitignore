@@ -25,3 +25,5 @@ yarn-error.log*
 
 .idea
 gen/
+
+/storybook-static
