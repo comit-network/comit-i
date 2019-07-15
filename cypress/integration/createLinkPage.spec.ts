@@ -1,3 +1,5 @@
+/// <reference types="Cypress" />
+
 describe("The page for creating a link", () => {
   it("should still render the page even if the comit_node is not reachable", () => {
     // Given we don't mock the API call
