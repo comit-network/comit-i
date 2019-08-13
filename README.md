@@ -4,7 +4,7 @@ A WebGUI for comit-rs.
 
 ## User behavior
 
-COMIT-i is currently under heavy development and in order to learn from our user behavior about what we need to optimize
+COMIT-i is currently under heavy development and in order to learn from our user behavior about what we need to optimize we make use of Google Analytics.
 we make use of Google Analytics. 
 
 In order to include the Google Analytics tag and the Google Tag Manager tag in the release bundle, create a 
