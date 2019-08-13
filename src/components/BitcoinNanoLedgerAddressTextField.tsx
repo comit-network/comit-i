@@ -5,7 +5,7 @@ import TransportU2F from "hw-transport-u2f";
 import React from "react";
 import { useAsync } from "react-async";
 import ErrorSnackbar from "./ErrorSnackbar";
-import MetamaskIcon from "./MetamaskIcon";
+import LedgerWalletIcon from "./LedgerWalletIcon";
 import TextField from "./TextField";
 
 const getNanoLedgerBitcoinAddress = async () => {
@@ -42,7 +42,7 @@ function BitcoinNanoLedgerAddressTextField({
                 aria-label="Load"
                 onClick={getBitcoinAddress}
               >
-                <MetamaskIcon />
+                <LedgerWalletIcon />
               </IconButton>
             </InputAdornment>
           )
