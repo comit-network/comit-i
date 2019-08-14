@@ -8,6 +8,6 @@ export default function useAllowReload(
   setAllowReload: (arg: boolean) => void
 ) {
   useEffect(() => {
-    setAllowReload(!!activeLedgerActionDialog || !!activeSirenParameterDialog);
+    setAllowReload(!activeLedgerActionDialog && !activeSirenParameterDialog);
   }, [activeLedgerActionDialog, activeSirenParameterDialog, setAllowReload]);
 }
