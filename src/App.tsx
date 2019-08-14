@@ -17,6 +17,7 @@ import InboxIcon from "@material-ui/icons/Inbox";
 import SendIcon from "@material-ui/icons/Send";
 import SettingsIcon from "@material-ui/icons/Settings";
 import React from "react";
+import CookieConsent from "react-cookie-consent";
 import {
   Redirect,
   Route,
@@ -125,6 +126,23 @@ function App({ classes, history }: AppProps) {
         <Route path="/send_swap" component={SendSwap} />
         <Route path="/from_link" component={LinkLandingPage} />
         <Route path="/settings" component={Settings} />
+
+        <CookieConsent
+          location="bottom"
+          buttonText="Sure, I'm happy to help!"
+          cookieName="comiti"
+          expires={150}
+          buttonClasses="btn btn-primary"
+          style={{ zIndex: 99999 }}
+          contentClasses="text-capitalize"
+        >
+          This website uses cookies to enhance the user experience.{" "}
+          <span style={{ fontSize: "10px" }}>
+            Additionally it uses Google Analytics to learn how you are using
+            this website so that we can improve it and optimize it for your
+            needs.
+          </span>
+        </CookieConsent>
       </main>
     </div>
   );
