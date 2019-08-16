@@ -22,7 +22,7 @@ import ledgers from "../../ledgerSpec";
 
 const MakeLink = () => {
   const [swap, dispatch] = useReducer(swapReducer, emptySwap);
-  const [protocol, setProtocol] = useState("");
+  const [protocol, setProtocol] = useState("rfc003");
   const [peerId, setPeerId] = useState("");
   const [addressHint, setAddressHint] = useState("");
 
@@ -138,6 +138,7 @@ const MakeLink = () => {
             SelectProps={{
               native: true
             }}
+            data-cy="protocol-select"
           >
             <option value={""} />
             <option value={"rfc003"}>RFC003</option>
