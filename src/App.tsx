@@ -63,7 +63,7 @@ interface AppProps extends WithStyles<typeof styles>, RouteComponentProps {}
 function App({ classes, history }: AppProps) {
   const goToSwaps = () => history.push("/show_resource/swaps");
   const goToMakeLink = () => history.push("/make_link");
-  const goToSendSwap = () => history.push("/send_swap");
+  const goToSendSwap = () => history.push("/send_swap?protocol=rfc003");
   const goToSettings = () => history.push("/settings");
 
   return (
