@@ -76,4 +76,10 @@ describe("The page for creating a link", () => {
   it("should not render the 'no options' element from react-select", () => {
     cy.contains("No options").should("not.exist");
   });
+
+  it("should pre-select RFC003 as the protocol", () => {
+    cy.get("[data-cy=protocol-select]")
+      .find("select")
+      .should("have.value", "rfc003");
+  });
 });
