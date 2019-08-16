@@ -56,6 +56,17 @@ export type Action =
       payload: { newSelection: string };
     };
 
+function nativeAsset(ledger: string) {
+  switch (ledger) {
+    case "bitcoin":
+      return "bitcoin";
+    case "ethereum":
+      return "ether";
+    default:
+      return "";
+  }
+}
+
 export function reducer(swap: Swap, action: Action): Swap {
   switch (action.type) {
     case "change-parameter": {
@@ -68,14 +79,16 @@ export function reducer(swap: Swap, action: Action): Swap {
       };
     }
     case "change-selection": {
+      const ledger = action.payload.newSelection;
+
       const newSwap = {
         ...swap,
         [action.of]: {
-          name: action.payload.newSelection
+          name: ledger
         }
       };
 
-      const defaultAsset = { name: "" };
+      const defaultAsset = { name: nativeAsset(ledger) };
       switch (action.of) {
         case "alpha_ledger": {
           return {

@@ -28,7 +28,7 @@ describe("The page for sending a swap request", () => {
           .select("Regtest");
         cy.get("[data-cy=asset-select]")
           .find("select")
-          .select("Bitcoin");
+          .should("have.value", "bitcoin"); // expect native asset to be prefilled
         cy.get("[data-cy=quantity-input]")
           .find("input")
           .clear()
@@ -44,7 +44,7 @@ describe("The page for sending a swap request", () => {
           .select("Regtest");
         cy.get("[data-cy=asset-select]")
           .find("select")
-          .select("Ether");
+          .should("have.value", "ether"); // expect native asset to be prefilled
         cy.get("[data-cy=quantity-input]")
           .find("input")
           .clear()
