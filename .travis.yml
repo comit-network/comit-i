@@ -19,7 +19,7 @@ jobs:
         - yarn run build-storybook
         - yarn run serveAndRunUiTests
     - stage: deploy
-      if: (tag =~ ^v) AND (branch = master)
+      if: tag =~ ^v
       env:
         secure: dw20gUSoJAGvWh3W33tTLzyF0xnZuOSNzFF49WBWYEA1P2hZ+KaLJSq3SYfaLWItl8fkDxVgB/JhELSCiHhmwb5KPssZABON2CskCvNqSanVggAH/9Xej1PQtO6gjreDk4PhujSbg+2am6FVhwMoTUfwdktBQafYzmJdwtrqZV4dudH+XXeEuLqQAq3CDolu6mnEHpxapN7fe4WfVt46ynztEL+RQVHW81ZRSL8FeeTUp1ZgCcE+zOZfjJ6MlODTAjoOv3tg4RhDCKHP6syy+9fOeAR5t1rhpkhkNFaiiSdTVN/DzlWIR50ggJIX70+PMrEgvdfaCCLpAt23v+2Dk5UipS+qJBnaK/5n3BN+gsR6jYp13f8QC9MAUq5zSabGa6Rg5x005joC69QBBbSRcVrvUaU9cZSS+pa/+vVvP2y1PUWz/vhEmnrOgwzhUnNYpSf0lq+sWOZBW7l8zG4y1iUXv1yxNIDhxQuQmerjPt6K1Tt2HAhZTnobNLJ98wL+qmKEd/9Gccu4uOfBbpygqMMXmROabG1bAmpE05OE8SMN/2WgANm6g3GlXrksjsgzPlClzbtYNlmidz8uIytem2NpA1WyrbGMj3+/4TxOsaAzZrrGm/5Ar5i5bDOnlKZrJe4FxWvjKKty+gzAvRug2ZZouBErafXmt2Xs6TIaRq0=
       script:
