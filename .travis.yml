@@ -31,3 +31,5 @@ jobs:
           secure: xBJwCaVjKkmOxiES89sVr8GsKSA5+lS6cvSikxWigtw2Z+xwHFAXqFFXJ3R6NAxvKkrrnNR2mQoT3IeeTFHNJj9YvXVOWJwi8pTaw7++FMOPHEpTSUmk1wNPNZsScSL3i7m6BSkqrI3ZHV0coo5FQ/IYQwbWOswxFpHSlgbaOF2go68AS57RblFvqIHeevBMgi/Pwx0kyAP69AukhDc3K+bylQaF+2IpbpGn2EqTuSSydKjICNYtm1fu9/FCvO2XhGtOdXfE3djlQM4/pkNt7sfmF8e5slUKF92MCWARY2ykUkHFgVbbmO4nXKAKRV3qQH9TM34N3iyn5c5xgNO49w1I5desYwAEcYv9l7evkTLE5gEaODGSKE5eYIKjuxJpAkJjIMDNQ8KvD1oZMyvNcykKbUyCXMw9rXayDrp4I/GVajzVdawJGl58ZHKEIAabhtm1DVKubkB/kOa6q9rvXhd8QJnJ12/asmkOz5ihIgMiI2DVWxolI6FsOf9BFjUEFFTmYJVvatcLjgOKZdKL1fdNM5o2ipZJvTXE8MPWlAR4eWvgC2QsUFNd3Xi8Ezyj/kpyRZDxwaerGkzrtJ2Als0MbdfdjX9ZswB7Ao8auXYNXet4MFfeVhoGQ2lhi2clphGgeLt/Uei3r/j7BGCkeP3utvxLrK66BiuKVyNZtkc=
         file: bundle.zip
         skip_cleanup: true
+        on:
+          tags: true
