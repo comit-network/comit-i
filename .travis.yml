@@ -7,23 +7,27 @@ cache:
   directories:
     - "~/.cache/Cypress"
     - "~/.cache/yarn"
-env:
-  secure: dw20gUSoJAGvWh3W33tTLzyF0xnZuOSNzFF49WBWYEA1P2hZ+KaLJSq3SYfaLWItl8fkDxVgB/JhELSCiHhmwb5KPssZABON2CskCvNqSanVggAH/9Xej1PQtO6gjreDk4PhujSbg+2am6FVhwMoTUfwdktBQafYzmJdwtrqZV4dudH+XXeEuLqQAq3CDolu6mnEHpxapN7fe4WfVt46ynztEL+RQVHW81ZRSL8FeeTUp1ZgCcE+zOZfjJ6MlODTAjoOv3tg4RhDCKHP6syy+9fOeAR5t1rhpkhkNFaiiSdTVN/DzlWIR50ggJIX70+PMrEgvdfaCCLpAt23v+2Dk5UipS+qJBnaK/5n3BN+gsR6jYp13f8QC9MAUq5zSabGa6Rg5x005joC69QBBbSRcVrvUaU9cZSS+pa/+vVvP2y1PUWz/vhEmnrOgwzhUnNYpSf0lq+sWOZBW7l8zG4y1iUXv1yxNIDhxQuQmerjPt6K1Tt2HAhZTnobNLJ98wL+qmKEd/9Gccu4uOfBbpygqMMXmROabG1bAmpE05OE8SMN/2WgANm6g3GlXrksjsgzPlClzbtYNlmidz8uIytem2NpA1WyrbGMj3+/4TxOsaAzZrrGm/5Ar5i5bDOnlKZrJe4FxWvjKKty+gzAvRug2ZZouBErafXmt2Xs6TIaRq0=
-script:
-  - yarn run prettier
-  - yarn run lint
-  - yarn run tsc
-  - yarn run test
-  - yarn run build
-  - yarn run build-storybook
-  - yarn run serveAndRunUiTests
-before_deploy: "yarn run bestzip bundle.zip build/*"
-deploy:
-  provider: releases
-  api_key:
-    secure: xBJwCaVjKkmOxiES89sVr8GsKSA5+lS6cvSikxWigtw2Z+xwHFAXqFFXJ3R6NAxvKkrrnNR2mQoT3IeeTFHNJj9YvXVOWJwi8pTaw7++FMOPHEpTSUmk1wNPNZsScSL3i7m6BSkqrI3ZHV0coo5FQ/IYQwbWOswxFpHSlgbaOF2go68AS57RblFvqIHeevBMgi/Pwx0kyAP69AukhDc3K+bylQaF+2IpbpGn2EqTuSSydKjICNYtm1fu9/FCvO2XhGtOdXfE3djlQM4/pkNt7sfmF8e5slUKF92MCWARY2ykUkHFgVbbmO4nXKAKRV3qQH9TM34N3iyn5c5xgNO49w1I5desYwAEcYv9l7evkTLE5gEaODGSKE5eYIKjuxJpAkJjIMDNQ8KvD1oZMyvNcykKbUyCXMw9rXayDrp4I/GVajzVdawJGl58ZHKEIAabhtm1DVKubkB/kOa6q9rvXhd8QJnJ12/asmkOz5ihIgMiI2DVWxolI6FsOf9BFjUEFFTmYJVvatcLjgOKZdKL1fdNM5o2ipZJvTXE8MPWlAR4eWvgC2QsUFNd3Xi8Ezyj/kpyRZDxwaerGkzrtJ2Als0MbdfdjX9ZswB7Ao8auXYNXet4MFfeVhoGQ2lhi2clphGgeLt/Uei3r/j7BGCkeP3utvxLrK66BiuKVyNZtkc=
-  file: bundle.zip
-  skip_cleanup: true
-  on:
-    repo: comit-network/comit-i
-    tags: true
+jobs:
+  include:
+    - stage: test
+      script:
+        - yarn run prettier
+        - yarn run lint
+        - yarn run tsc
+        - yarn run test
+        - yarn run build
+        - yarn run build-storybook
+        - yarn run serveAndRunUiTests
+    - stage: deploy
+      if: (tag =~ ^v) AND (branch = master)
+      env:
+        secure: dw20gUSoJAGvWh3W33tTLzyF0xnZuOSNzFF49WBWYEA1P2hZ+KaLJSq3SYfaLWItl8fkDxVgB/JhELSCiHhmwb5KPssZABON2CskCvNqSanVggAH/9Xej1PQtO6gjreDk4PhujSbg+2am6FVhwMoTUfwdktBQafYzmJdwtrqZV4dudH+XXeEuLqQAq3CDolu6mnEHpxapN7fe4WfVt46ynztEL+RQVHW81ZRSL8FeeTUp1ZgCcE+zOZfjJ6MlODTAjoOv3tg4RhDCKHP6syy+9fOeAR5t1rhpkhkNFaiiSdTVN/DzlWIR50ggJIX70+PMrEgvdfaCCLpAt23v+2Dk5UipS+qJBnaK/5n3BN+gsR6jYp13f8QC9MAUq5zSabGa6Rg5x005joC69QBBbSRcVrvUaU9cZSS+pa/+vVvP2y1PUWz/vhEmnrOgwzhUnNYpSf0lq+sWOZBW7l8zG4y1iUXv1yxNIDhxQuQmerjPt6K1Tt2HAhZTnobNLJ98wL+qmKEd/9Gccu4uOfBbpygqMMXmROabG1bAmpE05OE8SMN/2WgANm6g3GlXrksjsgzPlClzbtYNlmidz8uIytem2NpA1WyrbGMj3+/4TxOsaAzZrrGm/5Ar5i5bDOnlKZrJe4FxWvjKKty+gzAvRug2ZZouBErafXmt2Xs6TIaRq0=
+      script:
+        - yarn run build
+        - yarn run bestzip bundle.zip build/*
+      deploy:
+        provider: releases
+        api_key:
+          secure: xBJwCaVjKkmOxiES89sVr8GsKSA5+lS6cvSikxWigtw2Z+xwHFAXqFFXJ3R6NAxvKkrrnNR2mQoT3IeeTFHNJj9YvXVOWJwi8pTaw7++FMOPHEpTSUmk1wNPNZsScSL3i7m6BSkqrI3ZHV0coo5FQ/IYQwbWOswxFpHSlgbaOF2go68AS57RblFvqIHeevBMgi/Pwx0kyAP69AukhDc3K+bylQaF+2IpbpGn2EqTuSSydKjICNYtm1fu9/FCvO2XhGtOdXfE3djlQM4/pkNt7sfmF8e5slUKF92MCWARY2ykUkHFgVbbmO4nXKAKRV3qQH9TM34N3iyn5c5xgNO49w1I5desYwAEcYv9l7evkTLE5gEaODGSKE5eYIKjuxJpAkJjIMDNQ8KvD1oZMyvNcykKbUyCXMw9rXayDrp4I/GVajzVdawJGl58ZHKEIAabhtm1DVKubkB/kOa6q9rvXhd8QJnJ12/asmkOz5ihIgMiI2DVWxolI6FsOf9BFjUEFFTmYJVvatcLjgOKZdKL1fdNM5o2ipZJvTXE8MPWlAR4eWvgC2QsUFNd3Xi8Ezyj/kpyRZDxwaerGkzrtJ2Als0MbdfdjX9ZswB7Ao8auXYNXet4MFfeVhoGQ2lhi2clphGgeLt/Uei3r/j7BGCkeP3utvxLrK66BiuKVyNZtkc=
+        file: bundle.zip
+        skip_cleanup: true
