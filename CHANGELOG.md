@@ -8,5 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Use RFC003 as default protocol.
 - Use native blockchain assets as defaults.
+### Fixed
+- Fix version in `package.json`.
 
 [Unreleased]: https://github.com/comit-network/comit-rs/compare/v0.5.0-alpha...HEAD
